@@ -1,0 +1,10 @@
+Add motors into Misc array in constants
+In Diagnostic Command, success/failure if statement might be too strict, check/change
+(In the future, change the time condition in the diagonistic command 
+    for motors with limited axi of rotation)
+Check if diagonistic fail conditions work
+Add solenoids to diagonistic command
+When turning with extremes, the shaping delta is not proportional on both sides(+/-)
+    Find solution
+Eventually Smart Dashboard will be too full with success/failure statements from the Diagnostic command
+    Print onle failures, instead of pending, success, and failures
