@@ -47,7 +47,7 @@ public class DriveSubsystem extends SubsystemBase {
     // Set the left and right sides separately
     // left and right range from -1 to 1
     public void setSpeed(double left, double right) {
-        leftMotor1.set(ControlMode.PercentOutput, -left);
-        rightMotor1.set(ControlMode.PercentOutput, right);
+        leftMotor1.set(ControlMode.Velocity, -left);
+        rightMotor1.set(ControlMode.Velocity, right);
     }
 }
