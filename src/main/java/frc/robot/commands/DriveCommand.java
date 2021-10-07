@@ -1,13 +1,23 @@
 package frc.robot.commands;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.lib.JoystickProcessing;
+import frc.robot.lib.Units;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.JoystickSubsystem;
 
 public class DriveCommand extends CommandBase {
-    public DriveCommand() {
+    public enum DriveMode {
+        VELOCITY, PERCENT;
+    }
+
+    private DriveMode drive_mode;
+
+    public DriveCommand(DriveMode mode) {
+        this.drive_mode = mode;
         addRequirements(DriveSubsystem.getInstance());
         addRequirements(JoystickSubsystem.getInstance());
     }
@@ -23,9 +33,25 @@ public class DriveCommand extends CommandBase {
         double rightX = JoystickSubsystem.getInstance().getRightX();
         double leftY = JoystickSubsystem.getInstance().getLeftY();
         double[] speeds = JoystickProcessing.processJoysticks(rightX, leftY);
-        DriveSubsystem.getInstance().setSpeed(-speeds[0], speeds[1]);
-        SmartDashboard.putNumber("Left speed", speeds[0]);
-        SmartDashboard.putNumber("Right speed", speeds[1]);
+       //double[] speeds = {leftY, leftY};
+        
+        if(drive_mode == DriveMode.PERCENT) {
+            DriveSubsystem.getInstance().setSpeed(-speeds[0], speeds[1], ControlMode.PercentOutput);
+        } else {
+            double leftVel = Units.percent2Velocity(speeds[0]);
+            double rightVel = Units.percent2Velocity(speeds[1]);
+            DriveSubsystem.getInstance().setSpeed(leftVel, rightVel, ControlMode.Velocity);
+        }
+        SmartDashboard.putNumber("Joystick Left Y", leftY);
+        SmartDashboard.putNumber("Joystick Right X", rightX);
+        SmartDashboard.putNumber("Left percent", speeds[0]);
+        SmartDashboard.putNumber("Right percent", speeds[1]);
+        //Puts the velocity that the motor controller is reading to SmartDashboard
+        SmartDashboard.putNumber("Left Motor Real Velocity", DriveSubsystem.getInstance().getLeftMotorVelocity());
+        SmartDashboard.putNumber("Right Motor Real Velocity", DriveSubsystem.getInstance().getRightMotorVelocity());
+
+        // SmartDashboard.putNumber("Left Motor Real Velocity", PercentOutputDriveSubsystem.getInstance().getLeftMotorVelocity());
+        // SmartDashboard.putNumber("Right Motor Real Velocity", PercentOutputDriveSubsystem.getInstance().getRightMotorVelocity());
     }
 
     // Called once the command ends or is interrupted.
