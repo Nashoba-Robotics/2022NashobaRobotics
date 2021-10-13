@@ -16,15 +16,17 @@ public class DriveCommand extends CommandBase {
 
     private DriveMode drive_mode;
 
+    // mode: either DriveMode.VELOCITY for velocity
+    // control or DriveMode.PERCENT for percent output control
     public DriveCommand(DriveMode mode) {
         this.drive_mode = mode;
         addRequirements(DriveSubsystem.getInstance());
         addRequirements(JoystickSubsystem.getInstance());
     }
 
-    // Called when the command is initially scheduled.
     @Override
     public void initialize() {
+        DriveSubsystem.getInstance().setSpeed(0, 0, ControlMode.Velocity);
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -57,6 +59,7 @@ public class DriveCommand extends CommandBase {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
+        DriveSubsystem.getInstance().setSpeed(0, 0, ControlMode.Velocity);
     }
 
     // Returns true when the command should end.

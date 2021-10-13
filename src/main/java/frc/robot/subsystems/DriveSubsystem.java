@@ -1,7 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SendableRegistry;
 
 import frc.robot.Constants;
+import frc.robot.commands.StopCommand;
 
 // Subsystem for driving the robot
 public class DriveSubsystem extends SubsystemBase {
@@ -92,8 +93,7 @@ public class DriveSubsystem extends SubsystemBase {
         SendableRegistry.setName(this, "Drive");
     }
     public void initDefaultCommand(){
-      //  setDefaultCommand(new ));
-
+       setDefaultCommand(new StopCommand());
     }
     public static DriveSubsystem getInstance() {
         if(instance == null) {
@@ -109,8 +109,17 @@ public class DriveSubsystem extends SubsystemBase {
 
     // Set the left and right sides separately
     public void setSpeed(double left, double right, ControlMode mode) {
-        leftMotor.set(mode, left);
-        rightMotor.set(mode, right);
+        if(mode == ControlMode.PercentOutput) {
+            leftMotor.set(mode, left, DemandType.ArbitraryFeedForward, Constants.AFF);
+            rightMotor.set(mode, right, DemandType.ArbitraryFeedForward, Constants.AFF);
+            //leftMotor.set(mode, left);
+            //rightMotor.set(mode, right);
+        } else {
+            leftMotor.set(mode, left, DemandType.ArbitraryFeedForward, Constants.AFF);
+            rightMotor.set(mode, right, DemandType.ArbitraryFeedForward, Constants.AFF);
+            //leftMotor.set(mode, left);
+            //rightMotor.set(mode, right);
+        }
     }
 
     public double getLeftMotorVelocity(){
@@ -119,5 +128,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     public double getRightMotorVelocity(){
         return rightMasterSensor.getIntegratedSensorVelocity();
+
     }
+
 }

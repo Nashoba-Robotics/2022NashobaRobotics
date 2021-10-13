@@ -36,10 +36,12 @@ public final class Constants {
     public static final int PID_LOOP_IDX = 0;
 
     public static final double VELOCITY_MULTIPLIER = 19000;
+    // Arbitrary feed forward
+	public static final double AFF = 0;
 
     // motor constants
-    public static double KP = 0.0496;
+    public static double KP = 0.0485;
     public static double KI = 0.0;
     public static double KD = 0.0;
-    public static double KF = 0.0496;
+    public static double KF = 0.0485;
 }
