@@ -50,7 +50,7 @@ public class DriveSubsystem extends SubsystemBase {
 
 		/* Config sensor used for Primary PID [Velocity] */
         rightMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,
-                                            Constants.PID_LOOP_IDX, 
+                                            Constants.PID_IDX, 
 											Constants.TIMEOUT);
 											
 
@@ -61,11 +61,11 @@ public class DriveSubsystem extends SubsystemBase {
 		rightMotor.configPeakOutputReverse(-1, Constants.TIMEOUT);
 
 		/* Config the Velocity closed loop gains in slot0 */
-		rightMotor.config_kF(Constants.PID_LOOP_IDX, Constants.KF, Constants.TIMEOUT);
-		rightMotor.config_kP(Constants.PID_LOOP_IDX, Constants.KP, Constants.TIMEOUT);
-		rightMotor.config_kI(Constants.PID_LOOP_IDX, Constants.KI, Constants.TIMEOUT);
-        rightMotor.config_kD(Constants.PID_LOOP_IDX, Constants.KD, Constants.TIMEOUT);
-        
+		rightMotor.config_kF(Constants.SLOT_IDX, Constants.KF, Constants.TIMEOUT);
+		rightMotor.config_kP(Constants.SLOT_IDX, Constants.KP, Constants.TIMEOUT);
+		rightMotor.config_kI(Constants.SLOT_IDX, Constants.KI, Constants.TIMEOUT);
+        rightMotor.config_kD(Constants.SLOT_IDX, Constants.KD, Constants.TIMEOUT);
+
         leftMotor.configFactoryDefault();
 		
 		/* Config neutral deadband to be the smallest possible */
@@ -73,7 +73,7 @@ public class DriveSubsystem extends SubsystemBase {
 
 		/* Config sensor used for Primary PID [Velocity] */
         leftMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,
-                                            Constants.PID_LOOP_IDX, 
+                                            Constants.PID_IDX, 
 											Constants.TIMEOUT);
 											
 
@@ -84,10 +84,20 @@ public class DriveSubsystem extends SubsystemBase {
 		leftMotor.configPeakOutputReverse(-1, Constants.TIMEOUT);
 
 		/* Config the Velocity closed loop gains in slot0 */
-		leftMotor.config_kF(Constants.PID_LOOP_IDX, Constants.KF, Constants.TIMEOUT);
-		leftMotor.config_kP(Constants.PID_LOOP_IDX, Constants.KP, Constants.TIMEOUT);
-		leftMotor.config_kI(Constants.PID_LOOP_IDX, Constants.KI, Constants.TIMEOUT);
-		leftMotor.config_kD(Constants.PID_LOOP_IDX, Constants.KD, Constants.TIMEOUT);
+		leftMotor.config_kF(Constants.SLOT_IDX, Constants.KF, Constants.TIMEOUT);
+		leftMotor.config_kP(Constants.SLOT_IDX, Constants.KP, Constants.TIMEOUT);
+		leftMotor.config_kI(Constants.SLOT_IDX, Constants.KI, Constants.TIMEOUT);
+        leftMotor.config_kD(Constants.SLOT_IDX, Constants.KD, Constants.TIMEOUT);
+        
+        rightMotor.setInverted(true);
+        leftMotor.setInverted(false);
+        rightMotor2.setInverted(true);
+        leftMotor2.setInverted(false);
+        rightMotor3.setInverted(true);
+        leftMotor3.setInverted(false);
+
+        leftMotor.selectProfileSlot(Constants.SLOT_IDX, 0);
+        rightMotor.selectProfileSlot(Constants.SLOT_IDX, 0);
 
         // Set the name of the subsystem in smart dashboard
         SendableRegistry.setName(this, "Drive");
@@ -109,17 +119,19 @@ public class DriveSubsystem extends SubsystemBase {
 
     // Set the left and right sides separately
     public void setSpeed(double left, double right, ControlMode mode) {
-        if(mode == ControlMode.PercentOutput) {
-            leftMotor.set(mode, left, DemandType.ArbitraryFeedForward, Constants.AFF);
-            rightMotor.set(mode, right, DemandType.ArbitraryFeedForward, Constants.AFF);
-            //leftMotor.set(mode, left);
-            //rightMotor.set(mode, right);
-        } else {
-            leftMotor.set(mode, left, DemandType.ArbitraryFeedForward, Constants.AFF);
-            rightMotor.set(mode, right, DemandType.ArbitraryFeedForward, Constants.AFF);
-            //leftMotor.set(mode, left);
-            //rightMotor.set(mode, right);
+        double affLeft = Constants.AFF, affRight = Constants.AFF;
+        if(left == 0) {
+            affLeft *= 0;
+        } else if(left < 0) {
+            affLeft *= -1;
         }
+        if(right == 0) {
+            affRight *= 0;
+        } else if(right < 0) {
+            affRight *= -1;
+        }
+        leftMotor.set(mode, left, DemandType.ArbitraryFeedForward, affLeft);
+        rightMotor.set(mode, right, DemandType.ArbitraryFeedForward, affRight);
     }
 
     public double getLeftMotorVelocity(){

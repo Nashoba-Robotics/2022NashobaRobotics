@@ -32,13 +32,15 @@ public class DriveCommand extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
+        // rightX: turning joystick
         double rightX = JoystickSubsystem.getInstance().getRightX();
+        // leftY: movement joystick
         double leftY = JoystickSubsystem.getInstance().getLeftY();
-        double[] speeds = JoystickProcessing.processJoysticks(rightX, leftY);
+        double[] speeds = JoystickProcessing.processJoysticks(leftY, rightX);
        //double[] speeds = {leftY, leftY};
         
         if(drive_mode == DriveMode.PERCENT) {
-            DriveSubsystem.getInstance().setSpeed(-speeds[0], speeds[1], ControlMode.PercentOutput);
+            DriveSubsystem.getInstance().setSpeed(speeds[0], speeds[1], ControlMode.PercentOutput);
         } else {
             double leftVel = Units.percent2Velocity(speeds[0]);
             double rightVel = Units.percent2Velocity(speeds[1]);

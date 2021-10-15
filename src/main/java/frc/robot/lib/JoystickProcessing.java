@@ -3,18 +3,30 @@ package frc.robot.lib;
 import frc.robot.Constants;
 
 public class JoystickProcessing {
-    // Process the joystick Y value to make the controls more precise
-    // Equation: result = sign(value)*abs(value)^SENSETIVITY
-    public static double movementShape(double value) {
-        return Math.signum(value)*Math.pow(Math.abs(value), Constants.MOVEMENT_SENSITIVITY);
+    // Process the joystick value to make the controls easier to use
+    // Equation: 
+    public static double shapeJoystick(double value, double sensetivity) {
+        if(Math.abs(value) < Constants.DEAD_ZONE) {
+            return 0;
+        }
+        double value2 = (Math.abs(value) - Constants.DEAD_ZONE) / (1 - Constants.DEAD_ZONE);
+        return Math.pow(value2, sensetivity) * Math.signum(value);
     }
-    public static double turnShape(double value) {
-        return Math.signum(value)*Math.pow(Math.abs(value), Constants.TURN_SENSITIVITY);
-    }
+
+    // public static double turnShape(double value) {
+    //     double s = Math.signum(value)*Math.pow(Math.abs(value), Constants.TURN_SENSITIVITY);
+    //     if(Math.abs(s) < 0.05) {
+    //         return 0;
+    //     } else {
+    //         return s;
+    //     }
+    // }
 
     // Apply shaping to the turning and movement inputs
     public static double[] shapeJoysticks(double movement, double turning) {
-        return new double[]{turnShape(turning), movementShape(movement)};
+        double movementShaped = shapeJoystick(movement, Constants.MOVEMENT_SENSITIVITY);
+        double turningShaped = shapeJoystick(turning, Constants.TURN_SENSITIVITY);
+        return new double[]{movementShaped, turningShaped};
     }
 
     // Combine the movement and turing values to calculate

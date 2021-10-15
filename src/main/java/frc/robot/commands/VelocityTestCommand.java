@@ -39,11 +39,11 @@ public class VelocityTestCommand extends CommandBase {
             //SmartDashboard.putNumber("R-percent", rightVel);
             double leftVel = movement;
             double rightVel = movement;
-            DriveSubsystem.getInstance().setSpeed(-leftVel, -rightVel, ControlMode.Velocity);
+            DriveSubsystem.getInstance().setSpeed(leftVel, rightVel, ControlMode.Velocity);
         } else {
             double leftVel = motorInputs[0];
             double rightVel = motorInputs[1];
-            DriveSubsystem.getInstance().setSpeed(-leftVel, -rightVel, ControlMode.PercentOutput);
+            DriveSubsystem.getInstance().setSpeed(leftVel, rightVel, ControlMode.PercentOutput);
         }
         SmartDashboard.putNumber("L-velocity", DriveSubsystem.getInstance().getLeftMotorVelocity());
         SmartDashboard.putNumber("R-velocity", DriveSubsystem.getInstance().getRightMotorVelocity());

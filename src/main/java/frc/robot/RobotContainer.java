@@ -13,7 +13,7 @@ public class RobotContainer {
 
   public RobotContainer() {
     configureButtonBindings();
-    SmartDashboard.putData(new DriveCommand(DriveMode.PERCENT));
+    SmartDashboard.putData(new DriveCommand(DriveMode.VELOCITY));
     SmartDashboard.putData(new VelocityTestCommand());
     SmartDashboard.putData(new StopCommand());
   }
