@@ -4,15 +4,18 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.DriveCommand;
-import frc.robot.commands.DiagnosticCommand;
+import frc.robot.commands.StopCommand;
+import frc.robot.commands.VelocityTestCommand;
+import frc.robot.commands.DriveCommand.DriveMode;
 
 public class RobotContainer {
 
 
   public RobotContainer() {
     configureButtonBindings();
-    SmartDashboard.putData(new DriveCommand());
-    SmartDashboard.putData(new DiagnosticCommand());
+    SmartDashboard.putData(new DriveCommand(DriveMode.VELOCITY));
+    SmartDashboard.putData(new VelocityTestCommand());
+    SmartDashboard.putData(new StopCommand());
   }
 
   /**

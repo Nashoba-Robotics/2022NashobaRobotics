@@ -3,3 +3,13 @@ Put constants into constants class
 Created TODO
 Created Diagnosis for motors
 Added turning sensitivity constant and method to Drive
+
+09/28/21
+Started working on velocity
+
+10/05/21
+Tested the velocity drive command
+    -Turning was bad
+    -Drifted
+Prints raw joystick values to SmartDashboard
+Prints read velocity of each lead motor

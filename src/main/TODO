@@ -8,3 +8,6 @@ When turning with extremes, the shaping delta is not proportional on both sides(
     Find solution
 Eventually Smart Dashboard will be too full with success/failure statements from the Diagnostic command
     Print onle failures, instead of pending, success, and failures
+When mentor comes, figure out how the velocity stuff works
+Figure out why the motor drifts in velocity mode
+Create Voltage velocity graph

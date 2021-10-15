@@ -29,6 +29,7 @@ public class DiagnosticCommand extends CommandBase{
         motorPorts = new int[totalMotorLength];
 
         //Initializes all of the motors from Constants in the motors array
+        // In the end, motors will contain the motors from all three arrays
         int i;
         for(i = 0; i < leftMotorLength; i++){
             motors[i] = new TalonFX(Constants.LEFT_MOTOR_PORTS[i]);
