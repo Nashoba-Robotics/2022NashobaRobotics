@@ -29,21 +29,21 @@ public final class Constants {
     // 1 is a linear relationship between joystick position and speed
     // Higher values yield more precision in lower speeds and less in higher speeds
     public static final double MOVEMENT_SENSITIVITY = 2;   //Shaping sensitivity for the forward/backwards Joystick
-    public static final double TURN_SENSITIVITY = 4;   //Shaping sensitivity for the turning movement
+    public static final double TURN_SENSITIVITY = 2;   //Shaping sensitivity for the turning movement
     public static final double DEAD_ZONE = 0.05; // Range of joystick values that are treated like zero
 
     // timeout in ms
-    public static final int TIMEOUT = 30;
+    public static final int TIMEOUT = 0;
     public static final int SLOT_IDX = 0;
     public static final int PID_IDX = 0;
 
     public static final double VELOCITY_MULTIPLIER = 19000;
     // Arbitrary feed forward
-	public static final double AFF = 0.13;
+	public static final double AFF = 0;
 
     // motor constants
-    public static double KP = 0.0485;
-    public static double KI = 0.0;
-    public static double KD = 0.0;
-    public static double KF = 0.0485;
+    public static final double KP = 0.0485;
+    public static final double KI = 0.0;
+    public static final double KD = 0.0;
+    public static final double KF = 0.0485;
 }

@@ -15,6 +15,6 @@ public class StopCommand extends CommandBase {
     }
     @Override
     public boolean isFinished() {
-        return true;
+        return false;
     } 
 }

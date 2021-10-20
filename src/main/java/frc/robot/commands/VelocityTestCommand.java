@@ -37,17 +37,18 @@ public class VelocityTestCommand extends CommandBase {
             //double rightVel = Units.percent2Velocity(motorInputs[1]);
             //SmartDashboard.putNumber("L-percent", leftVel);
             //SmartDashboard.putNumber("R-percent", rightVel);
-            double leftVel = movement;
-            double rightVel = movement;
+            double leftVel = -movement; //Make the robot go in the correct direction
+            double rightVel = -movement;
             DriveSubsystem.getInstance().setSpeed(leftVel, rightVel, ControlMode.Velocity);
         } else {
-            double leftVel = motorInputs[0];
-            double rightVel = motorInputs[1];
+            double leftVel = -motorInputs[0];
+            double rightVel = -motorInputs[1];
             DriveSubsystem.getInstance().setSpeed(leftVel, rightVel, ControlMode.PercentOutput);
         }
         SmartDashboard.putNumber("L-velocity", DriveSubsystem.getInstance().getLeftMotorVelocity());
         SmartDashboard.putNumber("R-velocity", DriveSubsystem.getInstance().getRightMotorVelocity());
-
+        SmartDashboard.putNumber("L-error", DriveSubsystem.getInstance().getLeftMotorError());
+        SmartDashboard.putNumber("R-error", DriveSubsystem.getInstance().getRightMotorError());
     }
 
     @Override

@@ -9,6 +9,7 @@ import frc.robot.lib.Units;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.JoystickSubsystem;
 
+// TODO rename -- more specific to joysticks
 public class DriveCommand extends CommandBase {
     public enum DriveMode {
         VELOCITY, PERCENT;
@@ -30,8 +31,11 @@ public class DriveCommand extends CommandBase {
     }
 
     // Called every time the scheduler runs while the command is scheduled.
+    // TODO move percent/velocity logic into DriveSubsystem, add method to set mode
+    // TODO change from length 2 arrays to dedicated classes
+    // TODO add options to enable/disable shuffleboard diagnostics, reorganize
     @Override
-    public void execute() {
+    public void execute() { //10/19/21 Joysticks output reverse values
         // rightX: turning joystick
         double rightX = JoystickSubsystem.getInstance().getRightX();
         // leftY: movement joystick
@@ -43,7 +47,9 @@ public class DriveCommand extends CommandBase {
             DriveSubsystem.getInstance().setSpeed(speeds[0], speeds[1], ControlMode.PercentOutput);
         } else {
             double leftVel = Units.percent2Velocity(speeds[0]);
+            //double leftVel = Units.percent2Velocity(rightX);
             double rightVel = Units.percent2Velocity(speeds[1]);
+            //double rightVel = Units.percent2Velocity(leftY);
             DriveSubsystem.getInstance().setSpeed(leftVel, rightVel, ControlMode.Velocity);
         }
         SmartDashboard.putNumber("Joystick Left Y", leftY);

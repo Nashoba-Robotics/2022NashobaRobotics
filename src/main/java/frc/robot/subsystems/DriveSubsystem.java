@@ -28,6 +28,7 @@ public class DriveSubsystem extends SubsystemBase {
     private TalonFX rightMotor, rightMotor2, rightMotor3;
     private TalonFXSensorCollection rightMasterSensor;
 
+    // TODO generic function for either left or right motor
     private DriveSubsystem() {
         leftMotor = new TalonFX(Constants.LEFT_MOTOR_PORTS[0]);
         leftMotor3 = new TalonFX(Constants.LEFT_MOTOR_PORTS[2]);
@@ -52,8 +53,7 @@ public class DriveSubsystem extends SubsystemBase {
         rightMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,
                                             Constants.PID_IDX, 
 											Constants.TIMEOUT);
-											
-
+                                        
 		/* Config the peak and nominal outputs */
 		rightMotor.configNominalOutputForward(0, Constants.TIMEOUT);
 		rightMotor.configNominalOutputReverse(0, Constants.TIMEOUT);
@@ -89,12 +89,12 @@ public class DriveSubsystem extends SubsystemBase {
 		leftMotor.config_kI(Constants.SLOT_IDX, Constants.KI, Constants.TIMEOUT);
         leftMotor.config_kD(Constants.SLOT_IDX, Constants.KD, Constants.TIMEOUT);
         
-        rightMotor.setInverted(true);
-        leftMotor.setInverted(false);
-        rightMotor2.setInverted(true);
-        leftMotor2.setInverted(false);
-        rightMotor3.setInverted(true);
-        leftMotor3.setInverted(false);
+        rightMotor.setInverted(false);
+        leftMotor.setInverted(true);
+        rightMotor2.setInverted(false);
+        leftMotor2.setInverted(true);
+        rightMotor3.setInverted(false);
+        leftMotor3.setInverted(true);
 
         leftMotor.selectProfileSlot(Constants.SLOT_IDX, 0);
         rightMotor.selectProfileSlot(Constants.SLOT_IDX, 0);
@@ -119,7 +119,8 @@ public class DriveSubsystem extends SubsystemBase {
 
     // Set the left and right sides separately
     public void setSpeed(double left, double right, ControlMode mode) {
-        double affLeft = Constants.AFF, affRight = Constants.AFF;
+        double affLeft = Constants.AFF;
+        double affRight = Constants.AFF;
         if(left == 0) {
             affLeft *= 0;
         } else if(left < 0) {
@@ -129,7 +130,7 @@ public class DriveSubsystem extends SubsystemBase {
             affRight *= 0;
         } else if(right < 0) {
             affRight *= -1;
-        }
+        } 
         leftMotor.set(mode, left, DemandType.ArbitraryFeedForward, affLeft);
         rightMotor.set(mode, right, DemandType.ArbitraryFeedForward, affRight);
     }
@@ -140,7 +141,14 @@ public class DriveSubsystem extends SubsystemBase {
 
     public double getRightMotorVelocity(){
         return rightMasterSensor.getIntegratedSensorVelocity();
+    }
 
+    public double getLeftMotorError() {
+        return leftMotor.getClosedLoopError();
+    }
+
+    public double getRightMotorError() {
+        return rightMotor.getClosedLoopError();
     }
 
 }
