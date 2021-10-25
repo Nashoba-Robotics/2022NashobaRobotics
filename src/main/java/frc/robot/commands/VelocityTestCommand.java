@@ -2,8 +2,11 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.lib.JoystickProcessing;
+import frc.robot.lib.JoystickValues;
+import frc.robot.lib.MotorValues;
 import frc.robot.lib.Units;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.DriveSubsystem.DriveMode;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
@@ -23,28 +26,28 @@ public class VelocityTestCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        DriveSubsystem.getInstance().setSpeed(0, 0, ControlMode.Velocity);
+        DriveSubsystem.getInstance().setDriveMode(DriveMode.VELOCITY);
+        DriveSubsystem.getInstance().setSpeed(0, 0);
     }
 
     @Override
     public void execute(){
         double movement = SmartDashboard.getNumber("Movement%", 0);
         double turning = SmartDashboard.getNumber("Turning%", 0);
-        double[] motorInputs = JoystickProcessing.processJoysticks(movement, turning);
+        JoystickValues joystickValues = new JoystickValues(movement, turning);
+        MotorValues motorValues = JoystickProcessing.arcadeDrive(joystickValues);
         double velMode = SmartDashboard.getNumber("Vel-mode", 0);
+        
         if(velMode != 0) {
-            //double leftVel = Units.percent2Velocity(motorInputs[0]);
-            //double rightVel = Units.percent2Velocity(motorInputs[1]);
-            //SmartDashboard.putNumber("L-percent", leftVel);
-            //SmartDashboard.putNumber("R-percent", rightVel);
-            double leftVel = -movement; //Make the robot go in the correct direction
-            double rightVel = -movement;
-            DriveSubsystem.getInstance().setSpeed(leftVel, rightVel, ControlMode.Velocity);
+            DriveSubsystem.getInstance().setDriveMode(DriveMode.VELOCITY);
         } else {
-            double leftVel = -motorInputs[0];
-            double rightVel = -motorInputs[1];
-            DriveSubsystem.getInstance().setSpeed(leftVel, rightVel, ControlMode.PercentOutput);
+            DriveSubsystem.getInstance().setDriveMode(DriveMode.PERCENT);
         }
+
+        double leftVel = -motorValues.left;
+        double rightVel = -motorValues.right;
+        DriveSubsystem.getInstance().setSpeed(leftVel, rightVel);
+
         SmartDashboard.putNumber("L-velocity", DriveSubsystem.getInstance().getLeftMotorVelocity());
         SmartDashboard.putNumber("R-velocity", DriveSubsystem.getInstance().getRightMotorVelocity());
         SmartDashboard.putNumber("L-error", DriveSubsystem.getInstance().getLeftMotorError());
@@ -53,7 +56,8 @@ public class VelocityTestCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        DriveSubsystem.getInstance().setSpeed(0, 0, ControlMode.Velocity);
+        DriveSubsystem.getInstance().setDriveMode(DriveMode.VELOCITY);
+        DriveSubsystem.getInstance().setSpeed(0, 0);
     }
 
     @Override
