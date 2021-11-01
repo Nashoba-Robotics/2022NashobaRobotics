@@ -54,12 +54,12 @@ public class DriveSubsystem extends SubsystemBase {
         configureMotor(rightMotor);
         configureMotor(leftMotor);
         
-        rightMotor.setInverted(false);
-        leftMotor.setInverted(true);
-        rightMotor2.setInverted(false);
-        leftMotor2.setInverted(true);
-        rightMotor3.setInverted(false);
-        leftMotor3.setInverted(true);
+        rightMotor.setInverted(true);
+        leftMotor.setInverted(false);
+        rightMotor2.setInverted(true);
+        leftMotor2.setInverted(false);
+        rightMotor3.setInverted(true);
+        leftMotor3.setInverted(false);
 
         // Set the name of the subsystem in smart dashboard
         SendableRegistry.setName(this, "Drive");
@@ -144,6 +144,11 @@ public class DriveSubsystem extends SubsystemBase {
         setRightMotorSpeed(right);
     }
 
+    public void setRawMotorVelocity(double left, double right){
+        leftMotor.set(ControlMode.Velocity, left);
+        rightMotor.set(ControlMode.Velocity, right);
+    }
+
     public double getLeftMotorVelocity(){
         return leftMasterSensor.getIntegratedSensorVelocity();
     }
@@ -163,6 +168,10 @@ public class DriveSubsystem extends SubsystemBase {
     // Input: DriveMode enum. Sets drive mode the robot will be in (VELOCITY/PERCENT)
     public void setDriveMode(DriveMode mode){
         driveMode = mode;
+    }
+
+    public DriveMode getDriveMode(){
+        return driveMode;
     }
 
 }

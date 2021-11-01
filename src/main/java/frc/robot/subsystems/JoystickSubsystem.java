@@ -33,12 +33,18 @@ public class JoystickSubsystem extends SubsystemBase {
         return leftJoystick.getX();
     }
     public double getLeftY() {
-        return leftJoystick.getY();
+        return -leftJoystick.getY(); //Has to be negative when joystick inputs are reveresed
     }
     public double getRightX() {
         return rightJoystick.getX();
     }
     public double getRightY() {
-        return rightJoystick.getY();
+        return -rightJoystick.getY(); //Has to be negative when joystick inputs are reveresed
+    }
+    public Joystick getLeftJoystick(){  //getLeft/RightJoystick for Robot Container button binding
+        return leftJoystick;
+    }
+    public Joystick getRightJoystick(){
+        return rightJoystick;
     }
 }

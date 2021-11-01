@@ -8,7 +8,7 @@ public class JoystickProcessing {
         if(Math.abs(value) < deadzone) {
             return 0;
         } else {
-            return (Math.abs(value) - deadzone) / (1 - deadzone);
+            return Math.signum(value) * (Math.abs(value) - deadzone) / (1 - deadzone);
         }
     }
 
@@ -22,7 +22,7 @@ public class JoystickProcessing {
     // Process the joystick value to make the controls easier to use
     // Equation: 
     public static double shapeJoystick(double value, double sensetivity) {
-        return Math.pow(value, sensetivity) * Math.signum(value);
+        return Math.pow(Math.abs(value), sensetivity) * Math.signum(value);
     }
 
     // Apply shaping to the turning and movement inputs
@@ -35,10 +35,31 @@ public class JoystickProcessing {
     // Combine the movement and turing values to calculate
     // the left and right motor speeds
     public static MotorValues arcadeDrive(JoystickValues joystickValues) {
-        double left = joystickValues.movement - joystickValues.turning;
-        double right = joystickValues.movement + joystickValues.turning;
+        if(joystickValues.movement < 0) {
+            joystickValues.turning *= -1;
+        }
+
+        double left = joystickValues.movement + joystickValues.turning;
+        double right = joystickValues.movement - joystickValues.turning;
         // If either side is above 1, divide both by the maximum
         // to limit the maximum speed to 1 while preserving turning angle
+        if(Math.abs(left) > 1 || Math.abs(right) > 1) {
+            double factor = Math.max(Math.abs(left), Math.abs(right));
+            left /= factor;
+            right /= factor;
+        }
+        return new MotorValues(left, right);
+    }
+
+    public static MotorValues radiusDrive(JoystickValues joystickValues) {
+        double left, right;
+        if(joystickValues.movement > 0) {
+            left = joystickValues.movement + joystickValues.turning*Math.abs(joystickValues.movement);
+            right = joystickValues.movement - joystickValues.turning*Math.abs(joystickValues.movement);
+        } else {
+            left = joystickValues.movement - joystickValues.turning*Math.abs(joystickValues.movement);
+            right = joystickValues.movement + joystickValues.turning*Math.abs(joystickValues.movement);
+        }
         if(Math.abs(left) > 1 || Math.abs(right) > 1) {
             double factor = Math.max(Math.abs(left), Math.abs(right));
             left /= factor;
@@ -52,6 +73,6 @@ public class JoystickProcessing {
         JoystickValues scaledJoysticks = scaleJoysticks(joystickValues);
         JoystickValues shapedJoysticks = shapeJoysticks(scaledJoysticks);
         MotorValues motorSpeeds = arcadeDrive(shapedJoysticks);
-        return motorSpeeds;        
+        return motorSpeeds;
     }
 }

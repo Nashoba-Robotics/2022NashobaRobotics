@@ -1,18 +1,24 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.ButtonTestCommand;
 import frc.robot.commands.JoystickDriveCommand;
 import frc.robot.commands.StopCommand;
 import frc.robot.commands.VelocityTestCommand;
+import frc.robot.subsystems.JoystickSubsystem;
 
 public class RobotContainer {
-
 
   public RobotContainer() {
     configureButtonBindings();
     SmartDashboard.putData(new JoystickDriveCommand());
     SmartDashboard.putData(new VelocityTestCommand());
     SmartDashboard.putData(new StopCommand());
+    SmartDashboard.putData(new ButtonTestCommand());
+
+    
   }
 
   /**
@@ -22,6 +28,7 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    new JoystickButton(JoystickSubsystem.getInstance().getLeftJoystick(), 0);
   }
 
 

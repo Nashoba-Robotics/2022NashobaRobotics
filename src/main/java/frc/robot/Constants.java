@@ -28,8 +28,8 @@ public final class Constants {
 
     // 1 is a linear relationship between joystick position and speed
     // Higher values yield more precision in lower speeds and less in higher speeds
-    public static final double MOVEMENT_SENSITIVITY = 2;   //Shaping sensitivity for the forward/backwards Joystick
-    public static final double TURNING_SENSITIVITY = 2;   //Shaping sensitivity for the turning movement
+    public static final double MOVEMENT_SENSITIVITY = 3;   //Shaping sensitivity for the forward/backwards Joystick
+    public static final double TURNING_SENSITIVITY = 3;   //Shaping sensitivity for the turning movement
     public static final double MOVEMENT_DEADZONE = 0.05; // Range of joystick values that are treated like zero
     public static final double TURNING_DEADZONE = 0.05; // Range of joystick values that are treated like zero
 
@@ -45,6 +45,6 @@ public final class Constants {
     // motor constants
     public static final double KP = 0.0485;
     public static final double KI = 0.0;
-    public static final double KD = 0.0;
+    public static final double KD = 0.02;
     public static final double KF = 0.0485;
 }

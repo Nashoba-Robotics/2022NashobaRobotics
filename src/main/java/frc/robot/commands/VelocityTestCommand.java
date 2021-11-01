@@ -39,14 +39,18 @@ public class VelocityTestCommand extends CommandBase {
         double velMode = SmartDashboard.getNumber("Vel-mode", 0);
         
         if(velMode != 0) {
+
             DriveSubsystem.getInstance().setDriveMode(DriveMode.VELOCITY);
         } else {
             DriveSubsystem.getInstance().setDriveMode(DriveMode.PERCENT);
         }
 
+        System.out.println(DriveSubsystem.getInstance().getDriveMode());
+
+
         double leftVel = -motorValues.left;
         double rightVel = -motorValues.right;
-        DriveSubsystem.getInstance().setSpeed(leftVel, rightVel);
+        DriveSubsystem.getInstance().setRawMotorVelocity(leftVel, rightVel);
 
         SmartDashboard.putNumber("L-velocity", DriveSubsystem.getInstance().getLeftMotorVelocity());
         SmartDashboard.putNumber("R-velocity", DriveSubsystem.getInstance().getRightMotorVelocity());
