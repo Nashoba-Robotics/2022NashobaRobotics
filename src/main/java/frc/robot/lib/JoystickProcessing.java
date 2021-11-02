@@ -28,7 +28,13 @@ public class JoystickProcessing {
     // Apply shaping to the turning and movement inputs
     public static JoystickValues shapeJoysticks(JoystickValues joystickValues) {
         double movementShaped = shapeJoystick(joystickValues.movement, Constants.MOVEMENT_SENSITIVITY);
-        double turningShaped = shapeJoystick(joystickValues.turning, Constants.TURNING_SENSITIVITY);
+        double turningShaped = shapeJoystick(joystickValues.turning, Constants.ARCADE_TURNING_SENSITIVITY);
+        return new JoystickValues(movementShaped, turningShaped);
+    }
+
+    public static JoystickValues shapeJoysticksRadiusDrive(JoystickValues joystickValues) {
+        double movementShaped = shapeJoystick(joystickValues.movement, Constants.MOVEMENT_SENSITIVITY);
+        double turningShaped = shapeJoystick(joystickValues.turning, Constants.RADIUS_TURNING_SENSITIVITY);
         return new JoystickValues(movementShaped, turningShaped);
     }
 
@@ -41,8 +47,8 @@ public class JoystickProcessing {
 
         double left = joystickValues.movement + joystickValues.turning;
         double right = joystickValues.movement - joystickValues.turning;
-        // If either side is above 1, divide both by the maximum
-        // to limit the maximum speed to 1 while preserving turning angle
+        // If either side is above 1, divide by the max amount
+        // to limit the maximum speed to 1 while preserving turn angle
         if(Math.abs(left) > 1 || Math.abs(right) > 1) {
             double factor = Math.max(Math.abs(left), Math.abs(right));
             left /= factor;
@@ -69,10 +75,16 @@ public class JoystickProcessing {
     }
 
     // Apply all joystick processing
-    public static MotorValues processJoysticks(JoystickValues joystickValues) {
+    public static MotorValues processJoysticksArcadeDrive(JoystickValues joystickValues) {
         JoystickValues scaledJoysticks = scaleJoysticks(joystickValues);
         JoystickValues shapedJoysticks = shapeJoysticks(scaledJoysticks);
         MotorValues motorSpeeds = arcadeDrive(shapedJoysticks);
+        return motorSpeeds;
+    }
+    public static MotorValues processJoysticksRadiusDrive(JoystickValues joystickValues) {
+        JoystickValues scaledJoysticks = scaleJoysticks(joystickValues);
+        JoystickValues shapedJoysticks = shapeJoysticksRadiusDrive(scaledJoysticks);
+        MotorValues motorSpeeds = radiusDrive(shapedJoysticks);
         return motorSpeeds;
     }
 }

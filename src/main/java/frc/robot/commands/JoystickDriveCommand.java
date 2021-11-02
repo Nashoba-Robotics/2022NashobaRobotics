@@ -11,19 +11,29 @@ import frc.robot.lib.MotorValues;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.JoystickSubsystem;
 import frc.robot.subsystems.DriveSubsystem.DriveMode;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 public class JoystickDriveCommand extends CommandBase {
+
+    private boolean arcadeDrive;    //toggles arcadeDrive
+    private boolean buttonPressed;
+    private boolean lastPressed;
+    private JoystickButton joystickTrigger;
 
     // mode: either DriveMode.VELOCITY for velocity
     // control or DriveMode.PERCENT for percent output control
     public JoystickDriveCommand() {
         addRequirements(DriveSubsystem.getInstance());
         addRequirements(JoystickSubsystem.getInstance());
+        joystickTrigger = new JoystickButton(JoystickSubsystem.getInstance().getLeftJoystick(), 1);
     }
 
     @Override
     public void initialize() {
         DriveSubsystem.getInstance().setSpeed(0, 0);
+        arcadeDrive = true;
+        buttonPressed = false;
+        lastPressed = false;
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -31,12 +41,25 @@ public class JoystickDriveCommand extends CommandBase {
     // TODO add options to enable/disable shuffleboard diagnostics, reorganize
     @Override
     public void execute() { //10/19/21 Joysticks output reverse values
+        if(joystickTrigger.get()) buttonPressed = true;
+        else buttonPressed = false;
+
+        if(buttonPressed && lastPressed != buttonPressed) arcadeDrive = !arcadeDrive;
+        lastPressed = buttonPressed;
+
         // rightX: turning joystick
         double rightX = JoystickSubsystem.getInstance().getRightX();
         // leftY: movement joystick
         double leftY = JoystickSubsystem.getInstance().getLeftY();
         JoystickValues joystickValues = new JoystickValues(leftY, rightX);
-        MotorValues motorValues = JoystickProcessing.processJoysticks(joystickValues);
+        MotorValues motorValues;
+        if(arcadeDrive){
+            motorValues = JoystickProcessing.processJoysticksArcadeDrive(joystickValues);
+        } 
+        else{ 
+            motorValues = JoystickProcessing.processJoysticksRadiusDrive(joystickValues);
+        }
+        SmartDashboard.putBoolean("ArcadeDrive on?", arcadeDrive);
         
        //double[] speeds = {leftY, leftY};
         
