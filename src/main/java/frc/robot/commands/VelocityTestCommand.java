@@ -50,6 +50,9 @@ public class VelocityTestCommand extends CommandBase {
 
         double leftVel = -motorValues.left;
         double rightVel = -motorValues.right;
+        SmartDashboard.putNumber("Left Value", leftVel);
+        SmartDashboard.putNumber("Right Value", rightVel);
+
         DriveSubsystem.getInstance().setRawMotorVelocity(leftVel, rightVel);
 
         SmartDashboard.putNumber("L-velocity", DriveSubsystem.getInstance().getLeftMotorVelocity());

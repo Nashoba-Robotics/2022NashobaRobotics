@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.ButtonTestCommand;
 import frc.robot.commands.JoystickDriveCommand;
 import frc.robot.commands.StopCommand;
+import frc.robot.commands.TurretCommand;
 import frc.robot.commands.VelocityTestCommand;
 import frc.robot.subsystems.JoystickSubsystem;
 
@@ -17,6 +18,7 @@ public class RobotContainer {
     SmartDashboard.putData(new VelocityTestCommand());
     SmartDashboard.putData(new StopCommand());
     SmartDashboard.putData(new ButtonTestCommand());
+    SmartDashboard.putData(new TurretCommand());
 
     
   }

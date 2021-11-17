@@ -145,8 +145,15 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public void setRawMotorVelocity(double left, double right){
-        leftMotor.set(ControlMode.Velocity, left);
-        rightMotor.set(ControlMode.Velocity, right);
+        //left = Units.percent2Velocity(left);
+        //right = Units.percent2Velocity(right);
+        leftMotor.set(ControlMode.Velocity, left, DemandType.ArbitraryFeedForward, Constants.AFF);
+        rightMotor.set(ControlMode.Velocity, right, DemandType.ArbitraryFeedForward, Constants.AFF);
+    }
+
+    public void setRawPercent(double left, double right){
+        leftMotor.set(ControlMode.PercentOutput, left, DemandType.ArbitraryFeedForward, Constants.AFF);
+        rightMotor.set(ControlMode.PercentOutput, right, DemandType.ArbitraryFeedForward, Constants.AFF);
     }
 
     public double getLeftMotorVelocity(){

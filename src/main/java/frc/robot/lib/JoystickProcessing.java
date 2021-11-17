@@ -59,12 +59,13 @@ public class JoystickProcessing {
 
     public static MotorValues radiusDrive(JoystickValues joystickValues) {
         double left, right;
+        double turning = Constants.RADIUS_DRIVE_MULTIPLIER*joystickValues.turning*Math.abs(joystickValues.movement);
         if(joystickValues.movement > 0) {
-            left = joystickValues.movement + joystickValues.turning*Math.abs(joystickValues.movement);
-            right = joystickValues.movement - joystickValues.turning*Math.abs(joystickValues.movement);
+            left = joystickValues.movement + turning;
+            right = joystickValues.movement - turning;
         } else {
-            left = joystickValues.movement - joystickValues.turning*Math.abs(joystickValues.movement);
-            right = joystickValues.movement + joystickValues.turning*Math.abs(joystickValues.movement);
+            left = joystickValues.movement - turning;
+            right = joystickValues.movement + turning;
         }
         if(Math.abs(left) > 1 || Math.abs(right) > 1) {
             double factor = Math.max(Math.abs(left), Math.abs(right));

@@ -41,6 +41,7 @@ public class JoystickDriveCommand extends CommandBase {
     // TODO add options to enable/disable shuffleboard diagnostics, reorganize
     @Override
     public void execute() { //10/19/21 Joysticks output reverse values
+        DriveSubsystem.getInstance().setDriveMode(DriveMode.VELOCITY);
         if(joystickTrigger.get()) buttonPressed = true;
         else buttonPressed = false;
 

@@ -18,8 +18,7 @@ package frc.robot;
 public final class Constants {
     public static final int[] LEFT_MOTOR_PORTS = {12,13,14};
     public static final int[] RIGHT_MOTOR_PORTS = {1,2,3};
-    //If you put a motor w/ a limited axis of rotation change the time condition in the Diagnostic Command
-    public static final int[] MISC_MOTOR_PORTS = {};    
+    public static final int TURRET_PORT = 4;
 
     public static final int[] SOLENOID_CHANNELS = {};
 
@@ -30,8 +29,8 @@ public final class Constants {
     // Higher values yield more precision in lower speeds and less in higher speeds
     public static final double MOVEMENT_SENSITIVITY = 3;   //Shaping sensitivity for the forward/backwards Joystick
     public static final double ARCADE_TURNING_SENSITIVITY = 2;   //Shaping sensitivity for the arcade drive turning movement
-    public static final double RADIUS_TURNING_SENSITIVITY = 3;
-    public static final double MOVEMENT_DEADZONE = 0.05; // Range of joystick values that are treated like zero
+    public static final double RADIUS_TURNING_SENSITIVITY = 2;
+    public static final double MOVEMENT_DEADZONE = 0.08; // Range of joystick values that are treated like zero
     public static final double TURNING_DEADZONE = 0.05; // Range of joystick values that are treated like zero
 
     // timeout in ms
@@ -41,11 +40,12 @@ public final class Constants {
 
     public static final double VELOCITY_MULTIPLIER = 19000;
     // Arbitrary feed forward
-	public static final double AFF = 0;
+	public static final double AFF = 0.051;
 
     // motor constants
-    public static final double KP = 0.0485;
+    public static final double KP = 0.0457;
     public static final double KI = 0.0;
-    public static final double KD = 0.02;
-    public static final double KF = 0.0485;
+    public static final double KD = 0.0;
+    public static final double KF = 0.0457;
+	public static final double RADIUS_DRIVE_MULTIPLIER = 1.3;
 }
