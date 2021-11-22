@@ -59,7 +59,10 @@ public class JoystickProcessing {
 
     public static MotorValues radiusDrive(JoystickValues joystickValues) {
         double left, right;
-        double turning = Constants.RADIUS_DRIVE_MULTIPLIER*joystickValues.turning*Math.abs(joystickValues.movement);
+        joystickValues.turning *= Constants.RADIUS_DRIVE_MULTIPLIER;
+        joystickValues.movement = Math.signum(joystickValues.movement)*
+        Math.min(Math.abs(joystickValues.movement), allowedTipVelocity(Math.abs(joystickValues.turning)));
+        double turning = joystickValues.turning*Math.abs(joystickValues.movement);
         if(joystickValues.movement > 0) {
             left = joystickValues.movement + turning;
             right = joystickValues.movement - turning;
@@ -73,6 +76,14 @@ public class JoystickProcessing {
             right /= factor;
         }
         return new MotorValues(left, right);
+    }
+
+    //returns the max allowed velocity in order to prevent tipping
+    private static double allowedTipVelocity(double turn) {
+        double k_turn = Constants.WIDTH/2;
+        double sqrtNumerator = Constants.GRAVITY * (Constants.WIDTH/2) * k_turn;
+        double sqrtDenominator = 4 * Constants.HEIGHT * turn;
+        return Math.sqrt(sqrtNumerator/sqrtDenominator)/Constants.METRICMAX;
     }
 
     // Apply all joystick processing

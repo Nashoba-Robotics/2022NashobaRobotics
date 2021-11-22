@@ -36,6 +36,7 @@ public class TurretCommand extends CommandBase {
     public void end(boolean interrupted) {
         TurretSubsystem.getInstance().setVelocity(0);
     }
+    //:)
 
     @Override
     public boolean isFinished(){

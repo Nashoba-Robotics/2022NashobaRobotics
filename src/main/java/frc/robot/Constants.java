@@ -19,6 +19,7 @@ public final class Constants {
     public static final int[] LEFT_MOTOR_PORTS = {12,13,14};
     public static final int[] RIGHT_MOTOR_PORTS = {1,2,3};
     public static final int TURRET_PORT = 4;
+    public static final int WINCH_PORT = 18;
 
     public static final int[] SOLENOID_CHANNELS = {};
 
@@ -38,7 +39,7 @@ public final class Constants {
     public static final int SLOT_IDX = 0;
     public static final int PID_IDX = 0;
 
-    public static final double VELOCITY_MULTIPLIER = 19000;
+    public static final double VELOCITY_MULTIPLIER = 21136; //m/s
     // Arbitrary feed forward
 	public static final double AFF = 0.051;
 
@@ -47,5 +48,12 @@ public final class Constants {
     public static final double KI = 0.0;
     public static final double KD = 0.0;
     public static final double KF = 0.0457;
-	public static final double RADIUS_DRIVE_MULTIPLIER = 1.3;
+    public static final double RADIUS_DRIVE_MULTIPLIER = 1.3;
+    
+    //Tip control parameters
+    public static final double WIDTH = 0.6; //Metric units
+    public static final double HEIGHT = 0.3; //center of mass
+    public static final double GRAVITY = 9.8; //m/s
+    public static final double M2NUCONVERSION = 3564.6; //conversion factor for ticks/100ms to m/s
+    public static final double METRICMAX = VELOCITY_MULTIPLIER/M2NUCONVERSION;
 }

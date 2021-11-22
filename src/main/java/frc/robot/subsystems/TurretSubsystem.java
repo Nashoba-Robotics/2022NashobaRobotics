@@ -12,6 +12,8 @@ public class TurretSubsystem extends SubsystemBase {
 
     private TurretSubsystem() {
         turret = new TalonSRX(Constants.TURRET_PORT);
+
+        turret.configFactoryDefault();
     }
 
     public static TurretSubsystem getInstance() {
@@ -24,4 +26,6 @@ public class TurretSubsystem extends SubsystemBase {
     public void setVelocity(double velocity) {
         turret.set(ControlMode.PercentOutput, velocity);
     }
+
+    
 }

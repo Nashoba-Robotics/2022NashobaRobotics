@@ -13,3 +13,4 @@ Figure out why the motor drifts in velocity mode
 Create Voltage velocity graph
 Proportional scaling makes motor speed always one, and one is not a big number (according to my  sources) - Tristan 10/25/21 4:26
 Change the turning sensitivity for radius drive and arcade drive
+Figure out the PID loop settings for TalonSRX
