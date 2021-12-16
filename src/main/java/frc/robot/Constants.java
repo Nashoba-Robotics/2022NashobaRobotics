@@ -18,6 +18,11 @@ package frc.robot;
 public final class Constants {
     public static final int[] LEFT_MOTOR_PORTS = {12,13,14};
     public static final int[] RIGHT_MOTOR_PORTS = {1,2,3};
+
+    public static final int[] LEFT_MOTOR_PORTS_2019 = {0, 1, 2};
+    public static final int[] RIGHT_MOTOR_PORTS_2019 = {12, 13, 14};
+    public static final int HDRIVEPORT = 11; //Hopefully the right port
+    
     public static final int TURRET_PORT = 4;
     public static final int WINCH_PORT = 18;
 
@@ -44,9 +49,10 @@ public final class Constants {
 	public static final double AFF = 0.051;
 
     // motor constants
-    public static final double KP = 0.0457;
-    public static final double KI = 0.0;
-    public static final double KD = 0.0;
+    //public static final double KP = 0.0457;
+    public static final double KP = 0.12;
+    public static final double KI = 0.001;
+    public static final double KD = 0.001;
     public static final double KF = 0.0457;
     public static final double RADIUS_DRIVE_MULTIPLIER = 1.3;
     

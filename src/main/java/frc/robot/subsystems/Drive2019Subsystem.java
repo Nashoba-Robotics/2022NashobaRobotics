@@ -2,46 +2,52 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
-import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
-import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.motorcontrol.TalonFXSensorCollection;
+import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.jni.CANSparkMaxJNI;
+import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableRegistry;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.lib.Units;
 
 // Subsystem for driving the robot
-public class DriveSubsystem extends AbstractDriveSubsystem {
-    //public static final double KF = 0.0475;
+public class Drive2019Subsystem extends AbstractDriveSubsystem {
     public static final int VOLTAGE_COMPENSATION_LEVEL = 12;
     public static final VelocityMeasPeriod VELOCITY_MEASUREMENT_PERIOD_DRIVE = VelocityMeasPeriod.Period_10Ms; // find
     public static final int VELOCITY_MEASUREMENT_WINDOW_DRIVE = 32; // find this
 
     private DriveMode driveMode = DriveMode.VELOCITY;
 
-    private TalonFX leftMotor, leftMotor2, leftMotor3;
-    private TalonFXSensorCollection leftMasterSensor;
-    private TalonFX rightMotor, rightMotor2, rightMotor3;
-    private TalonFXSensorCollection rightMasterSensor;
-
+    private TalonSRX leftMotor;
+    private VictorSPX leftMotor2, leftMotor3;
+    private TalonSRX rightMotor;
+    private VictorSPX rightMotor2, rightMotor3;
+    // private TalonSRX hDriveMotor;
+    private CANSparkMax hDriveMotor;
     
-    private DriveSubsystem() {
-        leftMotor = new TalonFX(Constants.LEFT_MOTOR_PORTS[0]);
-        leftMotor3 = new TalonFX(Constants.LEFT_MOTOR_PORTS[2]);
-        leftMotor2 = new TalonFX(Constants.LEFT_MOTOR_PORTS[1]);
-        rightMotor = new TalonFX(Constants.RIGHT_MOTOR_PORTS[0]);
-        rightMotor2 = new TalonFX(Constants.RIGHT_MOTOR_PORTS[1]);
-        rightMotor3 = new TalonFX(Constants.RIGHT_MOTOR_PORTS[2]);
+    public Drive2019Subsystem() {
+        leftMotor = new TalonSRX(Constants.LEFT_MOTOR_PORTS_2019[0]);
+        leftMotor3 = new VictorSPX(Constants.LEFT_MOTOR_PORTS_2019[2]);
+        leftMotor2 = new VictorSPX(Constants.LEFT_MOTOR_PORTS_2019[1]);
+        rightMotor = new TalonSRX(Constants.RIGHT_MOTOR_PORTS_2019[0]);
+        rightMotor2 = new VictorSPX(Constants.RIGHT_MOTOR_PORTS_2019[1]);
+        rightMotor3 = new VictorSPX(Constants.RIGHT_MOTOR_PORTS_2019[2]);
+        hDriveMotor = new CANSparkMax(Constants.HDRIVEPORT, MotorType.kBrushless);
+        hDriveMotor.setInverted(true);
+        leftMotor.setSensorPhase(true);
         leftMotor2.follow(leftMotor);
         leftMotor3.follow(leftMotor);
         rightMotor2.follow(rightMotor);
         rightMotor3.follow(rightMotor);
 
-        leftMasterSensor = new TalonFXSensorCollection(leftMotor);
-        rightMasterSensor = new TalonFXSensorCollection(rightMotor);
+        //leftMasterSensor = new TalonFXSensorCollection(leftMotor);
+        //rightMasterSensor = new TalonFXSensorCollection(rightMotor);
 
         configureMotor(rightMotor);
         configureMotor(leftMotor);
@@ -57,16 +63,16 @@ public class DriveSubsystem extends AbstractDriveSubsystem {
         SendableRegistry.setName(this, "Drive");
     }
 
-    private void configureMotor(TalonFX motor) {
+    private void configureMotor(TalonSRX motor) {
         motor.configFactoryDefault();
 		
 		/* Config neutral deadband to be the smallest possible */
 		motor.configNeutralDeadband(0.001);
 
 		/* Config sensor used for Primary PID [Velocity] */
-        motor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,
-                                            Constants.PID_IDX, 
-											Constants.TIMEOUT);
+        //motor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,
+        //                                    Constants.PID_IDX, 
+		//									Constants.TIMEOUT);
                                         
 		/* Config the peak and nominal outputs */
 		motor.configNominalOutputForward(0, Constants.TIMEOUT);
@@ -85,32 +91,38 @@ public class DriveSubsystem extends AbstractDriveSubsystem {
 
     //takes input, speed, in form of percent (-1 through 1). Sets the speed of the right motor
     public void setRightMotorSpeed(double speed){
-        TalonFXControlMode controlMode = TalonFXControlMode.Velocity;
+        TalonSRXControlMode controlMode = TalonSRXControlMode.Velocity;
 
         if(driveMode == DriveMode.VELOCITY){
-            controlMode = TalonFXControlMode.Velocity;
+            controlMode = TalonSRXControlMode.Velocity;
             speed = Units.percent2Velocity(speed);
         } else if(driveMode == DriveMode.PERCENT){
-            controlMode = TalonFXControlMode.PercentOutput;
+            controlMode = TalonSRXControlMode.PercentOutput;
         }
         
-        double aff = Constants.AFF * Math.signum(speed);
+        //double aff = Constants.AFF * Math.signum(speed);
+        double aff = 0;
+
+        SmartDashboard.putNumber("Right input", speed);
 
         rightMotor.set(controlMode, speed, DemandType.ArbitraryFeedForward, aff);
     }
 
     //takes input, speed, in form of percent (-1 through 1). Sets the speed of the left motor
     public void setLeftMotorSpeed(double speed){
-        TalonFXControlMode controlMode = TalonFXControlMode.Velocity;
+        TalonSRXControlMode controlMode = TalonSRXControlMode.Velocity;
 
         if(driveMode == DriveMode.VELOCITY){
-            controlMode = TalonFXControlMode.Velocity;
+            controlMode = TalonSRXControlMode.Velocity;
             speed = Units.percent2Velocity(speed);
         } else if(driveMode == DriveMode.PERCENT){
-            controlMode = TalonFXControlMode.PercentOutput;
+            controlMode = TalonSRXControlMode.PercentOutput;
         }
 
-        double aff = Constants.AFF * Math.signum(speed);
+        //double aff = Constants.AFF * Math.signum(speed);
+        double aff = 0;
+
+        SmartDashboard.putNumber("Left input", speed);
 
         leftMotor.set(controlMode, speed, DemandType.ArbitraryFeedForward, aff);
     }
@@ -138,12 +150,19 @@ public class DriveSubsystem extends AbstractDriveSubsystem {
         rightMotor.set(ControlMode.PercentOutput, right, DemandType.ArbitraryFeedForward, Constants.AFF);
     }
 
+    public void setHDriveSpeed(double speed) {
+        hDriveMotor.set(speed);
+        
+    }
+
     public double getLeftMotorVelocity(){
-        return leftMasterSensor.getIntegratedSensorVelocity();
+        return 0;
+        // return leftMasterSensor.getIntegratedSensorVelocity();
     }
 
     public double getRightMotorVelocity(){
-        return rightMasterSensor.getIntegratedSensorVelocity();
+        return 0;
+        //return rightMasterSensor.getIntegratedSensorVelocity();
     }
 
     public double getLeftMotorError() {
@@ -162,5 +181,4 @@ public class DriveSubsystem extends AbstractDriveSubsystem {
     public DriveMode getDriveMode(){
         return driveMode;
     }
-
 }

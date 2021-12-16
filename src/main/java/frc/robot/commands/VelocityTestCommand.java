@@ -6,7 +6,7 @@ import frc.robot.lib.JoystickValues;
 import frc.robot.lib.MotorValues;
 import frc.robot.lib.Units;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.DriveSubsystem.DriveMode;
+import frc.robot.subsystems.AbstractDriveSubsystem.DriveMode;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 

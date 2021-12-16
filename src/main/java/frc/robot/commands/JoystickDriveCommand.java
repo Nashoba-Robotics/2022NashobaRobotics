@@ -9,8 +9,9 @@ import frc.robot.lib.Units;
 import frc.robot.lib.JoystickValues;
 import frc.robot.lib.MotorValues;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.AbstractDriveSubsystem;
 import frc.robot.subsystems.JoystickSubsystem;
-import frc.robot.subsystems.DriveSubsystem.DriveMode;
+import frc.robot.subsystems.AbstractDriveSubsystem.DriveMode;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 public class JoystickDriveCommand extends CommandBase {
@@ -52,6 +53,7 @@ public class JoystickDriveCommand extends CommandBase {
         double rightX = JoystickSubsystem.getInstance().getRightX();
         // leftY: movement joystick
         double leftY = JoystickSubsystem.getInstance().getLeftY();
+        double leftX = JoystickSubsystem.getInstance().getLeftX();
         JoystickValues joystickValues = new JoystickValues(leftY, rightX);
         MotorValues motorValues;
         if(arcadeDrive){
@@ -65,6 +67,7 @@ public class JoystickDriveCommand extends CommandBase {
        //double[] speeds = {leftY, leftY};
         
         DriveSubsystem.getInstance().setSpeed(motorValues.left, motorValues.right);
+        DriveSubsystem.getInstance().setHDriveSpeed(leftX);
         
         SmartDashboard.putNumber("Joystick Left Y", leftY);
         SmartDashboard.putNumber("Joystick Right X", rightX);
