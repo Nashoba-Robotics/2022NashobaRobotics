@@ -12,6 +12,8 @@ public abstract class AbstractDriveSubsystem extends SubsystemBase {
 
     public abstract void setSpeed(double left, double right);
     public abstract void setSpeed(double speed);
+    public abstract void setRightMotorSpeed(double speed);
+    public abstract void setLeftMotorSpeed(double speed);
     public abstract void setDriveMode(DriveMode driveMode);
     public abstract double getLeftMotorVelocity();
     public abstract double getRightMotorVelocity();

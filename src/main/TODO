@@ -8,9 +8,5 @@ When turning with extremes, the shaping delta is not proportional on both sides(
     Find solution
 Eventually Smart Dashboard will be too full with success/failure statements from the Diagnostic command
     Print onle failures, instead of pending, success, and failures
-When mentor comes, figure out how the velocity stuff works
-Figure out why the motor drifts in velocity mode
-Create Voltage velocity graph
-Proportional scaling makes motor speed always one, and one is not a big number (according to my  sources) - Tristan 10/25/21 4:26
-Change the turning sensitivity for radius drive and arcade drive
+"Proportional scaling makes motor speed always one, and one is not a big number (according to my  sources)" - Tristan 10/25/21 4:26 PM
 Figure out the PID loop settings for TalonSRX
