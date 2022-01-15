@@ -133,10 +133,6 @@ public class JoystickDriveCommand extends CommandBase {
     
         lastVelocity = Math.max(Math.abs(motorValues.left), Math.abs(motorValues.right));
         lastMillis = System.currentTimeMillis();
-
-        lastMove = Math.abs(joystickValues.movement);
-        lastTurn = Math.abs(joystickValues.turning);
-        
     }
 
     // Called once the command ends or is interrupted.
