@@ -62,4 +62,7 @@ public final class Constants {
     public static final double GRAVITY = 9.8; //m/s
     public static final double M2NUCONVERSION = 3564.6; //conversion factor for ticks/100ms to m/s
     public static final double METRICMAX = VELOCITY_MULTIPLIER/M2NUCONVERSION;
+
+    //Max acceleration parameters
+    public static final double MAX_ACCEL = 0.006;
 }

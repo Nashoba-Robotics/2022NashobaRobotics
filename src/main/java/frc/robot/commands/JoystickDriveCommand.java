@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.lib.JoystickProcessing;
 import frc.robot.lib.Units;
 import frc.robot.lib.JoystickValues;
@@ -21,6 +22,12 @@ public class JoystickDriveCommand extends CommandBase {
     private boolean lastPressed;
     private JoystickButton joystickTrigger;
 
+    private double lastVelocity = 0;
+    private long lastMillis = 0;
+
+    private double lastLeftY = 0;
+    private double lastRightX = 0;
+
     // mode: either DriveMode.VELOCITY for velocity
     // control or DriveMode.PERCENT for percent output control
     public JoystickDriveCommand() {
@@ -35,6 +42,11 @@ public class JoystickDriveCommand extends CommandBase {
         arcadeDrive = true;
         buttonPressed = false;
         lastPressed = false;
+        lastVelocity = 0;
+        lastMillis = System.currentTimeMillis();
+
+        lastLeftY = 0;
+        lastRightX = 0;
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -63,9 +75,25 @@ public class JoystickDriveCommand extends CommandBase {
             motorValues = JoystickProcessing.processJoysticksRadiusDrive(joystickValues);
         }
         SmartDashboard.putBoolean("ArcadeDrive on?", arcadeDrive);
-        
-       //double[] speeds = {leftY, leftY};
-        
+
+        long elapsed = System.currentTimeMillis() - lastMillis; 
+        double maxVel = lastVelocity + Constants.MAX_ACCEL * elapsed;
+
+        if(Math.abs(motorValues.left) > maxVel || Math.abs(motorValues.right) > maxVel) {
+            double coeff = maxVel / Math.max(Math.abs(motorValues.left), Math.abs(motorValues.right));
+            motorValues.left *= coeff;
+            motorValues.right *= coeff;
+        }
+
+        // if(Math.abs(leftY) < lastLeftY || Math.abs(rightX) < lastRightX){
+        //     DriveSubsystem.getInstance().setDerivative(0.1);
+        //     //DriveSubsystem.getInstance().setIntegral(0.1);
+        // }
+        // else if(Math.abs(leftY) > lastLeftY || Math.abs(rightX) > lastRightX){
+        //     DriveSubsystem.getInstance().setDerivative(Constants.KD);
+        //     //DriveSubsystem.getInstance().setDerivative(Constants.KI);
+        // }
+                
         DriveSubsystem.getInstance().setSpeed(motorValues.left, motorValues.right);
         DriveSubsystem.getInstance().setHDriveSpeed(leftX);
         
@@ -79,6 +107,12 @@ public class JoystickDriveCommand extends CommandBase {
 
         // SmartDashboard.putNumber("Left Motor Real Velocity", PercentOutputDriveSubsystem.getInstance().getLeftMotorVelocity());
         // SmartDashboard.putNumber("Right Motor Real Velocity", PercentOutputDriveSubsystem.getInstance().getRightMotorVelocity());
+    
+        lastVelocity = Math.max(Math.abs(motorValues.left), Math.abs(motorValues.right));
+        lastMillis = System.currentTimeMillis();
+
+        lastLeftY = Math.abs(leftY);
+        lastRightX = Math.abs(leftX);
     }
 
     // Called once the command ends or is interrupted.

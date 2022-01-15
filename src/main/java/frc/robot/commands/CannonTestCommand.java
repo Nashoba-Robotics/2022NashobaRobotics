@@ -13,11 +13,13 @@ public class CannonTestCommand extends CommandBase {
     @Override
     public void initialize(){
         speeeeeeed = SmartDashboard.getNumber("Cannon Speed", 0);
+        SmartDashboard.putNumber("Cannon Speed", speeeeeeed);
     }
 
     @Override
     public void execute(){
         CannonSubsystem.getInstance().shoot(speeeeeeed);
+        
         speeeeeeed = SmartDashboard.getNumber("Cannon Speed", 0);
     }
 
