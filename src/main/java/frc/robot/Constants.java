@@ -65,6 +65,6 @@ public final class Constants {
     public static final double METRICMAX = VELOCITY_MULTIPLIER/M2NUCONVERSION;
 
     //Max acceleration parameters
-    public static final double MAX_ACCEL = 0.0001;
+    public static final double MAX_ACCEL = 0.001;
     public static final double MAX_DECEL = 0.0001;
 }

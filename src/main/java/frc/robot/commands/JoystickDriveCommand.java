@@ -80,14 +80,14 @@ public class JoystickDriveCommand extends CommandBase {
 
         double moveChange = joystickValues.movement - lastMove;
 
-        double maxMove = Math.min(Math.abs(moveChange), Constants.MAX_ACCEL * elapsed);
+        double maxMove = Math.min(Math.abs(moveChange), getMaxChange(lastMove, joystickValues.movement, elapsed));
         if(moveChange < 0) maxMove *= -1;
         joystickValues.movement = lastMove + maxMove;
         lastMove = joystickValues.movement;
 
         double turnChange = joystickValues.turning - lastTurn;
 
-        double maxTurn = Math.min(Math.abs(turnChange), Constants.MAX_ACCEL * elapsed);
+        double maxTurn = Math.min(Math.abs(turnChange), getMaxChange(lastTurn, joystickValues.turning, elapsed));
         if(turnChange < 0) maxTurn *= -1;
         joystickValues.turning = lastTurn + maxTurn;
         lastTurn = joystickValues.turning;
@@ -133,6 +133,15 @@ public class JoystickDriveCommand extends CommandBase {
     
         lastVelocity = Math.max(Math.abs(motorValues.left), Math.abs(motorValues.right));
         lastMillis = System.currentTimeMillis();
+    }
+
+    private double getMaxChange(double lastValue, double newValue, long elapsed) {
+        if( (lastValue < 0 && newValue > 0)
+        || (newValue < 0 && lastValue > 0)
+         || Math.abs(newValue) < Math.abs(lastValue) ) {
+            return Constants.MAX_DECEL * elapsed;
+        }
+        return Constants.MAX_ACCEL * elapsed;
     }
 
     // Called once the command ends or is interrupted.
