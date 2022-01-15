@@ -92,6 +92,24 @@ public class JoystickDriveCommand extends CommandBase {
         joystickValues.turning = lastTurn + maxTurn;
         lastTurn = joystickValues.turning;
 
+        // if(Math.abs(joystickValues.movement) > maxMove){
+        //     // if(joystickValues.movement < 0) joystickValues.movement = -maxMove;
+        //     // else joystickValues.movement = maxMove;
+        // }else if(Math.abs(joystickValues.movement) < minMove){
+        //     if(joystickValues.movement < 0) joystickValues.movement = -minMove;
+        //     else joystickValues.movement = minMove;
+        //     System.out.println("move");
+        // }
+
+        // if(Math.abs(joystickValues.turning) > maxTurn){
+        //     // if(joystickValues.turning < 0) joystickValues.turning = -maxTurn;
+        //     // else joystickValues.turning = maxTurn;
+        // }else if(Math.abs(joystickValues.turning) < minTurn){
+        //     if(joystickValues.turning < 0) joystickValues.turning = -minTurn;
+        //     else joystickValues.turning = minTurn;
+        //     System.out.println("turn");
+        // }
+
         if(arcadeDrive){
             motorValues = JoystickProcessing.arcadeDrive(joystickValues);
         } 
