@@ -31,13 +31,13 @@ public class LimelightSubsystem extends SubsystemBase {
         ty = table.getEntry("ty");
         ta = table.getEntry("ta");
         ts = table.getEntry("ts");
-        tl = table.getEntry("ts");
-        tshort = table.getEntry("ts");
-        tlong = table.getEntry("ts");
-        thor = table.getEntry("ts");
-        tvert = table.getEntry("ts");
-        pipeline = table.getEntry("ts");
-        camTrain = table.getEntry("ts");
+        tl = table.getEntry("tl");
+        tshort = table.getEntry("tshort");
+        tlong = table.getEntry("tlong");
+        thor = table.getEntry("thor");
+        tvert = table.getEntry("tvert");
+        pipeline = table.getEntry("pipeline");
+        camTrain = table.getEntry("camTrain");
         ledMode = table.getEntry("ledMode");
     }
 

@@ -25,8 +25,8 @@ public class JoystickDriveCommand extends CommandBase {
     private double lastVelocity = 0;
     private long lastMillis = 0;
 
-    private double lastLeftY = 0;
-    private double lastRightX = 0;
+    private double lastMove = 0;
+    private double lastTurn = 0;
 
     // mode: either DriveMode.VELOCITY for velocity
     // control or DriveMode.PERCENT for percent output control
@@ -45,8 +45,8 @@ public class JoystickDriveCommand extends CommandBase {
         lastVelocity = 0;
         lastMillis = System.currentTimeMillis();
 
-        lastLeftY = 0;
-        lastRightX = 0;
+        lastMove = 0;
+        lastTurn = 0;
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -54,6 +54,9 @@ public class JoystickDriveCommand extends CommandBase {
     // TODO add options to enable/disable shuffleboard diagnostics, reorganize
     @Override
     public void execute() { //10/19/21 Joysticks output reverse values
+
+        System.out.println("running");
+
         DriveSubsystem.getInstance().setDriveMode(DriveMode.VELOCITY);
         if(joystickTrigger.get()) buttonPressed = true;
         else buttonPressed = false;
@@ -68,30 +71,60 @@ public class JoystickDriveCommand extends CommandBase {
         double leftX = JoystickSubsystem.getInstance().getLeftX();
         JoystickValues joystickValues = new JoystickValues(leftY, rightX);
         MotorValues motorValues;
-        if(arcadeDrive){
-            motorValues = JoystickProcessing.processJoysticksArcadeDrive(joystickValues);
-        } 
-        else{ 
-            motorValues = JoystickProcessing.processJoysticksRadiusDrive(joystickValues);
-        }
-        SmartDashboard.putBoolean("ArcadeDrive on?", arcadeDrive);
+        
+
+        joystickValues = JoystickProcessing.scaleJoysticks(joystickValues);
+        joystickValues = JoystickProcessing.shapeJoysticks(joystickValues);
 
         long elapsed = System.currentTimeMillis() - lastMillis; 
-        double maxVel = lastVelocity + Constants.MAX_ACCEL * elapsed;
 
-        if(Math.abs(motorValues.left) > maxVel || Math.abs(motorValues.right) > maxVel) {
-            double coeff = maxVel / Math.max(Math.abs(motorValues.left), Math.abs(motorValues.right));
-            motorValues.left *= coeff;
-            motorValues.right *= coeff;
+
+        double maxMove = lastMove + Constants.MAX_ACCEL * elapsed;
+        double minMove = lastMove - Constants.MAX_DECEL * elapsed;
+        double maxTurn = lastTurn + Constants.MAX_ACCEL * elapsed;
+        double minTurn = lastTurn - Constants.MAX_DECEL * elapsed;
+
+        if(Math.abs(joystickValues.movement) > maxMove){
+            // if(joystickValues.movement < 0) joystickValues.movement = -maxMove;
+            // else joystickValues.movement = maxMove;
+        }else if(Math.abs(joystickValues.movement) < minMove){
+            if(joystickValues.movement < 0) joystickValues.movement = -minMove;
+            else joystickValues.movement = minMove;
+            System.out.println("move");
         }
 
-        // if(Math.abs(leftY) < lastLeftY || Math.abs(rightX) < lastRightX){
-        //     DriveSubsystem.getInstance().setDerivative(0.1);
-        //     //DriveSubsystem.getInstance().setIntegral(0.1);
+        if(Math.abs(joystickValues.turning) > maxTurn){
+            // if(joystickValues.turning < 0) joystickValues.turning = -maxTurn;
+            // else joystickValues.turning = maxTurn;
+        }else if(Math.abs(joystickValues.turning) < minTurn){
+            if(joystickValues.turning < 0) joystickValues.turning = -minTurn;
+            else joystickValues.turning = minTurn;
+            System.out.println("turn");
+        }
+
+        if(arcadeDrive){
+            motorValues = JoystickProcessing.arcadeDrive(joystickValues);
+        } 
+        else{ 
+            motorValues = JoystickProcessing.radiusDrive(joystickValues);
+        }
+
+        SmartDashboard.putBoolean("ArcadeDrive on?", arcadeDrive);
+
+        // double maxVel = lastVelocity + Constants.MAX_ACCEL * elapsed;
+        // double minVel = lastVelocity - Constants.MAX_DECEL * elapsed;
+
+        // if(Math.abs(motorValues.left) > maxVel || Math.abs(motorValues.right) > maxVel) {
+        //     double coeff = maxVel / Math.max(Math.abs(motorValues.left), Math.abs(motorValues.right));
+        //     motorValues.left *= coeff;
+        //     motorValues.right *= coeff;
         // }
-        // else if(Math.abs(leftY) > lastLeftY || Math.abs(rightX) > lastRightX){
-        //     DriveSubsystem.getInstance().setDerivative(Constants.KD);
-        //     //DriveSubsystem.getInstance().setDerivative(Constants.KI);
+
+        // if(Math.abs(motorValues.left) < minVel || Math.abs(motorValues.right) < minVel){
+        //     double coeff = minVel / Math.min(Math.abs(motorValues.left), Math.abs(motorValues.right));
+        //     motorValues.left *= coeff;
+        //     motorValues.right *= coeff;
+        //     System.out.println("working");
         // }
                 
         DriveSubsystem.getInstance().setSpeed(motorValues.left, motorValues.right);
@@ -111,8 +144,9 @@ public class JoystickDriveCommand extends CommandBase {
         lastVelocity = Math.max(Math.abs(motorValues.left), Math.abs(motorValues.right));
         lastMillis = System.currentTimeMillis();
 
-        lastLeftY = Math.abs(leftY);
-        lastRightX = Math.abs(leftX);
+        lastMove = Math.abs(joystickValues.movement);
+        lastTurn = Math.abs(joystickValues.turning);
+        
     }
 
     // Called once the command ends or is interrupted.
