@@ -78,29 +78,19 @@ public class JoystickDriveCommand extends CommandBase {
 
         long elapsed = System.currentTimeMillis() - lastMillis; 
 
+        double moveChange = joystickValues.movement - lastMove;
 
-        double maxMove = lastMove + Constants.MAX_ACCEL * elapsed;
-        double minMove = lastMove - Constants.MAX_DECEL * elapsed;
-        double maxTurn = lastTurn + Constants.MAX_ACCEL * elapsed;
-        double minTurn = lastTurn - Constants.MAX_DECEL * elapsed;
+        double maxMove = Math.min(Math.abs(moveChange), Constants.MAX_ACCEL * elapsed);
+        if(moveChange < 0) maxMove *= -1;
+        joystickValues.movement = lastMove + maxMove;
+        lastMove = joystickValues.movement;
 
-        if(Math.abs(joystickValues.movement) > maxMove){
-            // if(joystickValues.movement < 0) joystickValues.movement = -maxMove;
-            // else joystickValues.movement = maxMove;
-        }else if(Math.abs(joystickValues.movement) < minMove){
-            if(joystickValues.movement < 0) joystickValues.movement = -minMove;
-            else joystickValues.movement = minMove;
-            System.out.println("move");
-        }
+        double turnChange = joystickValues.turning - lastTurn;
 
-        if(Math.abs(joystickValues.turning) > maxTurn){
-            // if(joystickValues.turning < 0) joystickValues.turning = -maxTurn;
-            // else joystickValues.turning = maxTurn;
-        }else if(Math.abs(joystickValues.turning) < minTurn){
-            if(joystickValues.turning < 0) joystickValues.turning = -minTurn;
-            else joystickValues.turning = minTurn;
-            System.out.println("turn");
-        }
+        double maxTurn = Math.min(Math.abs(turnChange), Constants.MAX_ACCEL * elapsed);
+        if(turnChange < 0) maxTurn *= -1;
+        joystickValues.turning = lastTurn + maxTurn;
+        lastTurn = joystickValues.turning;
 
         if(arcadeDrive){
             motorValues = JoystickProcessing.arcadeDrive(joystickValues);
