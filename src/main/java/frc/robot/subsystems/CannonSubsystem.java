@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
@@ -20,9 +21,9 @@ public class CannonSubsystem extends SubsystemBase{
     }
 
     public CannonSubsystem(){
-        topCannonMotor = new TalonFX(1);
-        bottomCannonMotor = new TalonFX(2);
-        bottomCannonMotor.setInverted(true);
+        topCannonMotor = new TalonFX(0);
+        bottomCannonMotor = new TalonFX(7);
+        //bottomCannonMotor.setInverted(true);
         configureMotor(topCannonMotor);
         configureMotor(bottomCannonMotor);
     }
@@ -51,6 +52,7 @@ public class CannonSubsystem extends SubsystemBase{
         motor.config_kD(Constants.SLOT_IDX, Constants.KD, Constants.TIMEOUT);
 
         motor.selectProfileSlot(Constants.SLOT_IDX, 0);
+        motor.setNeutralMode(NeutralMode.Coast);
     }
 
     public void shoot(double topSpeed, double bottomSpeed){

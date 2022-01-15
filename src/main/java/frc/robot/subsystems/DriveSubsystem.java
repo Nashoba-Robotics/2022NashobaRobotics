@@ -2,10 +2,12 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 import com.ctre.phoenix.motorcontrol.TalonFXSensorCollection;
 
 import edu.wpi.first.util.sendable.SendableRegistry;
@@ -28,7 +30,7 @@ public class DriveSubsystem extends AbstractDriveSubsystem {
     private TalonFXSensorCollection rightMasterSensor;
 
     
-    private DriveSubsystem() {
+    public DriveSubsystem() {
         leftMotor = new TalonFX(Constants.LEFT_MOTOR_PORTS[0]);
         leftMotor3 = new TalonFX(Constants.LEFT_MOTOR_PORTS[2]);
         leftMotor2 = new TalonFX(Constants.LEFT_MOTOR_PORTS[1]);
@@ -67,7 +69,7 @@ public class DriveSubsystem extends AbstractDriveSubsystem {
         motor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,
                                             Constants.PID_IDX, 
 											Constants.TIMEOUT);
-                                        
+                                                
 		/* Config the peak and nominal outputs */
 		motor.configNominalOutputForward(0, Constants.TIMEOUT);
 		motor.configNominalOutputReverse(0, Constants.TIMEOUT);
@@ -81,6 +83,26 @@ public class DriveSubsystem extends AbstractDriveSubsystem {
         motor.config_kD(Constants.SLOT_IDX, Constants.KD, Constants.TIMEOUT);
 
         motor.selectProfileSlot(Constants.SLOT_IDX, 0);
+
+        motor.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_1Ms, 30);
+        motor.configVelocityMeasurementWindow(8, 30);
+
+        
+    }
+
+    public void setProportional(double p){
+        rightMotor.config_kP(Constants.SLOT_IDX, p, Constants.TIMEOUT);
+        leftMotor.config_kP(Constants.SLOT_IDX, p, Constants.TIMEOUT);
+    }
+
+    public void setIntegral(double i){
+        rightMotor.config_kI(Constants.SLOT_IDX, i, Constants.TIMEOUT);
+        leftMotor.config_kI(Constants.SLOT_IDX, i, Constants.TIMEOUT);
+    }
+
+    public void setDerivative(double d){
+        rightMotor.config_kD(Constants.SLOT_IDX, d, Constants.TIMEOUT);
+        leftMotor.config_kD(Constants.SLOT_IDX, d, Constants.TIMEOUT);
     }
 
     //takes input, speed, in form of percent (-1 through 1). Sets the speed of the right motor

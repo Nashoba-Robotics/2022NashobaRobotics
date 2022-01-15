@@ -1,7 +1,10 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.BaseTalon;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.StopCommand;
+import frc.robot.subsystems.DriveSubsystem;
 
 public abstract class AbstractDriveSubsystem extends SubsystemBase {
     private static AbstractDriveSubsystem instance;
@@ -10,8 +13,18 @@ public abstract class AbstractDriveSubsystem extends SubsystemBase {
         VELOCITY, PERCENT;
     }
 
+    public abstract void setProportional(double p);
+    public abstract void setIntegral(double i);
+    public abstract void setDerivative(double d);
+
+    //implement if we want to be able to set specific motors
+    // public abstract void setProportional(BaseTalon motor, double p);
+    // public abstract void setIntegral(BaseTalon motor, double i);
+    // public abstract void setDerivative(BaseTalon motor, double d);
+    
     public abstract void setSpeed(double left, double right);
     public abstract void setSpeed(double speed);
+    public abstract void setRawPercent(double left, double right);
     public abstract void setRightMotorSpeed(double speed);
     public abstract void setLeftMotorSpeed(double speed);
     public abstract void setDriveMode(DriveMode driveMode);
@@ -29,7 +42,7 @@ public abstract class AbstractDriveSubsystem extends SubsystemBase {
 
     public static AbstractDriveSubsystem getInstance() {
         if(instance == null) {
-            instance = new Drive2019Subsystem();
+            instance = new DriveSubsystem();
         }
         return instance;
     }

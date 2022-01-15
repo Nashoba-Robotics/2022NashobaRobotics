@@ -38,6 +38,7 @@ public final class Constants {
     public static final double RADIUS_TURNING_SENSITIVITY = 2;
     public static final double MOVEMENT_DEADZONE = 0.08; // Range of joystick values that are treated like zero
     public static final double TURNING_DEADZONE = 0.05; // Range of joystick values that are treated like zero
+    public static final double DECELERATION_DEADZONE = 0.00;
 
     // timeout in ms
     public static final int TIMEOUT = 0;
@@ -62,4 +63,8 @@ public final class Constants {
     public static final double GRAVITY = 9.8; //m/s
     public static final double M2NUCONVERSION = 3564.6; //conversion factor for ticks/100ms to m/s
     public static final double METRICMAX = VELOCITY_MULTIPLIER/M2NUCONVERSION;
+
+    //Max acceleration parameters
+    public static final double MAX_ACCEL = 0.001;
+    public static final double MAX_DECEL = 0.0006;
 }

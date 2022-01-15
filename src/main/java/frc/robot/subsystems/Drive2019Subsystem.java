@@ -89,6 +89,22 @@ public class Drive2019Subsystem extends AbstractDriveSubsystem {
         motor.selectProfileSlot(Constants.SLOT_IDX, 0);
     }
 
+
+    public void setProportional(double p){
+        rightMotor.config_kP(Constants.SLOT_IDX, p, Constants.TIMEOUT);
+        leftMotor.config_kP(Constants.SLOT_IDX, p, Constants.TIMEOUT);
+    }
+
+    public void setIntegral(double i){
+        rightMotor.config_kI(Constants.SLOT_IDX, i, Constants.TIMEOUT);
+        leftMotor.config_kI(Constants.SLOT_IDX, i, Constants.TIMEOUT);
+    }
+
+    public void setDerivative(double d){
+        rightMotor.config_kD(Constants.SLOT_IDX, d, Constants.TIMEOUT);
+        leftMotor.config_kD(Constants.SLOT_IDX, d, Constants.TIMEOUT);
+    }
+
     //takes input, speed, in form of percent (-1 through 1). Sets the speed of the right motor
     public void setRightMotorSpeed(double speed){
         TalonSRXControlMode controlMode = TalonSRXControlMode.Velocity;
