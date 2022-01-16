@@ -10,12 +10,11 @@ import frc.robot.subsystems.Drive2019Subsystem;
 import frc.robot.subsystems.JoystickSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 
-public class AimBallCommand extends CommandBase{
+public class HybridDriveCommand extends CommandBase{
 
     LimelightSubsystem limelight;
-    AbstractDriveSubsystem driveTrain;
 
-    public AimBallCommand(){
+    public HybridDriveCommand(){
         addRequirements(LimelightSubsystem.getInstance());
         addRequirements(Drive2019Subsystem.getInstance());
     }
@@ -31,6 +30,9 @@ public class AimBallCommand extends CommandBase{
         double turn = 0;
         if(Math.abs(tx) > 5 && LimelightSubsystem.getInstance().validTarget()){
             turn = tx/180;
+        }else if(!LimelightSubsystem.getInstance().validTarget()){
+            System.out.println("no valid target");
+            turn = 0;
         }
         double move = JoystickSubsystem.getInstance().getLeftY();
         double moveScaled = JoystickProcessing.scaleJoystick(move, Constants.MOVEMENT_DEADZONE);
@@ -46,7 +48,7 @@ public class AimBallCommand extends CommandBase{
 
     @Override
     public void end(boolean interrupted){
-        driveTrain.setRightMotorSpeed(0);
-        driveTrain.setLeftMotorSpeed(0);
+        Drive2019Subsystem.getInstance().setRightMotorSpeed(0);
+        Drive2019Subsystem.getInstance().setLeftMotorSpeed(0);
     }
 }

@@ -55,8 +55,6 @@ public class JoystickDriveCommand extends CommandBase {
     @Override
     public void execute() { //10/19/21 Joysticks output reverse values
 
-        System.out.println("running");
-
         DriveSubsystem.getInstance().setDriveMode(DriveMode.VELOCITY);
         if(joystickTrigger.get()) buttonPressed = true;
         else buttonPressed = false;
@@ -70,11 +68,12 @@ public class JoystickDriveCommand extends CommandBase {
         double leftY = JoystickSubsystem.getInstance().getLeftY();
         double leftX = JoystickSubsystem.getInstance().getLeftX();
         JoystickValues joystickValues = new JoystickValues(leftY, rightX);
-        MotorValues motorValues;
-        
+        System.out.print(Units.roundTo(leftX, 3) + "," + Units.roundTo(leftY, 3) + " | ");
 
         joystickValues = JoystickProcessing.scaleJoysticks(joystickValues);
         joystickValues = JoystickProcessing.shapeJoysticks(joystickValues);
+
+        System.out.print(Units.roundTo(joystickValues.movement, 3) + "," + Units.roundTo(joystickValues.turning, 3) + " | ");
 
         long elapsed = System.currentTimeMillis() - lastMillis; 
 
@@ -87,10 +86,12 @@ public class JoystickDriveCommand extends CommandBase {
 
         double turnChange = joystickValues.turning - lastTurn;
 
-        double maxTurn = Math.min(Math.abs(turnChange), getMaxChange(lastTurn, joystickValues.turning, elapsed));
+        double maxTurn = Math.min(Math.abs(turnChange), getMaxChangeTurn(lastTurn, joystickValues.turning, elapsed));
         if(turnChange < 0) maxTurn *= -1;
         joystickValues.turning = lastTurn + maxTurn;
         lastTurn = joystickValues.turning;
+
+        System.out.print(Units.roundTo(joystickValues.movement, 3) + "," + Units.roundTo(joystickValues.turning, 3) + " | ");
 
         // if(Math.abs(joystickValues.movement) > maxMove){
         //     // if(joystickValues.movement < 0) joystickValues.movement = -maxMove;
@@ -110,12 +111,16 @@ public class JoystickDriveCommand extends CommandBase {
         //     System.out.println("turn");
         // }
 
+        MotorValues motorValues;
         if(arcadeDrive){
             motorValues = JoystickProcessing.arcadeDrive(joystickValues);
         } 
         else{ 
             motorValues = JoystickProcessing.radiusDrive(joystickValues);
         }
+
+        System.out.println(Units.roundTo(motorValues.left, 3) + "," + Units.roundTo(motorValues.right, 3));
+
 
         SmartDashboard.putBoolean("ArcadeDrive on?", arcadeDrive);
 
@@ -160,6 +165,15 @@ public class JoystickDriveCommand extends CommandBase {
             return Constants.MAX_DECEL * elapsed;
         }
         return Constants.MAX_ACCEL * elapsed;
+    }
+
+    private double getMaxChangeTurn(double lastValue, double newValue, long elapsed) {
+        if( (lastValue < 0 && newValue > 0)
+        || (newValue < 0 && lastValue > 0)
+         || Math.abs(newValue) < Math.abs(lastValue) ) {
+            return Constants.MAX_DECEL_TURN * elapsed;
+        }
+        return Constants.MAX_ACCEL_TURN * elapsed;
     }
 
     // Called once the command ends or is interrupted.

@@ -28,8 +28,10 @@ public class Drive2019Subsystem extends AbstractDriveSubsystem {
     private VictorSPX leftMotor2, leftMotor3;
     private TalonSRX rightMotor;
     private VictorSPX rightMotor2, rightMotor3;
-    // private TalonSRX hDriveMotor;
+    
     private CANSparkMax hDriveMotor;
+
+    
     
     public Drive2019Subsystem() {
         leftMotor = new TalonSRX(Constants.LEFT_MOTOR_PORTS_2019[0]);
@@ -46,8 +48,8 @@ public class Drive2019Subsystem extends AbstractDriveSubsystem {
         rightMotor2.follow(rightMotor);
         rightMotor3.follow(rightMotor);
 
-        //leftMasterSensor = new TalonFXSensorCollection(leftMotor);
-        //rightMasterSensor = new TalonFXSensorCollection(rightMotor);
+        // leftMasterSensor = new TalonFXSensorCollection(leftMotor);
+        // rightMasterSensor = new TalonFXSensorCollection(rightMotor);
 
         configureMotor(rightMotor);
         configureMotor(leftMotor);
@@ -58,6 +60,8 @@ public class Drive2019Subsystem extends AbstractDriveSubsystem {
         leftMotor2.setInverted(false);
         rightMotor3.setInverted(true);
         leftMotor3.setInverted(false);
+
+
 
         // Set the name of the subsystem in smart dashboard
         SendableRegistry.setName(this, "Drive");
@@ -177,7 +181,7 @@ public class Drive2019Subsystem extends AbstractDriveSubsystem {
     }
 
     public double getRightMotorVelocity(){
-        return 0;
+        return 0; 
         //return rightMasterSensor.getIntegratedSensorVelocity();
     }
 

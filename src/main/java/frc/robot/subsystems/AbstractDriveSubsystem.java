@@ -42,7 +42,7 @@ public abstract class AbstractDriveSubsystem extends SubsystemBase {
 
     public static AbstractDriveSubsystem getInstance() {
         if(instance == null) {
-            instance = new DriveSubsystem();
+            instance = new Drive2019Subsystem();
         }
         return instance;
     }

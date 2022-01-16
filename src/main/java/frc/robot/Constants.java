@@ -66,5 +66,7 @@ public final class Constants {
 
     //Max acceleration parameters
     public static final double MAX_ACCEL = 0.001;
-    public static final double MAX_DECEL = 0.0006;
+    public static final double MAX_DECEL = 0.0007;
+    public static final double MAX_ACCEL_TURN = 0.001;
+    public static final double MAX_DECEL_TURN = 0.001;
 }
