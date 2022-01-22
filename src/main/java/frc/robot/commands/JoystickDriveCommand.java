@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
+import frc.robot.lib.AccelerationControl;
 import frc.robot.lib.JoystickProcessing;
 import frc.robot.lib.Units;
 import frc.robot.lib.JoystickValues;
@@ -22,11 +23,11 @@ public class JoystickDriveCommand extends CommandBase {
     private boolean lastPressed;
     private JoystickButton joystickTrigger;
 
-    private double lastVelocity = 0;
-    private long lastMillis = 0;
+    // private double lastVelocity = 0;
+    // private double lastMove = 0;
+    // private double lastTurn = 0;
 
-    private double lastMove = 0;
-    private double lastTurn = 0;
+    private AccelerationControl accelerationControl;
 
     // mode: either DriveMode.VELOCITY for velocity
     // control or DriveMode.PERCENT for percent output control
@@ -34,6 +35,7 @@ public class JoystickDriveCommand extends CommandBase {
         addRequirements(DriveSubsystem.getInstance());
         addRequirements(JoystickSubsystem.getInstance());
         joystickTrigger = new JoystickButton(JoystickSubsystem.getInstance().getLeftJoystick(), 1);
+ 
     }
 
     @Override
@@ -42,11 +44,15 @@ public class JoystickDriveCommand extends CommandBase {
         arcadeDrive = true;
         buttonPressed = false;
         lastPressed = false;
-        lastVelocity = 0;
-        lastMillis = System.currentTimeMillis();
+        // lastVelocity = 0;
+        // lastMillis = System.currentTimeMillis();
 
-        lastMove = 0;
-        lastTurn = 0;
+        accelerationControl = new AccelerationControl(
+            Constants.MAX_ACCEL, Constants.MAX_DECEL, 
+            Constants.MAX_ACCEL_TURN, Constants.MAX_DECEL_TURN);
+
+        // lastMove = 0;
+        // lastTurn = 0;
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -75,41 +81,23 @@ public class JoystickDriveCommand extends CommandBase {
 
         System.out.print(Units.roundTo(joystickValues.movement, 3) + "," + Units.roundTo(joystickValues.turning, 3) + " | ");
 
-        long elapsed = System.currentTimeMillis() - lastMillis; 
+        joystickValues = accelerationControl.next(joystickValues);
 
-        double moveChange = joystickValues.movement - lastMove;
+        // double moveChange = joystickValues.movement - lastMove;
 
-        double maxMove = Math.min(Math.abs(moveChange), getMaxChange(lastMove, joystickValues.movement, elapsed));
-        if(moveChange < 0) maxMove *= -1;
-        joystickValues.movement = lastMove + maxMove;
-        lastMove = joystickValues.movement;
+        // double maxMove = Math.min(Math.abs(moveChange), getMaxChange(lastMove, joystickValues.movement, elapsed));
+        // if(moveChange < 0) maxMove *= -1;
+        // joystickValues.movement = lastMove + maxMove;
+        // lastMove = joystickValues.movement;
 
-        double turnChange = joystickValues.turning - lastTurn;
+        // double turnChange = joystickValues.turning - lastTurn;
 
-        double maxTurn = Math.min(Math.abs(turnChange), getMaxChangeTurn(lastTurn, joystickValues.turning, elapsed));
-        if(turnChange < 0) maxTurn *= -1;
-        joystickValues.turning = lastTurn + maxTurn;
-        lastTurn = joystickValues.turning;
+        // double maxTurn = Math.min(Math.abs(turnChange), getMaxChangeTurn(lastTurn, joystickValues.turning, elapsed));
+        // if(turnChange < 0) maxTurn *= -1;
+        // joystickValues.turning = lastTurn + maxTurn;
+        // lastTurn = joystickValues.turning;
 
-        System.out.print(Units.roundTo(joystickValues.movement, 3) + "," + Units.roundTo(joystickValues.turning, 3) + " | ");
-
-        // if(Math.abs(joystickValues.movement) > maxMove){
-        //     // if(joystickValues.movement < 0) joystickValues.movement = -maxMove;
-        //     // else joystickValues.movement = maxMove;
-        // }else if(Math.abs(joystickValues.movement) < minMove){
-        //     if(joystickValues.movement < 0) joystickValues.movement = -minMove;
-        //     else joystickValues.movement = minMove;
-        //     System.out.println("move");
-        // }
-
-        // if(Math.abs(joystickValues.turning) > maxTurn){
-        //     // if(joystickValues.turning < 0) joystickValues.turning = -maxTurn;
-        //     // else joystickValues.turning = maxTurn;
-        // }else if(Math.abs(joystickValues.turning) < minTurn){
-        //     if(joystickValues.turning < 0) joystickValues.turning = -minTurn;
-        //     else joystickValues.turning = minTurn;
-        //     System.out.println("turn");
-        // }
+        // System.out.print(Units.roundTo(joystickValues.movement, 3) + "," + Units.roundTo(joystickValues.turning, 3) + " | ");
 
         MotorValues motorValues;
         if(arcadeDrive){
@@ -157,27 +145,27 @@ public class JoystickDriveCommand extends CommandBase {
         SmartDashboard.putNumber("Left Motor Current", DriveSubsystem.getInstance().getLeftMotorCurrent());
         SmartDashboard.putNumber("Right Motor Current", DriveSubsystem.getInstance().getRightMotorCurrent());
     
-        lastVelocity = Math.max(Math.abs(motorValues.left), Math.abs(motorValues.right));
-        lastMillis = System.currentTimeMillis();
+        // lastVelocity = Math.max(Math.abs(motorValues.left), Math.abs(motorValues.right));
+        // lastMillis = System.currentTimeMillis();
     }
 
-    private double getMaxChange(double lastValue, double newValue, long elapsed) {
-        if( (lastValue < 0 && newValue > 0)
-        || (newValue < 0 && lastValue > 0)
-         || Math.abs(newValue) < Math.abs(lastValue) ) {
-            return Constants.MAX_DECEL * elapsed;
-        }
-        return Constants.MAX_ACCEL * elapsed;
-    }
+    // private double getMaxChange(double lastValue, double newValue, long elapsed) {
+    //     if( (lastValue < 0 && newValue > 0)
+    //     || (newValue < 0 && lastValue > 0)
+    //      || Math.abs(newValue) < Math.abs(lastValue) ) {
+    //         return Constants.MAX_DECEL * elapsed;
+    //     }
+    //     return Constants.MAX_ACCEL * elapsed;
+    // }
 
-    private double getMaxChangeTurn(double lastValue, double newValue, long elapsed) {
-        if( (lastValue < 0 && newValue > 0)
-        || (newValue < 0 && lastValue > 0)
-         || Math.abs(newValue) < Math.abs(lastValue) ) {
-            return Constants.MAX_DECEL_TURN * elapsed;
-        }
-        return Constants.MAX_ACCEL_TURN * elapsed;
-    }
+    // private double getMaxChangeTurn(double lastValue, double newValue, long elapsed) {
+    //     if( (lastValue < 0 && newValue > 0)
+    //     || (newValue < 0 && lastValue > 0)
+    //      || Math.abs(newValue) < Math.abs(lastValue) ) {
+    //         return Constants.MAX_DECEL_TURN * elapsed;
+    //     }
+    //     return Constants.MAX_ACCEL_TURN * elapsed;
+    // }
 
     // Called once the command ends or is interrupted.
     @Override

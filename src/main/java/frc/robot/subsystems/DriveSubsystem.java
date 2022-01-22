@@ -87,7 +87,7 @@ public class DriveSubsystem extends AbstractDriveSubsystem {
         motor.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_1Ms, 30);
         motor.configVelocityMeasurementWindow(8, 30);
 
-        motor.setNeutralMode(NeutralMode.Brake);
+        motor.setNeutralMode(NeutralMode.Coast);
     }
 
     public void setProportional(double p){
