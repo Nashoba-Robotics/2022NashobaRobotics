@@ -12,6 +12,7 @@ import com.revrobotics.jni.CANSparkMaxJNI;
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 
 import edu.wpi.first.util.sendable.SendableRegistry;
+import edu.wpi.first.wpilibj.motorcontrol.Victor;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.lib.Units;
@@ -35,14 +36,15 @@ public class Drive2019Subsystem extends AbstractDriveSubsystem {
     
     public Drive2019Subsystem() {
         leftMotor = new TalonSRX(Constants.LEFT_MOTOR_PORTS_2019[0]);
-        leftMotor3 = new VictorSPX(Constants.LEFT_MOTOR_PORTS_2019[2]);
         leftMotor2 = new VictorSPX(Constants.LEFT_MOTOR_PORTS_2019[1]);
+        leftMotor3 = new VictorSPX(Constants.LEFT_MOTOR_PORTS_2019[2]);
         rightMotor = new TalonSRX(Constants.RIGHT_MOTOR_PORTS_2019[0]);
         rightMotor2 = new VictorSPX(Constants.RIGHT_MOTOR_PORTS_2019[1]);
         rightMotor3 = new VictorSPX(Constants.RIGHT_MOTOR_PORTS_2019[2]);
         hDriveMotor = new CANSparkMax(Constants.HDRIVEPORT, MotorType.kBrushless);
         hDriveMotor.setInverted(true);
-        leftMotor.setSensorPhase(true);
+        leftMotor.setSensorPhase(false);
+        rightMotor.setSensorPhase(false);
         leftMotor2.follow(leftMotor);
         leftMotor3.follow(leftMotor);
         rightMotor2.follow(rightMotor);
@@ -91,6 +93,7 @@ public class Drive2019Subsystem extends AbstractDriveSubsystem {
         motor.config_kD(Constants.SLOT_IDX, Constants.KD, Constants.TIMEOUT);
 
         motor.selectProfileSlot(Constants.SLOT_IDX, 0);
+        motor.setSensorPhase(false);
     }
 
 
@@ -111,40 +114,58 @@ public class Drive2019Subsystem extends AbstractDriveSubsystem {
 
     //takes input, speed, in form of percent (-1 through 1). Sets the speed of the right motor
     public void setRightMotorSpeed(double speed){
-        TalonSRXControlMode controlMode = TalonSRXControlMode.Velocity;
-
-        if(driveMode == DriveMode.VELOCITY){
-            controlMode = TalonSRXControlMode.Velocity;
-            speed = Units.percent2Velocity(speed);
-        } else if(driveMode == DriveMode.PERCENT){
-            controlMode = TalonSRXControlMode.PercentOutput;
+        if(speed == 0){
+            rightMotor.set(ControlMode.PercentOutput, 0);
         }
-        
-        //double aff = Constants.AFF * Math.signum(speed);
-        double aff = 0;
+        else{
+            TalonSRXControlMode controlMode = TalonSRXControlMode.Velocity;
 
-        SmartDashboard.putNumber("Right input", speed);
+            if(driveMode == DriveMode.VELOCITY){
+                controlMode = TalonSRXControlMode.Velocity;
+                speed = Units.percent2Velocity(speed);
+            } else if(driveMode == DriveMode.PERCENT){
+                controlMode = TalonSRXControlMode.PercentOutput;
+            }
+            
+            //double aff = Constants.AFF * Math.signum(speed);
+            double aff = 0;
 
-        rightMotor.set(controlMode, speed, DemandType.ArbitraryFeedForward, aff);
+            SmartDashboard.putNumber("Right input", speed);
+
+            rightMotor.set(controlMode, speed, DemandType.ArbitraryFeedForward, aff);
+        }
     }
 
     //takes input, speed, in form of percent (-1 through 1). Sets the speed of the left motor
     public void setLeftMotorSpeed(double speed){
-        TalonSRXControlMode controlMode = TalonSRXControlMode.Velocity;
+        if(speed == 0){
+            leftMotor.set(ControlMode.PercentOutput, 0);
+        } else{
+            TalonSRXControlMode controlMode = TalonSRXControlMode.Velocity;
 
-        if(driveMode == DriveMode.VELOCITY){
-            controlMode = TalonSRXControlMode.Velocity;
-            speed = Units.percent2Velocity(speed);
-        } else if(driveMode == DriveMode.PERCENT){
-            controlMode = TalonSRXControlMode.PercentOutput;
+            if(driveMode == DriveMode.VELOCITY){
+                controlMode = TalonSRXControlMode.Velocity;
+                speed = Units.percent2Velocity(speed);
+            } else if(driveMode == DriveMode.PERCENT){
+                controlMode = TalonSRXControlMode.PercentOutput;
+            }
+
+            //double aff = Constants.AFF * Math.signum(speed);
+            double aff = 0;
+
+            SmartDashboard.putNumber("Left input", speed);
+
+            leftMotor.set(controlMode, speed, DemandType.ArbitraryFeedForward, aff);
         }
+    }
 
-        //double aff = Constants.AFF * Math.signum(speed);
-        double aff = 0;
+    //Gets current output from motors
+    public double getLeftMotorCurrent(){
+        return leftMotor.getStatorCurrent();
+    }
 
-        SmartDashboard.putNumber("Left input", speed);
-
-        leftMotor.set(controlMode, speed, DemandType.ArbitraryFeedForward, aff);
+    public double getRightMotorCurrent(){
+        return rightMotor.getStatorCurrent();
     }
 
     // Set the speed of both the left and right side

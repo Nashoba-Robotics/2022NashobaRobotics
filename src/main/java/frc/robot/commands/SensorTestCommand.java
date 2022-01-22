@@ -9,8 +9,8 @@ public class SensorTestCommand extends CommandBase{
     SensorSubsystem currSensor;
 
     public SensorTestCommand(){
-        currSensor = new SensorSubsystem(6);
-        SmartDashboard.putBoolean("DIO Output", false);
+        currSensor = new SensorSubsystem();
+        SmartDashboard.putNumber("Distance", 0);
     }
 
     @Override
@@ -20,7 +20,7 @@ public class SensorTestCommand extends CommandBase{
 
     @Override
     public void execute(){
-        SmartDashboard.putBoolean("DIO Output", currSensor.getInput());
+        SmartDashboard.putNumber("Distance", currSensor.getDistanceSensor());
     }
 
     @Override

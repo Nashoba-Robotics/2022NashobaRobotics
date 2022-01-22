@@ -153,6 +153,9 @@ public class JoystickDriveCommand extends CommandBase {
 
         // SmartDashboard.putNumber("Left Motor Real Velocity", PercentOutputDriveSubsystem.getInstance().getLeftMotorVelocity());
         // SmartDashboard.putNumber("Right Motor Real Velocity", PercentOutputDriveSubsystem.getInstance().getRightMotorVelocity());
+
+        SmartDashboard.putNumber("Left Motor Current", DriveSubsystem.getInstance().getLeftMotorCurrent());
+        SmartDashboard.putNumber("Right Motor Current", DriveSubsystem.getInstance().getRightMotorCurrent());
     
         lastVelocity = Math.max(Math.abs(motorValues.left), Math.abs(motorValues.right));
         lastMillis = System.currentTimeMillis();

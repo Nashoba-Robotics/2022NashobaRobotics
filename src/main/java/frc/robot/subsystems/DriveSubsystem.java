@@ -167,6 +167,14 @@ public class DriveSubsystem extends AbstractDriveSubsystem {
     public double getRightMotorVelocity(){
         return rightMasterSensor.getIntegratedSensorVelocity();
     }
+    
+    public double getLeftMotorCurrent(){
+        return leftMotor.getStatorCurrent();
+    }
+
+    public double getRightMotorCurrent(){
+        return rightMotor.getStatorCurrent();
+    }
 
     public double getLeftMotorError() {
         return leftMotor.getClosedLoopError();

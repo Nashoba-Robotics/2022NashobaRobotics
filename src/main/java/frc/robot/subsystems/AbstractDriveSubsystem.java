@@ -34,6 +34,8 @@ public abstract class AbstractDriveSubsystem extends SubsystemBase {
     public abstract DriveMode getDriveMode();
     public abstract double getLeftMotorError();
     public abstract double getRightMotorError();
+    public abstract double getLeftMotorCurrent();
+    public abstract double getRightMotorCurrent();
     public void setHDriveSpeed(double speed) {}
 
     public void initDefaultCommand(){
@@ -42,7 +44,7 @@ public abstract class AbstractDriveSubsystem extends SubsystemBase {
 
     public static AbstractDriveSubsystem getInstance() {
         if(instance == null) {
-            instance = new Drive2019Subsystem();
+            instance = new DriveSubsystem();
         }
         return instance;
     }

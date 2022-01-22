@@ -54,7 +54,7 @@ public final class Constants {
     public static final double KP = 0.12;
     public static final double KI = 0.001;
     public static final double KD = 0.001;
-    public static final double KF = 0.0457;
+    public static final double KF = 0.0457; //0.0457
     public static final double RADIUS_DRIVE_MULTIPLIER = 1.3;
     
     //Tip control parameters
@@ -66,7 +66,12 @@ public final class Constants {
 
     //Max acceleration parameters
     public static final double MAX_ACCEL = 0.001;
+    //Also known as PARTTDOTRV; Positive acceleration relative to the direction of the robot's velocity
     public static final double MAX_DECEL = 0.0007;
+    //Also known as NARTTDOTRV; Negative acceleration relative to the direction of the robot's velocity
     public static final double MAX_ACCEL_TURN = 0.001;
-    public static final double MAX_DECEL_TURN = 0.001;
+    //Also known as PAARTTDOTRAAV; Positive angular acceleration relative to the direction of the robot's angular velocity
+    public static final double MAX_DECEL_TURN = 0.01;
+    //Also known as NAARTTDOTRAAV; Negative angular acceleration relative to the direction of the robot's angular velocity
+    
 }

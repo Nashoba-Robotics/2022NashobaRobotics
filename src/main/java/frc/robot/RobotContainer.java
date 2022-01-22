@@ -14,6 +14,7 @@ import frc.robot.commands.SensorTestCommand;
 import frc.robot.commands.StopCommand;
 import frc.robot.commands.TurretCommand;
 import frc.robot.commands.VelocityTestCommand;
+import frc.robot.subsystems.Drive2019Subsystem;
 import frc.robot.subsystems.JoystickSubsystem;
 import frc.robot.commands.GyroTestCommand;
 import frc.robot.commands.CannonTestCommand;
@@ -32,9 +33,10 @@ public class RobotContainer {
     //SmartDashboard.putData(new TurretCommand());
     //SmartDashboard.putData(new MusicCommand());
     //SmartDashboard.putData(new OdeToJoy());
-    SmartDashboard.putData(new GyroTestCommand());
+    //SmartDashboard.putData(new GyroTestCommand());
     SmartDashboard.putData(new LimelightCommand());
-    SmartDashboard.putData(new CannonTestCommand());
+    //SmartDashboard.putData(new CannonTestCommand());
+    SmartDashboard.putData(Drive2019Subsystem.getInstance());
   }
 
   /**

@@ -41,9 +41,9 @@ public class JoystickProcessing {
     // Combine the movement and turing values to calculate
     // the left and right motor speeds
     public static MotorValues arcadeDrive(JoystickValues joystickValues) {
-        if(joystickValues.movement < 0) {
-            joystickValues.turning *= -1;
-        }
+        // if(joystickValues.movement < 0) {
+        //     joystickValues.turning *= -1;
+        // }
 
         double left = joystickValues.movement + joystickValues.turning;
         double right = joystickValues.movement - joystickValues.turning;
