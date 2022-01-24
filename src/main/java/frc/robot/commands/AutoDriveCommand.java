@@ -30,7 +30,7 @@ public class AutoDriveCommand extends CommandBase{
         SmartDashboard.putNumber("left auto", 0);
         SmartDashboard.putNumber("right auto", 0);
 
-        LimelightSubsystem.getInstance().setPipeline(1);
+        LimelightSubsystem.getInstance().setPipeline(2);
 
         accelerationControl = new AccelerationControl(
             Constants.MAX_ACCEL, Constants.MAX_DECEL, 

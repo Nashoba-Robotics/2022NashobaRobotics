@@ -125,7 +125,12 @@ public class LimelightSubsystem extends SubsystemBase {
         double h1 = 0.915;
         double a1 = -16*Constants.TAU/360;
         double a2 = getTy() * Constants.TAU/360;
-        return (h2-h1) / Math.tan(a1+a2);
+        double distance = (h2-h1) / Math.tan(a1+a2);
+        if(distance >= 0){
+            return distance;
+        }else{
+            return 0;
+        }
     }
 
     public double getDistanceBall(){
@@ -133,6 +138,11 @@ public class LimelightSubsystem extends SubsystemBase {
         double h2 =  0;
         double a1 = 0*Constants.TAU/360;
         double a2 = getTy() * Constants.TAU/360;
-        return ((h2-h1) / Math.tan(a1+a2)) * 0.794 - .119;
+        double distance = ((h2-h1) / Math.tan(a1+a2)) * 0.794 - .119;
+        if(distance >= 0){
+            return distance;
+        }else{
+            return 0;
+        }
     }
 }
