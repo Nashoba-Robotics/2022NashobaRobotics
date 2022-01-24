@@ -16,6 +16,8 @@ public class AutoDriveCommand extends CommandBase{
     LimelightSubsystem limelight;
 
     private AccelerationControl accelerationControl;
+    private boolean spin;
+    private int spinDirection;
 
     public AutoDriveCommand(){
         addRequirements(LimelightSubsystem.getInstance());
@@ -29,8 +31,12 @@ public class AutoDriveCommand extends CommandBase{
         SmartDashboard.putBoolean("target?", false);
         SmartDashboard.putNumber("left auto", 0);
         SmartDashboard.putNumber("right auto", 0);
+        SmartDashboard.putNumber("spin?", 0);
 
-        LimelightSubsystem.getInstance().setPipeline(2);
+        LimelightSubsystem.getInstance().setPipeline(0);
+
+        spin = false;
+        spinDirection = 1;
 
         accelerationControl = new AccelerationControl(
             Constants.MAX_ACCEL, Constants.MAX_DECEL, 
@@ -42,6 +48,8 @@ public class AutoDriveCommand extends CommandBase{
         double tx = LimelightSubsystem.getInstance().getTx();
         double turn = 0;
         double move = 0;
+        spin = SmartDashboard.getNumber("spin?", 0) == 1;
+        
         // if(!LimelightSubsystem.getInstance().validTarget()){
         //     turn = 0;
         //     move = 0;
@@ -56,13 +64,21 @@ public class AutoDriveCommand extends CommandBase{
 
         if(LimelightSubsystem.getInstance().validTarget()){
             if(Math.abs(tx) > 5){
-                turn = tx/200;
+                turn = tx/170;
             }
-            if(LimelightSubsystem.getInstance().getDistanceBall() > 2.5){
-                move = -0.2;
+            if(LimelightSubsystem.getInstance().getDistanceBall() > Constants.SPEED_THRESHOLD_AUTO){
+                move = -Constants.MOVE_SPEED_AUTO;
+            }else if(LimelightSubsystem.getInstance().getDistanceBall() > Constants.MIN_DISTANCE_AUTO){
+                move = -LimelightSubsystem.getInstance().getDistanceBall()/(Constants.SPEED_THRESHOLD_AUTO*(1/Constants.MOVE_SPEED_AUTO));
+            }
+            
+            if(tx >= 0){
+                spinDirection = 1;
             }else {
-                move = -LimelightSubsystem.getInstance().getDistanceBall()/12.5;
+                spinDirection = -1;
             }
+        }else if(spin){
+            turn = 0.05 * spinDirection;
         }
 
         JoystickValues joystickValues = accelerationControl.next(new JoystickValues(move, turn));
@@ -77,6 +93,8 @@ public class AutoDriveCommand extends CommandBase{
         SmartDashboard.putNumber("left auto", vel.left);
         SmartDashboard.putNumber("left auto", vel.right);
         Drive2019Subsystem.getInstance().setSpeed(vel.left, vel.right);
+
+        
     }
 
     @Override
