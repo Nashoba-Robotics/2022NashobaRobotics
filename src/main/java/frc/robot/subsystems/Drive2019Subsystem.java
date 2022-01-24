@@ -25,6 +25,8 @@ public class Drive2019Subsystem extends AbstractDriveSubsystem {
 
     private DriveMode driveMode = DriveMode.VELOCITY;
 
+    private boolean brakeMode = false;
+
     private TalonSRX leftMotor;
     private VictorSPX leftMotor2, leftMotor3;
     private TalonSRX rightMotor;
@@ -49,6 +51,8 @@ public class Drive2019Subsystem extends AbstractDriveSubsystem {
         leftMotor3.follow(leftMotor);
         rightMotor2.follow(rightMotor);
         rightMotor3.follow(rightMotor);
+
+        brakeMode = false;
 
         // leftMasterSensor = new TalonFXSensorCollection(leftMotor);
         // rightMasterSensor = new TalonFXSensorCollection(rightMotor);
@@ -96,6 +100,18 @@ public class Drive2019Subsystem extends AbstractDriveSubsystem {
         motor.setSensorPhase(false);
     }
 
+    public void changeBrakeMode(){
+        brakeMode = !brakeMode;
+    }
+
+    public boolean getBrakeMode(){
+        return brakeMode;
+    }
+
+    public void setBrakeMode(boolean brakeMode){
+        this.brakeMode = brakeMode;
+    }
+
 
     public void setProportional(double p){
         rightMotor.config_kP(Constants.SLOT_IDX, p, Constants.TIMEOUT);
@@ -132,7 +148,11 @@ public class Drive2019Subsystem extends AbstractDriveSubsystem {
 
             SmartDashboard.putNumber("Right input", speed);
 
-            rightMotor.set(controlMode, speed, DemandType.ArbitraryFeedForward, aff);
+            if(!brakeMode){
+                rightMotor.set(controlMode, speed, DemandType.ArbitraryFeedForward, aff);
+            }else{
+                rightMotor.set(ControlMode.PercentOutput, 0);
+            }
         }
     }
 
@@ -155,7 +175,11 @@ public class Drive2019Subsystem extends AbstractDriveSubsystem {
 
             SmartDashboard.putNumber("Left input", speed);
 
-            leftMotor.set(controlMode, speed, DemandType.ArbitraryFeedForward, aff);
+            if(!brakeMode){
+                leftMotor.set(controlMode, speed, DemandType.ArbitraryFeedForward, aff);
+            }else {
+                leftMotor.set(ControlMode.PercentOutput, 0);
+            }
         }
     }
 

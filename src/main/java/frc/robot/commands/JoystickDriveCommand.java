@@ -19,9 +19,12 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class JoystickDriveCommand extends CommandBase {
 
     private boolean arcadeDrive;    //toggles arcadeDrive
-    private boolean buttonPressed;
-    private boolean lastPressed;
-    private JoystickButton joystickTrigger;
+    private boolean buttonPressedLeft;
+    private boolean lastPressedLeft;
+    private boolean buttonPressedRight;
+    private boolean lastPressedRight;
+    private JoystickButton joystickTriggerLeft;
+    private JoystickButton joystickTriggerRight;
 
     // private double lastVelocity = 0;
     // private double lastMove = 0;
@@ -34,7 +37,8 @@ public class JoystickDriveCommand extends CommandBase {
     public JoystickDriveCommand() {
         addRequirements(DriveSubsystem.getInstance());
         addRequirements(JoystickSubsystem.getInstance());
-        joystickTrigger = new JoystickButton(JoystickSubsystem.getInstance().getLeftJoystick(), 1);
+        joystickTriggerLeft = new JoystickButton(JoystickSubsystem.getInstance().getLeftJoystick(), 1);
+        joystickTriggerRight = new JoystickButton(JoystickSubsystem.getInstance().getRightJoystick(), 1);
  
     }
 
@@ -42,8 +46,13 @@ public class JoystickDriveCommand extends CommandBase {
     public void initialize() {
         DriveSubsystem.getInstance().setSpeed(0, 0);
         arcadeDrive = true;
-        buttonPressed = false;
-        lastPressed = false;
+        buttonPressedLeft = false;
+        lastPressedLeft = false;
+
+        buttonPressedRight = false;
+        lastPressedRight = false;
+
+
         // lastVelocity = 0;
         // lastMillis = System.currentTimeMillis();
 
@@ -62,11 +71,16 @@ public class JoystickDriveCommand extends CommandBase {
     public void execute() { //10/19/21 Joysticks output reverse values
 
         DriveSubsystem.getInstance().setDriveMode(DriveMode.VELOCITY);
-        if(joystickTrigger.get()) buttonPressed = true;
-        else buttonPressed = false;
+        
+        buttonPressedLeft = joystickTriggerLeft.get();
+        if(buttonPressedLeft && lastPressedLeft != buttonPressedLeft) arcadeDrive = !arcadeDrive;
+        lastPressedLeft = buttonPressedLeft;
 
-        if(buttonPressed && lastPressed != buttonPressed) arcadeDrive = !arcadeDrive;
-        lastPressed = buttonPressed;
+        buttonPressedRight = joystickTriggerRight.get();
+        if(buttonPressedRight && lastPressedRight != buttonPressedRight) AbstractDriveSubsystem.getInstance().changeBrakeMode();
+        lastPressedRight = buttonPressedRight;
+        
+        SmartDashboard.putBoolean("Brake Mode", AbstractDriveSubsystem.getInstance().getBrakeMode());
 
         // rightX: turning joystick
         double rightX = JoystickSubsystem.getInstance().getRightX();
@@ -172,6 +186,7 @@ public class JoystickDriveCommand extends CommandBase {
     public void end(boolean interrupted) {
         DriveSubsystem.getInstance().setDriveMode(DriveMode.VELOCITY);
         DriveSubsystem.getInstance().setSpeed(0, 0);
+        DriveSubsystem.getInstance().setBrakeMode(false);
     }
 
     // Returns true when the command should end.

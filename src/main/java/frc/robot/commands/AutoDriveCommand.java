@@ -30,6 +30,8 @@ public class AutoDriveCommand extends CommandBase{
         SmartDashboard.putNumber("left auto", 0);
         SmartDashboard.putNumber("right auto", 0);
 
+        LimelightSubsystem.getInstance().setPipeline(1);
+
         accelerationControl = new AccelerationControl(
             Constants.MAX_ACCEL, Constants.MAX_DECEL, 
             Constants.MAX_ACCEL_TURN, Constants.MAX_DECEL_TURN);
@@ -40,17 +42,28 @@ public class AutoDriveCommand extends CommandBase{
         double tx = LimelightSubsystem.getInstance().getTx();
         double turn = 0;
         double move = 0;
-        if(!LimelightSubsystem.getInstance().validTarget()){
-            turn = 0;
-            move = 0;
-        } else {
+        // if(!LimelightSubsystem.getInstance().validTarget()){
+        //     turn = 0;
+        //     move = 0;
+        // } else {
+        //     if(Math.abs(tx) > 5){
+        //       turn = tx/200; 
+        //     }
+        //     if(LimelightSubsystem.getInstance().getDistanceBall() > 1){
+        //         move = -0.05;
+        //     }
+        // } 
+
+        if(LimelightSubsystem.getInstance().validTarget()){
             if(Math.abs(tx) > 5){
-              turn = tx/400; 
+                turn = tx/200;
             }
-            if(LimelightSubsystem.getInstance().getDistanceBall() > 1){
-                move = -0.05;
+            if(LimelightSubsystem.getInstance().getDistanceBall() > 2.5){
+                move = -0.2;
+            }else {
+                move = -LimelightSubsystem.getInstance().getDistanceBall()/12.5;
             }
-        } 
+        }
 
         JoystickValues joystickValues = accelerationControl.next(new JoystickValues(move, turn));
         
@@ -68,7 +81,8 @@ public class AutoDriveCommand extends CommandBase{
 
     @Override
     public boolean isFinished(){
-        return LimelightSubsystem.getInstance().getDistanceBall() < 1;
+        //return LimelightSubsystem.getInstance().getDistanceBall() < 1;
+        return false;
     }
 
     @Override

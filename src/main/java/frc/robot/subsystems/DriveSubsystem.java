@@ -24,6 +24,8 @@ public class DriveSubsystem extends AbstractDriveSubsystem {
 
     private DriveMode driveMode = DriveMode.VELOCITY;
 
+    private boolean brakeMode = false;
+
     private TalonFX leftMotor, leftMotor2, leftMotor3;
     private TalonFXSensorCollection leftMasterSensor;
     private TalonFX rightMotor, rightMotor2, rightMotor3;
@@ -41,6 +43,8 @@ public class DriveSubsystem extends AbstractDriveSubsystem {
         leftMotor3.follow(leftMotor);
         rightMotor2.follow(rightMotor);
         rightMotor3.follow(rightMotor);
+
+        brakeMode = false;
 
         leftMasterSensor = new TalonFXSensorCollection(leftMotor);
         rightMasterSensor = new TalonFXSensorCollection(rightMotor);
@@ -90,6 +94,18 @@ public class DriveSubsystem extends AbstractDriveSubsystem {
         motor.setNeutralMode(NeutralMode.Coast);
     }
 
+    public void changeBrakeMode(){
+        brakeMode = !brakeMode;
+    }
+
+    public boolean getBrakeMode(){
+        return brakeMode;
+    }
+
+    public void setBrakeMode(boolean brakeMode){
+        this.brakeMode = brakeMode;
+    }
+
     public void setProportional(double p){
         rightMotor.config_kP(Constants.SLOT_IDX, p, Constants.TIMEOUT);
         leftMotor.config_kP(Constants.SLOT_IDX, p, Constants.TIMEOUT);
@@ -117,8 +133,13 @@ public class DriveSubsystem extends AbstractDriveSubsystem {
         }
         
         double aff = Constants.AFF * Math.signum(speed);
-
-        rightMotor.set(controlMode, speed, DemandType.ArbitraryFeedForward, aff);
+        
+        if(!brakeMode){
+            rightMotor.set(controlMode, speed, DemandType.ArbitraryFeedForward, aff);
+        }else {
+            rightMotor.set(ControlMode.PercentOutput, 0);
+        }
+        
     }
 
     //takes input, speed, in form of percent (-1 through 1). Sets the speed of the left motor
@@ -135,6 +156,12 @@ public class DriveSubsystem extends AbstractDriveSubsystem {
         double aff = Constants.AFF * Math.signum(speed);
 
         leftMotor.set(controlMode, speed, DemandType.ArbitraryFeedForward, aff);
+
+        if(!brakeMode){
+            leftMotor.set(controlMode, speed, DemandType.ArbitraryFeedForward, aff);
+        }else {
+            leftMotor.set(ControlMode.PercentOutput, 0);
+        }
     }
 
     // Set the speed of both the left and right side
