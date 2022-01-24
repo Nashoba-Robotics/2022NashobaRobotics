@@ -31,8 +31,8 @@ public class HybridDriveCommand extends CommandBase{
     public void execute(){
         double tx = LimelightSubsystem.getInstance().getTx();
         double turn = 0;
-        if(Math.abs(tx) > 5 && LimelightSubsystem.getInstance().validTarget()){
-            turn = tx/180;
+        if(Math.abs(tx) > 3 && LimelightSubsystem.getInstance().validTarget()){
+            turn = tx/240;
         }else if(!LimelightSubsystem.getInstance().validTarget()){
             //System.out.println("no valid target");
             turn = 0;

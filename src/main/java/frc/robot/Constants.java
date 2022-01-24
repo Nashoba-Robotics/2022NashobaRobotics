@@ -73,5 +73,7 @@ public final class Constants {
     //Also known as PAARTTDOTRAAV; Positive angular acceleration relative to the direction of the robot's angular velocity
     public static final double MAX_DECEL_TURN = 0.01;
     //Also known as NAARTTDOTRAAV; Negative angular acceleration relative to the direction of the robot's angular velocity
+
+    public static final double TAU = 2 * Math.PI;
     
 }

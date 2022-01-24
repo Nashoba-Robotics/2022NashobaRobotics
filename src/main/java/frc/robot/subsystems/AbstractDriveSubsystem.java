@@ -17,6 +17,10 @@ public abstract class AbstractDriveSubsystem extends SubsystemBase {
     public abstract void setIntegral(double i);
     public abstract void setDerivative(double d);
 
+    public abstract void changeBrakeMode();
+    public abstract boolean getBrakeMode();
+    public abstract void setBrakeMode(boolean brakeMode);
+
     //implement if we want to be able to set specific motors
     // public abstract void setProportional(BaseTalon motor, double p);
     // public abstract void setIntegral(BaseTalon motor, double i);
