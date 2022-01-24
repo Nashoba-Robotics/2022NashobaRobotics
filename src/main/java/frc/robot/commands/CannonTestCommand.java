@@ -21,8 +21,6 @@ public class CannonTestCommand extends CommandBase {
         CannonSubsystem.getInstance().shoot(speeeeeeed);
         
         speeeeeeed = SmartDashboard.getNumber("Cannon Speed", 0);
-        SmartDashboard.putNumber("Top speed", CannonSubsystem.getInstance().getTopSpeed());
-        SmartDashboard.putNumber("Bottom speed", CannonSubsystem.getInstance().getBottomSpeed());
     }
 
     @Override
