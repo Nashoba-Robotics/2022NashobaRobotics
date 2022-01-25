@@ -11,4 +11,8 @@ public class Units {
     public static double velocity2Percent(double velocity){
         return velocity/Constants.VELOCITY_MULTIPLIER;
     }
+
+    public static double roundTo(double num, int places) {
+        return Math.round(num * Math.pow(10, places)) * Math.pow(10, -places);
+    }
 }

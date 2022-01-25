@@ -54,7 +54,7 @@ public final class Constants {
     public static final double KP = 0.12;
     public static final double KI = 0.001;
     public static final double KD = 0.001;
-    public static final double KF = 0.0457;
+    public static final double KF = 0.0457; //0.0457
     public static final double RADIUS_DRIVE_MULTIPLIER = 1.3;
     
     //Tip control parameters
@@ -66,5 +66,19 @@ public final class Constants {
 
     //Max acceleration parameters
     public static final double MAX_ACCEL = 0.001;
-    public static final double MAX_DECEL = 0.0006;
+    //Also known as PARTTDOTRV; Positive acceleration relative to the direction of the robot's velocity
+    public static final double MAX_DECEL = 0.0007;
+    //Also known as NARTTDOTRV; Negative acceleration relative to the direction of the robot's velocity
+    public static final double MAX_ACCEL_TURN = 0.001;
+    //Also known as PAARTTDOTRAAV; Positive angular acceleration relative to the direction of the robot's angular velocity
+    public static final double MAX_DECEL_TURN = 0.01;
+    //Also known as NAARTTDOTRAAV; Negative angular acceleration relative to the direction of the robot's angular velocity
+
+    //Use this as the superior circle constant
+    public static final double TAU = 2 * Math.PI;
+    
+    //Change the autonomous settings
+    public static final double MIN_DISTANCE_AUTO = 1; //Tells at what distance from the target where the robot will stop
+    public static final double SPEED_THRESHOLD_AUTO = 2.5; //The distance from the targget at which the robot will not go at moveSpeedAuto; past threshold, speed will be proportional to distance of target
+    public static final double MOVE_SPEED_AUTO = 0.2; //The max move speed during autonomous
 }

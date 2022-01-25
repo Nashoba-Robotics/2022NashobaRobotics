@@ -5,6 +5,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class LimelightSubsystem extends SubsystemBase {
     private static LimelightSubsystem instance;
@@ -122,16 +123,26 @@ public class LimelightSubsystem extends SubsystemBase {
         // hieght 2 = 1.08 cm
         // a1 = 16 deg = 2tau/45
         double h1 = 0.915;
-        double a1 = -16*Math.PI/180;
-        double a2 = getTy() * Math.PI/180;
-        return (h2-h1) / Math.tan(a1+a2);
+        double a1 = -16*Constants.TAU/360;
+        double a2 = getTy() * Constants.TAU/360;
+        double distance = (h2-h1) / Math.tan(a1+a2);
+        if(distance >= 0){
+            return distance;
+        }else{
+            return 0;
+        }
     }
 
     public double getDistanceBall(){
-        double h1 = 0.915;
+        double h1 = 0.565;
         double h2 =  0;
-        double a1 = -16*Math.PI/180;
-        double a2 = getTy() * Math.PI/180;
-        return ((h2-h1) / Math.tan(a1+a2)) * 2.075 - 0.714;
+        double a1 = 0*Constants.TAU/360;
+        double a2 = getTy() * Constants.TAU/360;
+        double distance = ((h2-h1) / Math.tan(a1+a2)) * 0.794 - .119;
+        if(distance >= 0){
+            return distance;
+        }else{
+            return 0;
+        }
     }
 }

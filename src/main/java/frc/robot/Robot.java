@@ -9,9 +9,12 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.JoystickDriveCommand;
+import frc.robot.subsystems.AbstractDriveSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.AbstractDriveSubsystem.DriveMode;
 
@@ -51,6 +54,7 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    //CommandScheduler.getInstance().setDefaultCommand(AbstractDriveSubsystem.getInstance(), new JoystickDriveCommand());
   }
 
   /**
