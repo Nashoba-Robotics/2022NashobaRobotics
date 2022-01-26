@@ -1,118 +1,113 @@
 package frc.robot.commands;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.lib.AccelerationControl;
 import frc.robot.lib.JoystickProcessing;
 import frc.robot.lib.Units;
 import frc.robot.lib.JoystickValues;
 import frc.robot.lib.MotorValues;
-import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.AbstractDriveSubsystem;
 import frc.robot.subsystems.JoystickSubsystem;
 import frc.robot.subsystems.AbstractDriveSubsystem.DriveMode;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
+/*
+    Operate the robot using the joysticks.
+*/
 public class JoystickDriveCommand extends CommandBase {
 
-    private boolean arcadeDrive;    //toggles arcadeDrive
+    // Toggle between arcade drive (true) and radius drive (false)
+    private boolean arcadeDrive;    
+    // Record the state of the joystick triggers to detect when they
+    // are pressed/released
     private boolean buttonPressedLeft;
     private boolean lastPressedLeft;
     private boolean buttonPressedRight;
     private boolean lastPressedRight;
+
+    private boolean lastPressedbottom;
+    private boolean bottomPressed;
+
+    // The left and right joystick triggers
     private JoystickButton joystickTriggerLeft;
     private JoystickButton joystickTriggerRight;
 
-    // private double lastVelocity = 0;
-    // private double lastMove = 0;
-    // private double lastTurn = 0;
+    private JoystickButton joystickBottomRight;
 
     private AccelerationControl accelerationControl;
 
-    // mode: either DriveMode.VELOCITY for velocity
-    // control or DriveMode.PERCENT for percent output control
     public JoystickDriveCommand() {
-        addRequirements(DriveSubsystem.getInstance());
+        addRequirements(AbstractDriveSubsystem.getInstance());
         addRequirements(JoystickSubsystem.getInstance());
         joystickTriggerLeft = new JoystickButton(JoystickSubsystem.getInstance().getLeftJoystick(), 1);
         joystickTriggerRight = new JoystickButton(JoystickSubsystem.getInstance().getRightJoystick(), 1);
- 
+        joystickBottomRight = new JoystickButton(JoystickSubsystem.getInstance().getRightJoystick(), 2);
     }
 
     @Override
     public void initialize() {
-        DriveSubsystem.getInstance().setSpeed(0, 0);
+        AbstractDriveSubsystem.getInstance().setSpeed(0, 0);
+        // Default to enabling arcade drive
         arcadeDrive = true;
-        buttonPressedLeft = false;
-        lastPressedLeft = false;
-
-        buttonPressedRight = false;
-        lastPressedRight = false;
-
-
-        // lastVelocity = 0;
-        // lastMillis = System.currentTimeMillis();
+        // Joystick buttons start off unpressed
+        buttonPressedLeft = joystickTriggerLeft.get();
+        lastPressedLeft = joystickTriggerLeft.get();
+        buttonPressedRight = joystickTriggerRight.get();
+        lastPressedRight = joystickTriggerRight.get();
 
         accelerationControl = new AccelerationControl(
             Constants.MAX_ACCEL, Constants.MAX_DECEL, 
             Constants.MAX_ACCEL_TURN, Constants.MAX_DECEL_TURN);
-
-        // lastMove = 0;
-        // lastTurn = 0;
     }
 
-    // Called every time the scheduler runs while the command is scheduled.
-    // TODO change from length 2 arrays to dedicated classes
-    // TODO add options to enable/disable shuffleboard diagnostics, reorganize
     @Override
-    public void execute() { //10/19/21 Joysticks output reverse values
-
-        DriveSubsystem.getInstance().setDriveMode(DriveMode.VELOCITY);
+    public void execute() {
+        // Joystick drive uses velocity mode
+        AbstractDriveSubsystem.getInstance().setDriveMode(DriveMode.VELOCITY);
         
+        // Toggle arcade drive when the left trigger is pressed
         buttonPressedLeft = joystickTriggerLeft.get();
         if(buttonPressedLeft && lastPressedLeft != buttonPressedLeft) arcadeDrive = !arcadeDrive;
         lastPressedLeft = buttonPressedLeft;
 
+        // Enable break mode when the right trigger is pressed
         buttonPressedRight = joystickTriggerRight.get();
         if(buttonPressedRight && lastPressedRight != buttonPressedRight) AbstractDriveSubsystem.getInstance().changeBrakeMode();
         lastPressedRight = buttonPressedRight;
+
+        bottomPressed = joystickBottomRight.get();
+        if(bottomPressed && lastPressedbottom != bottomPressed){
+            CommandScheduler.getInstance().schedule(RobotContainer.hybridDriveCommand);
+            CommandScheduler.getInstance().run();
+            CommandScheduler.getInstance().cancel(RobotContainer.joystickDriveCommand);
+        }
+        lastPressedbottom = bottomPressed;
         
+        // Show whether break mode is enabled
         SmartDashboard.putBoolean("Brake Mode", AbstractDriveSubsystem.getInstance().getBrakeMode());
 
-        // rightX: turning joystick
+        // right joystick x position - turning
         double rightX = JoystickSubsystem.getInstance().getRightX();
-        // leftY: movement joystick
+        // left joystick y position - movement
         double leftY = JoystickSubsystem.getInstance().getLeftY();
+        // left joystick x position - h-drive
         double leftX = JoystickSubsystem.getInstance().getLeftX();
+        // creates a JoystickValues object to represent the output from the actual joysticks; before all processing
         JoystickValues joystickValues = new JoystickValues(leftY, rightX);
-        System.out.print(Units.roundTo(leftX, 3) + "," + Units.roundTo(leftY, 3) + " | ");
-
+        // adds deadzone to joystick values while also keeping graph continuous
         joystickValues = JoystickProcessing.scaleJoysticks(joystickValues);
+        // adds shaping to joystick; see JoystickProcessing
         joystickValues = JoystickProcessing.shapeJoysticks(joystickValues);
 
-        System.out.print(Units.roundTo(joystickValues.movement, 3) + "," + Units.roundTo(joystickValues.turning, 3) + " | ");
-
+        // changes joystickValues if exceeds acceleration limit
         joystickValues = accelerationControl.next(joystickValues);
 
-        // double moveChange = joystickValues.movement - lastMove;
-
-        // double maxMove = Math.min(Math.abs(moveChange), getMaxChange(lastMove, joystickValues.movement, elapsed));
-        // if(moveChange < 0) maxMove *= -1;
-        // joystickValues.movement = lastMove + maxMove;
-        // lastMove = joystickValues.movement;
-
-        // double turnChange = joystickValues.turning - lastTurn;
-
-        // double maxTurn = Math.min(Math.abs(turnChange), getMaxChangeTurn(lastTurn, joystickValues.turning, elapsed));
-        // if(turnChange < 0) maxTurn *= -1;
-        // joystickValues.turning = lastTurn + maxTurn;
-        // lastTurn = joystickValues.turning;
-
-        // System.out.print(Units.roundTo(joystickValues.movement, 3) + "," + Units.roundTo(joystickValues.turning, 3) + " | ");
-
+        //Switches between Arcade Drive and Radius Drive
+        //motorValues are move/turn instead of left/right
         MotorValues motorValues;
         if(arcadeDrive){
             motorValues = JoystickProcessing.arcadeDrive(joystickValues);
@@ -121,77 +116,36 @@ public class JoystickDriveCommand extends CommandBase {
             motorValues = JoystickProcessing.radiusDrive(joystickValues);
         }
 
-        System.out.println(Units.roundTo(motorValues.left, 3) + "," + Units.roundTo(motorValues.right, 3));
-
-
         SmartDashboard.putBoolean("ArcadeDrive on?", arcadeDrive);
-
-        // double maxVel = lastVelocity + Constants.MAX_ACCEL * elapsed;
-        // double minVel = lastVelocity - Constants.MAX_DECEL * elapsed;
-
-        // if(Math.abs(motorValues.left) > maxVel || Math.abs(motorValues.right) > maxVel) {
-        //     double coeff = maxVel / Math.max(Math.abs(motorValues.left), Math.abs(motorValues.right));
-        //     motorValues.left *= coeff;
-        //     motorValues.right *= coeff;
-        // }
-
-        // if(Math.abs(motorValues.left) < minVel || Math.abs(motorValues.right) < minVel){
-        //     double coeff = minVel / Math.min(Math.abs(motorValues.left), Math.abs(motorValues.right));
-        //     motorValues.left *= coeff;
-        //     motorValues.right *= coeff;
-        //     System.out.println("working");
-        // }
                 
-        DriveSubsystem.getInstance().setSpeed(motorValues.left, motorValues.right);
-        DriveSubsystem.getInstance().setHDriveSpeed(leftX);
+        //Sets the speed
+        AbstractDriveSubsystem.getInstance().setSpeed(motorValues.left, motorValues.right);
+        //H-Drive
+        AbstractDriveSubsystem.getInstance().setHDriveSpeed(leftX);
         
+        //Diagnostic values for Joysticks and motors
         SmartDashboard.putNumber("Joystick Left Y", leftY);
         SmartDashboard.putNumber("Joystick Right X", rightX);
         SmartDashboard.putNumber("Left percent", motorValues.left);
         SmartDashboard.putNumber("Right percent", motorValues.right);
         //Puts the velocity that the motor controller is reading to SmartDashboard
-        SmartDashboard.putNumber("Left Motor Real Velocity", DriveSubsystem.getInstance().getLeftMotorVelocity());
-        SmartDashboard.putNumber("Right Motor Real Velocity", DriveSubsystem.getInstance().getRightMotorVelocity());
-
-        // SmartDashboard.putNumber("Left Motor Real Velocity", PercentOutputDriveSubsystem.getInstance().getLeftMotorVelocity());
-        // SmartDashboard.putNumber("Right Motor Real Velocity", PercentOutputDriveSubsystem.getInstance().getRightMotorVelocity());
-
-        SmartDashboard.putNumber("Left Motor Current", DriveSubsystem.getInstance().getLeftMotorCurrent());
-        SmartDashboard.putNumber("Right Motor Current", DriveSubsystem.getInstance().getRightMotorCurrent());
-    
-        // lastVelocity = Math.max(Math.abs(motorValues.left), Math.abs(motorValues.right));
-        // lastMillis = System.currentTimeMillis();
+        SmartDashboard.putNumber("Left Motor Real Velocity", AbstractDriveSubsystem.getInstance().getLeftMotorVelocity());
+        SmartDashboard.putNumber("Right Motor Real Velocity", AbstractDriveSubsystem.getInstance().getRightMotorVelocity());
     }
-
-    // private double getMaxChange(double lastValue, double newValue, long elapsed) {
-    //     if( (lastValue < 0 && newValue > 0)
-    //     || (newValue < 0 && lastValue > 0)
-    //      || Math.abs(newValue) < Math.abs(lastValue) ) {
-    //         return Constants.MAX_DECEL * elapsed;
-    //     }
-    //     return Constants.MAX_ACCEL * elapsed;
-    // }
-
-    // private double getMaxChangeTurn(double lastValue, double newValue, long elapsed) {
-    //     if( (lastValue < 0 && newValue > 0)
-    //     || (newValue < 0 && lastValue > 0)
-    //      || Math.abs(newValue) < Math.abs(lastValue) ) {
-    //         return Constants.MAX_DECEL_TURN * elapsed;
-    //     }
-    //     return Constants.MAX_ACCEL_TURN * elapsed;
-    // }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        DriveSubsystem.getInstance().setDriveMode(DriveMode.VELOCITY);
-        DriveSubsystem.getInstance().setSpeed(0, 0);
-        DriveSubsystem.getInstance().setBrakeMode(false);
+        //When this command ends, set everything to 0 and gets out of Brake Mode
+        AbstractDriveSubsystem.getInstance().setDriveMode(DriveMode.PERCENT);
+        AbstractDriveSubsystem.getInstance().setSpeed(0, 0);
+        AbstractDriveSubsystem.getInstance().setBrakeMode(false);
     }
 
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
+        //Command is constantly running, and can only be stopped manually
         return false;
     }
 }

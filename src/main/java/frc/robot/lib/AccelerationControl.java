@@ -1,5 +1,6 @@
 package frc.robot.lib;
 
+
 public class AccelerationControl {
     private double lastMove = 0;
     private double lastTurn = 0;

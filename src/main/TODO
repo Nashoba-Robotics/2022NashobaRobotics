@@ -8,5 +8,6 @@ When turning with extremes, the shaping delta is not proportional on both sides(
     Find solution
 Eventually Smart Dashboard will be too full with success/failure statements from the Diagnostic command
     Print onle failures, instead of pending, success, and failures
-"Proportional scaling makes motor speed always one, and one is not a big number (according to my  sources)" - Tristan 10/25/21 4:26 PM
+"Proportional scaling makes motor speed always one, and one is not a big number (according to my  sources)" - Tristan 10/25/21 16:26 UTC+5
 Figure out the PID loop settings for TalonSRX
+"I am an amphibian, and a lizard at the same time. And a fish and a sea sponge, and also several worms" - Tristan 01/25/22 18:13 UTC+5

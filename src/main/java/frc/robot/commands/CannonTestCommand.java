@@ -4,23 +4,27 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.CannonSubsystem;
 
+/*
+    Command to test the cannon. Allows the user to input a percent into Shuffleboard
+    to use for the cannon velocity
+*/
 public class CannonTestCommand extends CommandBase {
-    double speeeeeeed;
+    double speed;
     public CannonTestCommand(){
         addRequirements(CannonSubsystem.getInstance());
     }
 
     @Override
     public void initialize(){
-        speeeeeeed = SmartDashboard.getNumber("Cannon Speed", 0);
-        SmartDashboard.putNumber("Cannon Speed", speeeeeeed);
+        speed = SmartDashboard.getNumber("Cannon Speed", 0);
+        SmartDashboard.putNumber("Cannon Speed", speed);
     }
 
     @Override
     public void execute(){
-        CannonSubsystem.getInstance().shoot(speeeeeeed);
+        CannonSubsystem.getInstance().shoot(speed);
         
-        speeeeeeed = SmartDashboard.getNumber("Cannon Speed", 0);
+        speed = SmartDashboard.getNumber("Cannon Speed", 0);
     }
 
     @Override

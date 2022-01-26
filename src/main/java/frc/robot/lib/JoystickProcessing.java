@@ -2,6 +2,7 @@ package frc.robot.lib;
 
 import frc.robot.Constants;
 
+//Processes joysticks
 public class JoystickProcessing {
 
     public static double scaleJoystick(double value, double deadzone) {

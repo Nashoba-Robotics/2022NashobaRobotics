@@ -5,11 +5,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.HybridDriveCommand;
 import frc.robot.commands.AutoDriveCommand;
-import frc.robot.commands.ButtonTestCommand;
 import frc.robot.commands.JoystickDriveCommand;
 import frc.robot.commands.LimelightCommand;
-import frc.robot.commands.MusicCommand;
-import frc.robot.commands.OdeToJoy;
 import frc.robot.commands.SensorTestCommand;
 import frc.robot.commands.StopCommand;
 import frc.robot.commands.TurretCommand;
@@ -21,18 +18,18 @@ import frc.robot.commands.CannonTestCommand;
 
 public class RobotContainer {
 
+  public static JoystickDriveCommand joystickDriveCommand = new JoystickDriveCommand();
+  public static HybridDriveCommand hybridDriveCommand = new HybridDriveCommand();
+
   public RobotContainer() {
     configureButtonBindings();
-    SmartDashboard.putData(new JoystickDriveCommand());
+    SmartDashboard.putData(joystickDriveCommand);
     SmartDashboard.putData(new VelocityTestCommand());
     SmartDashboard.putData(new StopCommand());
     SmartDashboard.putData(new SensorTestCommand());
-    SmartDashboard.putData(new HybridDriveCommand());
+    SmartDashboard.putData(hybridDriveCommand);
     SmartDashboard.putData(new AutoDriveCommand());
-    //SmartDashboard.putData(new ButtonTestCommand());
     //SmartDashboard.putData(new TurretCommand());
-    //SmartDashboard.putData(new MusicCommand());
-    //SmartDashboard.putData(new OdeToJoy());
     //SmartDashboard.putData(new GyroTestCommand());
     SmartDashboard.putData(new LimelightCommand());
     //SmartDashboard.putData(new CannonTestCommand());

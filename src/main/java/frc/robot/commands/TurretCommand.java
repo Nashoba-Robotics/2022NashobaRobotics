@@ -2,14 +2,10 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.TurretSubsystem;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-// Simple debugging inteface for testing the robot at 
-// specific set inputs (instead of joysticks, which are
-// hard to control precisely)
+//Turret diagnostic stuff
 public class TurretCommand extends CommandBase {
-
     public TurretCommand(){
         addRequirements(TurretSubsystem.getInstance());
         SmartDashboard.putNumber("Turret%", 0);
@@ -24,14 +20,12 @@ public class TurretCommand extends CommandBase {
     public void execute(){
         double vel = SmartDashboard.getNumber("Turret%", 0);
         TurretSubsystem.getInstance().setVelocity(vel);
-    
     }
 
     @Override
     public void end(boolean interrupted) {
         TurretSubsystem.getInstance().setVelocity(0);
     }
-    //:)
 
     @Override
     public boolean isFinished(){
