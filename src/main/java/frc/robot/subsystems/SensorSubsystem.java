@@ -8,18 +8,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class SensorSubsystem extends SubsystemBase{
 
     private DigitalInput input;
-    private AnalogInput distanceSensor;
 
-    public SensorSubsystem(){
-        //input = new DigitalInput(DIOPort);
-        distanceSensor = new AnalogInput(3);
+    public SensorSubsystem(int port){
+        input = new DigitalInput(port);
     }
 
     public boolean getInput(){
         return input.get();
-    }
-
-    public double getDistanceSensor() {
-        return distanceSensor.getValue();
     }
 }

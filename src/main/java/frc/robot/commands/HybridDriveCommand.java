@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -32,7 +33,7 @@ public class HybridDriveCommand extends CommandBase{
     @Override
     public void initialize() {
         // Set the Limelight pipeline
-        LimelightSubsystem.getInstance().setPipeline(1);
+        LimelightSubsystem.getInstance().setPipeline(2);
         joystickBottomRight = new JoystickButton(JoystickSubsystem.getInstance().getRightJoystick(), 2);
 
         bottomPressed = joystickBottomRight.get();
@@ -51,17 +52,31 @@ public class HybridDriveCommand extends CommandBase{
         }
         lastPressedbottom = bottomPressed;
 
-        double tx = LimelightSubsystem.getInstance().getTx();
+        double tx = -LimelightSubsystem.getInstance().getTx();
+        SmartDashboard.putNumber("HybridTX", tx);
         double turn = 0;
 
         if(LimelightSubsystem.getInstance().validTarget()) {
             // If there is a valid target
-            if(Math.abs(tx) > 3) {
-                // If the target's x position is outside of the deadzone,
-                // turn an amount proportional to how far the target is left/right
-                turn = tx/240;
-            }
+            // if(Math.abs(tx) > 3) {
+            //     // If the target's x position is outside of the deadzone,
+            //     // turn an amount proportional to how far the target is left/right
+            //     turn = tx/240;
+            // }
+
+            double txPercent = tx/27;
+            if(Math.abs(txPercent) <= Constants.HYBRID_DRIVE_DEADZONE) turn = 0;
+            else{
+                turn = txPercent - Math.signum(txPercent) * Constants.HYBRID_DRIVE_DEADZONE;
+                turn *= Constants.HYBRID_DRIVE_SENSITIVITY;
+                turn = Math.pow(turn, 2);
+                turn = Math.abs(turn);
+                turn = Math.min(turn, 1);
+                turn *= Math.signum(txPercent);
+            } //turn = Math.signum(txPercent) * Math.min(Math.abs(Math.pow((Constants.HYBRID_DRIVE_SENSITIVITY) * (txPercent - Math.signum(txPercent)*Constants.HYBRID_DRIVE_DEADZONE), 5)), 1);
         }
+
+        SmartDashboard.putNumber("Hybrid Turn", turn);
 
         // Get the movement amount from the joysticks
         double move = JoystickSubsystem.getInstance().getLeftY();

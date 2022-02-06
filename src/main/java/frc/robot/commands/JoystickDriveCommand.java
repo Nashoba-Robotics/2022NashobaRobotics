@@ -22,6 +22,7 @@ public class JoystickDriveCommand extends CommandBase {
 
     // Toggle between arcade drive (true) and radius drive (false)
     private boolean arcadeDrive;    
+    private boolean invertDrive;
     // Record the state of the joystick triggers to detect when they
     // are pressed/released
     private boolean buttonPressedLeft;
@@ -53,6 +54,7 @@ public class JoystickDriveCommand extends CommandBase {
         AbstractDriveSubsystem.getInstance().setSpeed(0, 0);
         // Default to enabling arcade drive
         arcadeDrive = true;
+        invertDrive = false;
         // Joystick buttons start off unpressed
         buttonPressedLeft = joystickTriggerLeft.get();
         lastPressedLeft = joystickTriggerLeft.get();
@@ -70,8 +72,13 @@ public class JoystickDriveCommand extends CommandBase {
         AbstractDriveSubsystem.getInstance().setDriveMode(DriveMode.VELOCITY);
         
         // Toggle arcade drive when the left trigger is pressed
+        //Temporarily switch left trigger to invert drive
         buttonPressedLeft = joystickTriggerLeft.get();
-        if(buttonPressedLeft && lastPressedLeft != buttonPressedLeft) arcadeDrive = !arcadeDrive;
+        if(buttonPressedLeft && lastPressedLeft != buttonPressedLeft){
+            //arcadeDrive = !arcadeDrive;
+            invertDrive = !invertDrive;
+            accelerationControl.invert();
+        } 
         lastPressedLeft = buttonPressedLeft;
 
         // Enable break mode when the right trigger is pressed
@@ -110,16 +117,18 @@ public class JoystickDriveCommand extends CommandBase {
         //motorValues are move/turn instead of left/right
         MotorValues motorValues;
         if(arcadeDrive){
-            motorValues = JoystickProcessing.arcadeDrive(joystickValues);
+            motorValues = JoystickProcessing.arcadeDrive(joystickValues, invertDrive);
         } 
         else{ 
             motorValues = JoystickProcessing.radiusDrive(joystickValues);
         }
 
         SmartDashboard.putBoolean("ArcadeDrive on?", arcadeDrive);
+        SmartDashboard.putBoolean("InvertedDrive?", invertDrive);
                 
         //Sets the speed
-        AbstractDriveSubsystem.getInstance().setSpeed(motorValues.left, motorValues.right);
+        if(!invertDrive) AbstractDriveSubsystem.getInstance().setSpeed(motorValues.left, motorValues.right);
+        else AbstractDriveSubsystem.getInstance().setSpeed(-motorValues.left, -motorValues.right);
         //H-Drive
         AbstractDriveSubsystem.getInstance().setHDriveSpeed(leftX);
         
@@ -140,6 +149,7 @@ public class JoystickDriveCommand extends CommandBase {
         AbstractDriveSubsystem.getInstance().setDriveMode(DriveMode.PERCENT);
         AbstractDriveSubsystem.getInstance().setSpeed(0, 0);
         AbstractDriveSubsystem.getInstance().setBrakeMode(false);
+        invertDrive = false;
     }
 
     // Returns true when the command should end.

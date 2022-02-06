@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.TurretSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-//Turret diagnostic stuff
+//used to break the turret
 public class TurretCommand extends CommandBase {
     public TurretCommand(){
         addRequirements(TurretSubsystem.getInstance());

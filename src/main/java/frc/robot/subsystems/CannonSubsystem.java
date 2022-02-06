@@ -9,6 +9,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.lib.Units;
 
+//public means accessible by other classes
+//class means this is being defined as a class
+//CannonSubsystem is what we are calling this class
+//extends means it is using another class
+//SubsystemBase allows us access to functions found in SubsystemBase
+//{ indicates the start of the class
+//(//) indicates it is a comment (not read by compiler) instead of code
+//() is notation for signifying characters we are talking about inside the parentheses
 public class CannonSubsystem extends SubsystemBase{
     private static CannonSubsystem singleton;
     public TalonFX topCannonMotor;
@@ -55,10 +63,13 @@ public class CannonSubsystem extends SubsystemBase{
         motor.setNeutralMode(NeutralMode.Coast);
     }
 
+    //sets the speed of each individual motor
     public void shoot(double topSpeed, double bottomSpeed){
         topCannonMotor.set(ControlMode.Velocity, Units.percent2Velocity(topSpeed));
         bottomCannonMotor.set(ControlMode.Velocity, Units.percent2Velocity(bottomSpeed));
     }
+    
+    //sets the speed of both motors to same value
     public void shoot(double speeeeeeed){
         shoot(speeeeeeed, speeeeeeed);
     }

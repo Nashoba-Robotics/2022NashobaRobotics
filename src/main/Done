@@ -18,3 +18,7 @@ Prints read velocity of each lead motor
 1) Removed all instances of setting control mode through the setspeed function for the DriveSubsystem (replaced with setDriveMode())
 2) Added setter methods to DriveSubsystem that set individual left and right side motors.
 3) Created JoystickValues class to represent X/Y values to replace array. Did not implement throughout code so we could talk about what we want to name it
+
+01/25/22
+A lot of stuff
+Cleaned up the code

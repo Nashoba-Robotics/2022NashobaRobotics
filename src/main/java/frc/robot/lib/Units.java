@@ -8,10 +8,12 @@ public class Units {
         return percent*Constants.VELOCITY_MULTIPLIER;
     }
 
+    //converts from velocity (motor units / 100ms) to percent output
     public static double velocity2Percent(double velocity){
         return velocity/Constants.VELOCITY_MULTIPLIER;
     }
 
+    //will round num to decimal places
     public static double roundTo(double num, int places) {
         return Math.round(num * Math.pow(10, places)) * Math.pow(10, -places);
     }

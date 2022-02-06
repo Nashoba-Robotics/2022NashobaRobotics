@@ -16,13 +16,18 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    public static final int[] LEFT_MOTOR_PORTS = {12,13,14};
-    public static final int[] RIGHT_MOTOR_PORTS = {1,2,3};
+    //the ports on the CAN bus for the left and right motors respectively on 2020 robot
+    //index 0 should be master motor
+    public static final int[] LEFT_MOTOR_PORTS = {12,13,14};// {3, 4, 5}; //;
+    public static final int[] RIGHT_MOTOR_PORTS = {1,2,3};//  {0, 1, 2}; //;
 
+    //the ports on the CAN bus for the left and right motors respectively on 2019 robot
+    //index 0 should be master motor
     public static final int[] LEFT_MOTOR_PORTS_2019 = {0, 1, 2};
     public static final int[] RIGHT_MOTOR_PORTS_2019 = {12, 13, 14};
     public static final int HDRIVEPORT = 11; //Hopefully the right port
     
+    //port numbers for various moving parts
     public static final int TURRET_PORT = 4;
     public static final int WINCH_PORT = 18;
 
@@ -55,7 +60,7 @@ public final class Constants {
     public static final double KI = 0.001;
     public static final double KD = 0.001;
     public static final double KF = 0.0457; //0.0457
-    public static final double RADIUS_DRIVE_MULTIPLIER = 1.3;
+    public static final double RADIUS_DRIVE_MULTIPLIER = 1.8;   //1.3
     
     //Tip control parameters
     public static final double WIDTH = 0.6; //Metric units
@@ -65,9 +70,9 @@ public final class Constants {
     public static final double METRICMAX = VELOCITY_MULTIPLIER/M2NUCONVERSION;
 
     //Max acceleration parameters
-    public static final double MAX_ACCEL = 0.001;
+    public static final double MAX_ACCEL = 0.0007; //0.001;
     //Also known as PARTTDOTRV; Positive acceleration relative to the direction of the robot's velocity
-    public static final double MAX_DECEL = 0.0007;
+    public static final double MAX_DECEL = 0.0005; //0.0007;
     //Also known as NARTTDOTRV; Negative acceleration relative to the direction of the robot's velocity
     public static final double MAX_ACCEL_TURN = 0.001;
     //Also known as PAARTTDOTRAAV; Positive angular acceleration relative to the direction of the robot's angular velocity
@@ -81,4 +86,8 @@ public final class Constants {
     public static final double MIN_DISTANCE_AUTO = 1; //Tells at what distance from the target where the robot will stop
     public static final double SPEED_THRESHOLD_AUTO = 2.5; //The distance from the targget at which the robot will not go at moveSpeedAuto; past threshold, speed will be proportional to distance of target
     public static final double MOVE_SPEED_AUTO = 0.2; //The max move speed during autonomous
+
+    //HybridDrive constants
+    public static final double HYBRID_DRIVE_DEADZONE = 3.0/27;  //Hybrid Drive Graph:
+    public static final double HYBRID_DRIVE_SENSITIVITY = 0.420;  //https://www.desmos.com/calculator/ojy5ecv8fd  (CHECK GRAPH BEFORE CHANGING CONSTANTS)
 }

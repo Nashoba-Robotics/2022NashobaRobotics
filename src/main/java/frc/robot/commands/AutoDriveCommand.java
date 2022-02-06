@@ -57,22 +57,32 @@ public class AutoDriveCommand extends CommandBase{
         if(LimelightSubsystem.getInstance().validTarget()) {
             // If a target is found
 
-            if(Math.abs(tx) > 5) {
-                // If the x position of the target is outside of the deadzone,
-                // calculate the turn speed based on how far left/right it is
-                turn = tx/170;
-            }
+            // if(Math.abs(tx) > 5) {
+            //     // If the x position of the target is outside of the deadzone,
+            //     // calculate the turn speed based on how far left/right it is
+            //     turn = -tx/170;
+            // }
 
+            double txPercent = -tx/27;
+            if(Math.abs(txPercent) <= Constants.HYBRID_DRIVE_DEADZONE) turn = 0;
+            else{
+                turn = txPercent - Math.signum(txPercent) * Constants.HYBRID_DRIVE_DEADZONE;
+                turn *= Constants.HYBRID_DRIVE_SENSITIVITY;
+                turn = Math.pow(turn, 2);
+                turn = Math.abs(turn);
+                turn = Math.min(turn, 1);
+                turn *= Math.signum(txPercent);
+            }
             double ballDistance = LimelightSubsystem.getInstance().getDistanceBall();
 
             // Depending on the distance to the ball, there are three different behaviors:
             if (ballDistance > Constants.SPEED_THRESHOLD_AUTO) {
                 // If the distance is greater than SPEED_THRESHOLD_AUTO, move at a constant speed (MOVE_SPEED_AUTO)
-                move = -Constants.MOVE_SPEED_AUTO;
+                move = Constants.MOVE_SPEED_AUTO;
             } else if(ballDistance > Constants.MIN_DISTANCE_AUTO) {
                 // Otherwise, if the distance is greater than MIN_DISTANC_AUTO, move at a speed proportional to the distance
                 // This formula is designed such that the distance-velocity graph is continuous
-                move = -ballDistance * Constants.MOVE_SPEED_AUTO / Constants.SPEED_THRESHOLD_AUTO;
+                move = ballDistance * Constants.MOVE_SPEED_AUTO / Constants.SPEED_THRESHOLD_AUTO;
             }
             // Otherwise, do not move
             

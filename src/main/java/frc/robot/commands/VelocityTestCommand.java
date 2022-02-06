@@ -6,20 +6,23 @@ import frc.robot.lib.JoystickValues;
 import frc.robot.lib.MotorValues;
 import frc.robot.subsystems.AbstractDriveSubsystem;
 import frc.robot.subsystems.AbstractDriveSubsystem.DriveMode;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-// Drive diagnostic stuff
+//gives ability to set percent output to motors manually through shuffleboard
 public class VelocityTestCommand extends CommandBase {
     public VelocityTestCommand(){
         addRequirements(AbstractDriveSubsystem.getInstance());
         SmartDashboard.putNumber("Movement%", 0);
         SmartDashboard.putNumber("Turning%", 0);
         SmartDashboard.putNumber("Vel-mode", 0);
+        SmartDashboard.putNumber("leftCurrent", 0);
+        SmartDashboard.putNumber("rightCurrent", 0);
     }
 
     @Override
     public void initialize() {
-        AbstractDriveSubsystem.getInstance().setDriveMode(DriveMode.VELOCITY);
+        AbstractDriveSubsystem.getInstance().setDriveMode(DriveMode.PERCENT);
         AbstractDriveSubsystem.getInstance().setSpeed(0, 0);
     }
 
@@ -51,6 +54,8 @@ public class VelocityTestCommand extends CommandBase {
         SmartDashboard.putNumber("R-velocity", AbstractDriveSubsystem.getInstance().getRightMotorVelocity());
         SmartDashboard.putNumber("L-error", AbstractDriveSubsystem.getInstance().getLeftMotorError());
         SmartDashboard.putNumber("R-error", AbstractDriveSubsystem.getInstance().getRightMotorError());
+        SmartDashboard.putNumber("leftCurrent", AbstractDriveSubsystem.getInstance().getLeftMotorCurrent());
+        SmartDashboard.putNumber("rightCurrent", AbstractDriveSubsystem.getInstance().getRightMotorCurrent());
     }
 
     @Override

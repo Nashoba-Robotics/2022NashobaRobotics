@@ -6,6 +6,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.StopCommand;
 import frc.robot.subsystems.DriveSubsystem;
 
+//serves as parent class to DriveSubsystem and Drive2019Subsystem
+//change subsystem in getInstance() to corresponding robot
 public abstract class AbstractDriveSubsystem extends SubsystemBase {
     private static AbstractDriveSubsystem instance;
     

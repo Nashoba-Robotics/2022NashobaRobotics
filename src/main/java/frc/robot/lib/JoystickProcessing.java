@@ -58,11 +58,43 @@ public class JoystickProcessing {
         return new MotorValues(left, right);
     }
 
+    public static MotorValues arcadeDrive(JoystickValues joystickValues, boolean invertedDrive) {
+        // if(joystickValues.movement < 0) {
+        //     joystickValues.turning *= -1;
+        // }
+        double left;
+        double right;
+        if(!invertedDrive){
+            left = joystickValues.movement + joystickValues.turning;
+            right = joystickValues.movement - joystickValues.turning;
+            // If either side is above 1, divide by the max amount
+            // to limit the maximum speed to 1 while preserving turn angle
+            if(Math.abs(left) > 1 || Math.abs(right) > 1) {
+                double factor = Math.max(Math.abs(left), Math.abs(right));
+                left /= factor;
+                right /= factor;
+            }
+        }
+        else{
+            left = joystickValues.movement - joystickValues.turning;
+            right = joystickValues.movement + joystickValues.turning;
+            // If either side is above 1, divide by the max amount
+            // to limit the maximum speed to 1 while preserving turn angle
+            if(Math.abs(left) > 1 || Math.abs(right) > 1) {
+                double factor = Math.max(Math.abs(left), Math.abs(right));
+                left /= factor;
+                right /= factor;
+            }
+        }
+        return new MotorValues(left, right);
+    }
+
+    //returns MotorValues that allow robot to turn at a constant radius
     public static MotorValues radiusDrive(JoystickValues joystickValues) {
         double left, right;
         joystickValues.turning *= Constants.RADIUS_DRIVE_MULTIPLIER;
-        joystickValues.movement = Math.signum(joystickValues.movement)*
-        Math.min(Math.abs(joystickValues.movement), allowedTipVelocity(Math.abs(joystickValues.turning)));
+        //joystickValues.movement = Math.signum(joystickValues.movement)*
+        //Math.min(Math.abs(joystickValues.movement), allowedTipVelocity(Math.abs(joystickValues.turning)));
         double turning = joystickValues.turning*Math.abs(joystickValues.movement);
         if(joystickValues.movement > 0) {
             left = joystickValues.movement + turning;

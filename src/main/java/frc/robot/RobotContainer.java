@@ -9,6 +9,7 @@ import frc.robot.commands.JoystickDriveCommand;
 import frc.robot.commands.LimelightCommand;
 import frc.robot.commands.SensorTestCommand;
 import frc.robot.commands.StopCommand;
+import frc.robot.commands.TalonTestCommand;
 import frc.robot.commands.TurretCommand;
 import frc.robot.commands.VelocityTestCommand;
 import frc.robot.subsystems.Drive2019Subsystem;
@@ -29,6 +30,7 @@ public class RobotContainer {
     SmartDashboard.putData(new SensorTestCommand());
     SmartDashboard.putData(hybridDriveCommand);
     SmartDashboard.putData(new AutoDriveCommand());
+    SmartDashboard.putData(new TalonTestCommand());
     //SmartDashboard.putData(new TurretCommand());
     //SmartDashboard.putData(new GyroTestCommand());
     SmartDashboard.putData(new LimelightCommand());

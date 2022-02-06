@@ -1,7 +1,11 @@
 package frc.robot.lib;
 
-
+/*
+    Limit the acceleration of the robot to prevent tipping. Each command that uses DriveSubsystem
+    can have its own instance of this class 
+*/
 public class AccelerationControl {
+    //when object is created, assume there has been no previous movement
     private double lastMove = 0;
     private double lastTurn = 0;
     private long lastMillis;
@@ -19,6 +23,7 @@ public class AccelerationControl {
         lastMillis = System.currentTimeMillis();
     }
 
+    //will return JoystickValues with the next max input for velocity
     public JoystickValues next(JoystickValues input) {   
         long elapsed = System.currentTimeMillis() - lastMillis;
         lastMillis += elapsed;
@@ -42,7 +47,12 @@ public class AccelerationControl {
         return new JoystickValues(newMove, newTurn);
     }
 
-    
+    public void invert(){
+        lastMove *= -1;
+        lastTurn *= -1;
+    }
+
+    //helper function of next()
     private static double getMaxChange(double lastValue, double newValue, long elapsed, double maxAccel, double maxDecel) {
         if( (lastValue < 0 && newValue > 0)
         || (newValue < 0 && lastValue > 0)

@@ -52,12 +52,10 @@ public class DriveSubsystem extends AbstractDriveSubsystem {
         configureMotor(rightMotor);
         configureMotor(leftMotor);
         
-        rightMotor.setInverted(true);
-        leftMotor.setInverted(false);
-        rightMotor2.setInverted(true);
-        leftMotor2.setInverted(false);
-        rightMotor3.setInverted(true);
-        leftMotor3.setInverted(false);
+        rightMotor.setInverted(false);
+        leftMotor.setInverted(true);
+        leftMotor2.setInverted(true);
+        leftMotor3.setInverted(true);
 
         // Set the name of the subsystem in smart dashboard
         SendableRegistry.setName(this, "Drive");
@@ -183,8 +181,8 @@ public class DriveSubsystem extends AbstractDriveSubsystem {
     }
 
     public void setRawPercent(double left, double right){
-        leftMotor.set(ControlMode.PercentOutput, left, DemandType.ArbitraryFeedForward, Constants.AFF);
-        rightMotor.set(ControlMode.PercentOutput, right, DemandType.ArbitraryFeedForward, Constants.AFF);
+        leftMotor.set(ControlMode.PercentOutput, left);
+        rightMotor.set(ControlMode.PercentOutput, right);
     }
 
     public double getLeftMotorVelocity(){
