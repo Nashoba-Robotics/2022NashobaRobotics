@@ -29,12 +29,13 @@ public class CannonSubsystem extends SubsystemBase{
     }
 
     public CannonSubsystem(){
-        topCannonMotor = new TalonFX(0);
-        bottomCannonMotor = new TalonFX(7);
+        topCannonMotor = new TalonFX(7);
+        bottomCannonMotor = new TalonFX(0);
         //bottomCannonMotor.setInverted(true);
         configureMotor(topCannonMotor);
         configureMotor(bottomCannonMotor);
     }
+
 
     private void configureMotor(TalonFX motor) {
         motor.configFactoryDefault();
@@ -54,13 +55,21 @@ public class CannonSubsystem extends SubsystemBase{
 		motor.configPeakOutputReverse(-1, Constants.TIMEOUT);
 
 		/* Config the Velocity closed loop gains in slot0 */
-		motor.config_kF(Constants.SLOT_IDX, Constants.KF, Constants.TIMEOUT);
-		motor.config_kP(Constants.SLOT_IDX, Constants.KP, Constants.TIMEOUT);
-		motor.config_kI(Constants.SLOT_IDX, Constants.KI, Constants.TIMEOUT);
-        motor.config_kD(Constants.SLOT_IDX, Constants.KD, Constants.TIMEOUT);
+		motor.config_kF(Constants.SLOT_IDX, Constants.KF_CANNON, Constants.TIMEOUT);
+		motor.config_kP(Constants.SLOT_IDX, Constants.KP_CANNON, Constants.TIMEOUT);
+		motor.config_kI(Constants.SLOT_IDX, Constants.KI_CANNON, Constants.TIMEOUT);
+        motor.config_kD(Constants.SLOT_IDX, Constants.KD_CANNON, Constants.TIMEOUT);
 
         motor.selectProfileSlot(Constants.SLOT_IDX, 0);
         motor.setNeutralMode(NeutralMode.Coast);
+    }
+
+    public double getCurrentTop(){
+        return topCannonMotor.getStatorCurrent();
+    }
+
+    public double getCurretBottom(){
+        return bottomCannonMotor.getStatorCurrent();
     }
 
     //sets the speed of each individual motor
@@ -72,6 +81,26 @@ public class CannonSubsystem extends SubsystemBase{
     //sets the speed of both motors to same value
     public void shoot(double speeeeeeed){
         shoot(speeeeeeed, speeeeeeed);
+    }
+
+    public void setProportional(double p){
+        topCannonMotor.config_kP(Constants.SLOT_IDX, p, Constants.TIMEOUT);
+        bottomCannonMotor.config_kP(Constants.SLOT_IDX, p, Constants.TIMEOUT);
+    }
+
+    public void setIntegral(double i){
+        topCannonMotor.config_kI(Constants.SLOT_IDX, i, Constants.TIMEOUT);
+        bottomCannonMotor.config_kI(Constants.SLOT_IDX, i, Constants.TIMEOUT);
+    }
+
+    public void setDerivative(double d){
+        topCannonMotor.config_kD(Constants.SLOT_IDX, d, Constants.TIMEOUT);
+        bottomCannonMotor.config_kD(Constants.SLOT_IDX, d, Constants.TIMEOUT);
+    }
+
+    public void setKF(double kF){
+        topCannonMotor.config_kF(Constants.SLOT_IDX, kF, Constants.TIMEOUT);
+        bottomCannonMotor.config_kF(Constants.SLOT_IDX, kF, Constants.TIMEOUT);
     }
 }
 

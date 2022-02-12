@@ -12,13 +12,12 @@ import frc.robot.lib.MotorValues;
 import frc.robot.subsystems.AbstractDriveSubsystem;
 import frc.robot.subsystems.JoystickSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
+import frc.robot.subsystems.PhotonVisionSubsystem;
 
 /*
     Hybrid drive: Limelight controls turning, driver controls movement
 */
 public class HybridDriveCommand extends CommandBase{
-
-    LimelightSubsystem limelight;
 
     private boolean lastPressedbottom;
     private boolean bottomPressed;
@@ -27,13 +26,14 @@ public class HybridDriveCommand extends CommandBase{
 
     public HybridDriveCommand(){
         addRequirements(LimelightSubsystem.getInstance());
+        addRequirements(PhotonVisionSubsystem.getInstance());
         addRequirements(AbstractDriveSubsystem.getInstance());
     }
 
     @Override
     public void initialize() {
         // Set the Limelight pipeline
-        LimelightSubsystem.getInstance().setPipeline(2);
+        //LimelightSubsystem.getInstance().setPipeline(2);
         joystickBottomRight = new JoystickButton(JoystickSubsystem.getInstance().getRightJoystick(), 2);
 
         bottomPressed = joystickBottomRight.get();
@@ -43,7 +43,7 @@ public class HybridDriveCommand extends CommandBase{
     @Override
     public void execute() {
         // Get the X position of the tracked object (-27 to +27)
-
+        PhotonVisionSubsystem.getInstance().update();
         bottomPressed = joystickBottomRight.get();
         if(bottomPressed && lastPressedbottom != bottomPressed){
             CommandScheduler.getInstance().schedule(RobotContainer.joystickDriveCommand);
@@ -52,11 +52,11 @@ public class HybridDriveCommand extends CommandBase{
         }
         lastPressedbottom = bottomPressed;
 
-        double tx = -LimelightSubsystem.getInstance().getTx();
+        double tx = -PhotonVisionSubsystem.getInstance().getTx();
         SmartDashboard.putNumber("HybridTX", tx);
         double turn = 0;
 
-        if(LimelightSubsystem.getInstance().validTarget()) {
+        if(PhotonVisionSubsystem.getInstance().validTarget()) {
             // If there is a valid target
             // if(Math.abs(tx) > 3) {
             //     // If the target's x position is outside of the deadzone,
