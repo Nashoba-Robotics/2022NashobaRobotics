@@ -20,6 +20,7 @@ public class GyroSubsystem extends SubsystemBase{
         xyz = new double[3];
         speedxyz = new double[3];
         acceleration = new short[3];
+        pigeon.setYaw(0);   //In degrees
     }
 
     private static GyroSubsystem singleton;
@@ -27,6 +28,10 @@ public class GyroSubsystem extends SubsystemBase{
         if(singleton == null) singleton = new GyroSubsystem();
         //Yi is a uhcuhuhajnbiciwinr
         return singleton;
+    }
+
+    public double getAbsoluteAngle(){
+        return getYawPitchRole()[0] % 360;
     }
 
     public double[] getYawPitchRole(){

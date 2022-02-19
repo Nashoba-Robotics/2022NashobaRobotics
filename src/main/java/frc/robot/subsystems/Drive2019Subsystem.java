@@ -11,6 +11,9 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.jni.CANSparkMaxJNI;
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.motorcontrol.Victor;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -99,6 +102,17 @@ public class Drive2019Subsystem extends AbstractDriveSubsystem {
         motor.selectProfileSlot(Constants.SLOT_IDX, 0);
         motor.setSensorPhase(false);
     }
+
+    public double getAngle(){ return 0; }
+    public double getTranslationX(){ return 0; }
+    public double getTranslationY(){ return 0; }
+    public double getDistanceLeft(){ return 0; }
+    public double getDistanceRight(){ return 0; }
+    public DifferentialDriveKinematics getKinematics(){ return null; }
+    public Pose2d getPose(){ return null; }
+    public DifferentialDriveWheelSpeeds getWheelSpeeds(){ return null; }
+    public void resetOdometry(Pose2d pose){}
+    public void setVoltage(double leftVolts, double rightVolts){}
 
     public void changeBrakeMode(){
         brakeMode = !brakeMode;

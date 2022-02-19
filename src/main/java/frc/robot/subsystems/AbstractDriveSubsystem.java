@@ -2,6 +2,9 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.BaseTalon;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.StopCommand;
 import frc.robot.subsystems.DriveSubsystem;
@@ -22,6 +25,17 @@ public abstract class AbstractDriveSubsystem extends SubsystemBase {
     public abstract void changeBrakeMode();
     public abstract boolean getBrakeMode();
     public abstract void setBrakeMode(boolean brakeMode);
+
+    public abstract double getDistanceLeft();
+    public abstract double getDistanceRight();
+    public abstract double getTranslationX();
+    public abstract double getTranslationY();
+    public abstract double getAngle();
+    public abstract DifferentialDriveKinematics getKinematics();
+    public abstract Pose2d getPose();
+    public abstract DifferentialDriveWheelSpeeds getWheelSpeeds();
+    public abstract void resetOdometry(Pose2d pose);
+    public abstract void setVoltage(double leftVolts, double rightVolts);
 
     //implement if we want to be able to set specific motors
     // public abstract void setProportional(BaseTalon motor, double p);

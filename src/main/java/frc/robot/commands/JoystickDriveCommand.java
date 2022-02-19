@@ -11,6 +11,7 @@ import frc.robot.lib.Units;
 import frc.robot.lib.JoystickValues;
 import frc.robot.lib.MotorValues;
 import frc.robot.subsystems.AbstractDriveSubsystem;
+import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.JoystickSubsystem;
 import frc.robot.subsystems.AbstractDriveSubsystem.DriveMode;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -64,6 +65,9 @@ public class JoystickDriveCommand extends CommandBase {
         accelerationControl = new AccelerationControl(
             Constants.MAX_ACCEL, Constants.MAX_DECEL, 
             Constants.MAX_ACCEL_TURN, Constants.MAX_DECEL_TURN);
+
+        SmartDashboard.putNumber("distanceX", 0);
+        SmartDashboard.putNumber("distanceY", 0);
     }
 
     @Override
@@ -132,14 +136,17 @@ public class JoystickDriveCommand extends CommandBase {
         //H-Drive
         AbstractDriveSubsystem.getInstance().setHDriveSpeed(leftX);
         
-        //Diagnostic values for Joysticks and motors
-        SmartDashboard.putNumber("Joystick Left Y", leftY);
-        SmartDashboard.putNumber("Joystick Right X", rightX);
-        SmartDashboard.putNumber("Left percent", motorValues.left);
-        SmartDashboard.putNumber("Right percent", motorValues.right);
-        //Puts the velocity that the motor controller is reading to SmartDashboard
-        SmartDashboard.putNumber("Left Motor Real Velocity", AbstractDriveSubsystem.getInstance().getLeftMotorVelocity());
-        SmartDashboard.putNumber("Right Motor Real Velocity", AbstractDriveSubsystem.getInstance().getRightMotorVelocity());
+        // //Diagnostic values for Joysticks and motors
+        // SmartDashboard.putNumber("Joystick Left Y", leftY);
+        // SmartDashboard.putNumber("Joystick Right X", rightX);
+        // SmartDashboard.putNumber("Left percent", motorValues.left);
+        // SmartDashboard.putNumber("Right percent", motorValues.right);
+        // //Puts the velocity that the motor controller is reading to SmartDashboard
+        // SmartDashboard.putNumber("Left Motor Real Velocity", AbstractDriveSubsystem.getInstance().getLeftMotorVelocity());
+        // SmartDashboard.putNumber("Right Motor Real Velocity", AbstractDriveSubsystem.getInstance().getRightMotorVelocity());
+        SmartDashboard.putNumber("distanceX", DriveSubsystem.getInstance().getTranslationX());
+        SmartDashboard.putNumber("distanceY", DriveSubsystem.getInstance().getTranslationY());
+        SmartDashboard.putNumber("robotAngle", DriveSubsystem.getInstance().getAngle());
     }
 
     // Called once the command ends or is interrupted.

@@ -17,4 +17,8 @@ public class Units {
     public static double roundTo(double num, int places) {
         return Math.round(num * Math.pow(10, places)) * Math.pow(10, -places);
     }
+
+    public static double inches2Meters(double num){
+        return num * 0.0254;
+    }
 }

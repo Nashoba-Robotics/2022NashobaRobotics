@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import frc.robot.lib.Units;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants.  This class should not be used for any other purpose.  All constants should be
@@ -26,6 +28,10 @@ public final class Constants {
     public static final int[] LEFT_MOTOR_PORTS_2019 = {0, 1, 2};
     public static final int[] RIGHT_MOTOR_PORTS_2019 = {12, 13, 14};
     public static final int HDRIVEPORT = 11; //Hopefully the right port
+
+    public static final int[] GRABBER_MOTOR_PORTS = {};
+    public static final int[] INTAKE_MOTOR_PORTS = {};
+    public static final int[] LOADER_MOTOR_PORTS = {};
     
     //port numbers for various moving parts
     public static final int TURRET_PORT = 4;
@@ -62,10 +68,10 @@ public final class Constants {
     public static final double KF = 0.0457; //0.0457
     public static final double RADIUS_DRIVE_MULTIPLIER = 1.8;   //1.3
 
-    public static final double KP_CANNON = 0.12;
-    public static final double KI_CANNON = 0;
-    public static final double KD_CANNON = 0.004;
-    public static final double KF_CANNON = 0.0457;
+    public static final double KP_CANNON = 0.05;
+    public static final double KI_CANNON = 0.0;
+    public static final double KD_CANNON = 0.0;
+    public static final double KF_CANNON = 0.0475;
     
     //Tip control parameters
     public static final double WIDTH = 0.6; //Metric units
@@ -97,4 +103,42 @@ public final class Constants {
     public static final double HYBRID_DRIVE_SENSITIVITY = 0.420;  //https://www.desmos.com/calculator/ojy5ecv8fd  (CHECK GRAPH BEFORE CHANGING CONSTANTS)
 
     public static final String PHOTONVISION_NICKNAME = "cargodetectooor"; // TODO
+
+    public static final double WHEEL_GAP = Units.inches2Meters(21); // distance between wheels in meters
+    public static final double WHEEL_RADIUS = 0.085; // wheel radius in meters
+
+    public static final double DRIVE_GEAR_RATIO = 9.65;
+
+    public static final double FALCON_NU = 2048; // the number of native units per rotation
+
+    public static class Climber {
+        public static final int PORT_UP1 = 0;
+        public static final int PORT_UP2 = 0;
+        public static final int PORT_DOWN = 0;
+        public static final int PORT_ROTATE = 0;
+
+        public static final double KF = 0;
+
+        public static final double KP_UP = 0;
+        public static final double KI_UP = 0;
+        public static final double KD_UP = 0;
+        
+        public static final double KP_DOWN = 0;
+        public static final double KI_DOWN = 0;
+        public static final double KD_DOWN = 0;
+
+        public static final double KP_ROTATE = 0;
+        public static final double KI_ROTATE = 0;
+        public static final double KD_ROTATE = 0;
+    }
+
+    public static class DriveTrain {
+        public static final double KS = 0.6613;
+        public static final double KV = 1.8944;
+        public static final double KA = 0.29877;
+
+        public static final double MAX_VELOCITY = .2; //max speed in meters per second
+        public static final double MAX_ACCELERATION = .2; //max speed in meters per second per second
+    }
+
 }

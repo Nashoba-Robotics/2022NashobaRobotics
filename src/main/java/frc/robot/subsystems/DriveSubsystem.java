@@ -7,16 +7,35 @@ import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.sensors.PigeonIMU;
 import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 import com.ctre.phoenix.motorcontrol.TalonFXSensorCollection;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.util.sendable.SendableRegistry;
-
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.lib.Units;
 
 // Subsystem for driving the robot
 public class DriveSubsystem extends AbstractDriveSubsystem {
+
+    //x-speed, y-speed, rate of rotation
+    private ChassisSpeeds speeds = new ChassisSpeeds(0, 0, 0);
+    private DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(Constants.WHEEL_GAP);
+    private DifferentialDriveWheelSpeeds wheelSpeeds = kinematics.toWheelSpeeds(speeds);
+    private Rotation2d gyroAngle = Rotation2d.fromDegrees(-GyroSubsystem.getInstance().getAbsoluteAngle());
+    private DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(gyroAngle);
+    private Pose2d pose;
+
     //public static final double KF = 0.0475;
     public static final int VOLTAGE_COMPENSATION_LEVEL = 12;
     public static final VelocityMeasPeriod VELOCITY_MEASUREMENT_PERIOD_DRIVE = VelocityMeasPeriod.Period_10Ms; // find
@@ -31,6 +50,56 @@ public class DriveSubsystem extends AbstractDriveSubsystem {
     private TalonFX rightMotor, rightMotor2, rightMotor3;
     private TalonFXSensorCollection rightMasterSensor;
 
+    // @Override
+    @Override
+    public void periodic() {
+        gyroAngle = Rotation2d.fromDegrees(GyroSubsystem.getInstance().getAbsoluteAngle());
+        pose = odometry.update(gyroAngle, NU2Meters(leftMotor.getSelectedSensorPosition(Constants.PID_IDX)), NU2Meters(rightMotor.getSelectedSensorPosition()));
+    }
+
+    public void setVoltage(double leftVolts, double rightVolts){
+        leftMotor.set(ControlMode.PercentOutput, leftVolts/RobotController.getBatteryVoltage(), DemandType.ArbitraryFeedForward, Constants.AFF);
+        rightMotor.set(ControlMode.PercentOutput, rightVolts/RobotController.getBatteryVoltage(), DemandType.ArbitraryFeedForward, Constants.AFF);
+    }
+
+    public void resetOdometry(Pose2d pose){
+        leftMasterSensor.setIntegratedSensorPosition(0, Constants.TIMEOUT);
+        rightMasterSensor.setIntegratedSensorPosition(0, Constants.TIMEOUT);
+        odometry.resetPosition(pose, Rotation2d.fromDegrees(GyroSubsystem.getInstance().getAbsoluteAngle()));
+    }
+
+    public DifferentialDriveWheelSpeeds getWheelSpeeds(){
+        return new DifferentialDriveWheelSpeeds(NU2Meters(leftMasterSensor.getIntegratedSensorVelocity()), NU2Meters(leftMasterSensor.getIntegratedSensorVelocity()));
+    }
+
+    public double getAngle(){
+        return getPose().getRotation().getRadians();
+    }
+
+    public Pose2d getPose(){
+        return odometry.getPoseMeters();
+    }
+
+    public double getTranslationX(){
+        return getPose().getTranslation().getX();
+    }
+
+    public double getTranslationY(){
+        return getPose().getTranslation().getY();
+    }
+
+    private double NU2Meters(double nu){
+        double rate = Constants.TAU * (Constants.WHEEL_RADIUS / Constants.DRIVE_GEAR_RATIO) / Constants.FALCON_NU;
+        return nu * rate;
+    }
+
+    private Rotation2d toRotation2d(double angle){
+        return Rotation2d.fromDegrees(angle);
+    }
+
+    public DifferentialDriveKinematics getKinematics(){
+        return kinematics;
+    }
     
     public DriveSubsystem() {
         leftMotor = new TalonFX(Constants.LEFT_MOTOR_PORTS[0]);
@@ -47,7 +116,9 @@ public class DriveSubsystem extends AbstractDriveSubsystem {
         brakeMode = false;
 
         leftMasterSensor = new TalonFXSensorCollection(leftMotor);
+        leftMasterSensor.setIntegratedSensorPosition(0, Constants.TIMEOUT);
         rightMasterSensor = new TalonFXSensorCollection(rightMotor);
+        rightMasterSensor.setIntegratedSensorPosition(0, Constants.TIMEOUT);
 
         configureMotor(rightMotor);
         configureMotor(leftMotor);
@@ -90,6 +161,8 @@ public class DriveSubsystem extends AbstractDriveSubsystem {
         motor.configVelocityMeasurementWindow(8, 30);
 
         motor.setNeutralMode(NeutralMode.Coast);
+
+        motor.setSelectedSensorPosition(0, Constants.PID_IDX, Constants.TIMEOUT);
     }
 
     public void changeBrakeMode(){
@@ -216,6 +289,22 @@ public class DriveSubsystem extends AbstractDriveSubsystem {
 
     public DriveMode getDriveMode(){
         return driveMode;
+    }
+
+    public double getPositionLeft(){
+        return leftMasterSensor.getIntegratedSensorPosition();
+    }
+
+    public double getPositionRight(){
+        return -rightMasterSensor.getIntegratedSensorPosition();
+    }
+
+    public double getDistanceLeft(){
+        return NU2Meters(getPositionLeft());
+    }
+
+    public double getDistanceRight(){
+        return NU2Meters(getPositionRight());
     }
 
 }
