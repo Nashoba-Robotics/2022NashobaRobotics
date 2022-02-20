@@ -112,20 +112,22 @@ public final class Constants {
     public static final double FALCON_NU = 2048; // the number of native units per rotation
 
     public static class Climber {
-        public static final int PORT_UP1 = 0;
-        public static final int PORT_UP2 = 0;
-        public static final int PORT_DOWN = 0;
-        public static final int PORT_ROTATE = 0;
+        public static final int PORT_LEFT_1 = 11;
+        public static final int PORT_LEFT_2 = 12;
+        public static final int PORT_LEFT_ROTATE = 13;
+        public static final int PORT_RIGHT_1 = 14;
+        public static final int PORT_RIGHT_2 = 15;
+        public static final int PORT_RIGHT_ROTATE = 16;
 
-        public static final double KF = 0;
+        public static final double KF = 0.0457;
 
-        public static final double KP_UP = 0;
-        public static final double KI_UP = 0;
-        public static final double KD_UP = 0;
+        public static final double KP_1 = 0;
+        public static final double KI_1 = 0;
+        public static final double KD_1 = 0;
         
-        public static final double KP_DOWN = 0;
-        public static final double KI_DOWN = 0;
-        public static final double KD_DOWN = 0;
+        public static final double KP_2 = 0;
+        public static final double KI_2 = 0;
+        public static final double KD_2 = 0;
 
         public static final double KP_ROTATE = 0;
         public static final double KI_ROTATE = 0;
@@ -139,6 +141,12 @@ public final class Constants {
 
         public static final double MAX_VELOCITY = .2; //max speed in meters per second
         public static final double MAX_ACCELERATION = .2; //max speed in meters per second per second
+    }
+
+    public static class Loader {
+        public static final int INTAKE_PORT = 6;
+        public static final int GRABBER_PORT = 7;
+        public static final int LOADER_PORT = 8;
     }
 
 }

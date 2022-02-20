@@ -22,6 +22,7 @@ import frc.robot.commands.HybridDriveCommand;
 import frc.robot.commands.AutoDriveCommand;
 import frc.robot.commands.JoystickDriveCommand;
 import frc.robot.commands.LimelightCommand;
+import frc.robot.commands.LoaderCommand;
 import frc.robot.commands.SensorTestCommand;
 import frc.robot.commands.StopCommand;
 import frc.robot.commands.TalonTestCommand;
@@ -32,6 +33,7 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.JoystickSubsystem;
 import frc.robot.commands.GyroTestCommand;
 import frc.robot.commands.CannonTestCommand;
+import frc.robot.commands.ClimberCommand;
 
 public class RobotContainer {
 
@@ -40,18 +42,19 @@ public class RobotContainer {
 
   public RobotContainer() {
     configureButtonBindings();
-    SmartDashboard.putData(joystickDriveCommand);
-    SmartDashboard.putData(new VelocityTestCommand());
+    // SmartDashboard.putData(joystickDriveCommand);
+    // SmartDashboard.putData(new VelocityTestCommand());
     SmartDashboard.putData(new StopCommand());
-    SmartDashboard.putData(new SensorTestCommand());
-    SmartDashboard.putData(hybridDriveCommand);
-    SmartDashboard.putData(new AutoDriveCommand());
+    // SmartDashboard.putData(new SensorTestCommand());
+    // SmartDashboard.putData(hybridDriveCommand);
+    // SmartDashboard.putData(new AutoDriveCommand());
     // SmartDashboard.putData(new TalonTestCommand());
     //SmartDashboard.putData(new TurretCommand());
-    SmartDashboard.putData(new GyroTestCommand());
-    SmartDashboard.putData(new LimelightCommand());
-    SmartDashboard.putData(new CannonTestCommand());
+    // SmartDashboard.putData(new GyroTestCommand());
+    // SmartDashboard.putData(new LimelightCommand());
+    // SmartDashboard.putData(new CannonTestCommand());
     // SmartDashboard.putData(Drive2019Subsystem.getInstance());
+    SmartDashboard.putData(new ClimberCommand());
   }
 
   /**
