@@ -7,10 +7,6 @@ import frc.robot.subsystems.CannonSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ClimberSubsystem.ClimberMotor;
 
-/*
-    Command to test the cannon. Allows the user to input a percent into Shuffleboard
-    to use for the cannon velocity
-*/
 public class ClimberCommand extends CommandBase {
     boolean finished;
 
@@ -29,6 +25,9 @@ public class ClimberCommand extends CommandBase {
     @Override
     public void execute(){
         ClimberSubsystem csi = ClimberSubsystem.getInstance();
+
+        csi.checkLimitSwitches();
+
         if(csi.isCurrentBad()) {
             csi.stop();
             finished = true;
@@ -37,7 +36,17 @@ public class ClimberCommand extends CommandBase {
         csi.setSpeed(ClimberMotor.LEFT_1, SmartDashboard.getNumber("L 1",0));
         csi.setSpeed(ClimberMotor.LEFT_2, SmartDashboard.getNumber("L 2",0));
         csi.setSpeed(ClimberMotor.LEFT_ROTATE, SmartDashboard.getNumber("L Rotate",0));
-        SmartDashboard.putNumber("L 1 Stator Current", csi.getStatorCurrent(motor))
+
+        SmartDashboard.putNumber("L 1 Stator", csi.getStatorCurrent(ClimberMotor.LEFT_1));
+        SmartDashboard.putNumber("L 2 Stator", csi.getStatorCurrent(ClimberMotor.LEFT_2));
+        SmartDashboard.putNumber("L Rotate Stator", csi.getStatorCurrent(ClimberMotor.LEFT_ROTATE));
+        SmartDashboard.putNumber("L 1 Supply", csi.getSupplyCurrent(ClimberMotor.LEFT_1));
+        SmartDashboard.putNumber("L 2 Supply", csi.getSupplyCurrent(ClimberMotor.LEFT_2));
+        SmartDashboard.putNumber("L Rotate Supply", csi.getSupplyCurrent(ClimberMotor.LEFT_ROTATE));
+        SmartDashboard.putNumber("L 1 Pos", csi.getPosition(ClimberMotor.LEFT_1));
+        SmartDashboard.putNumber("L 2 Pos", csi.getPosition(ClimberMotor.LEFT_2));
+        SmartDashboard.putNumber("L Rotate Pos", csi.getPosition(ClimberMotor.LEFT_ROTATE));
+
     }
 
     @Override

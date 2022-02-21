@@ -119,6 +119,11 @@ public final class Constants {
         public static final int PORT_RIGHT_2 = 15;
         public static final int PORT_RIGHT_ROTATE = 16;
 
+        public static final int DIO_LS_LEFT_1 = 0; // TODO change
+        public static final int DIO_LS_LEFT_2 = 0; // TODO change
+        public static final int DIO_LS_RIGHT_1 = 0; // TODO change
+        public static final int DIO_LS_RIGHT_2 = 0; // TODO change
+
         public static final double KF = 0.0457;
 
         public static final double KP_1 = 0;

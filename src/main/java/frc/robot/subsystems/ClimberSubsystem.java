@@ -23,13 +23,27 @@ public class ClimberSubsystem extends SubsystemBase {
     private TalonFX motorRight2;
     private TalonFX motorRightRotate;
 
+    private DigitalInput lsLeft1;
+    private DigitalInput lsLeft2;
+    private DigitalInput lsRight1;
+    private DigitalInput lsRight2;
+
     private TalonFX[] motors = {
         motorLeft1, motorLeft2, motorLeftRotate, 
         motorRight1, motorRight2, motorRightRotate
     };
 
+    private DigitalInput[] limitSwitches = {
+        lsLeft1, lsRight1, null,
+        lsLeft2, lsRight2, null
+    }
+
     private TalonFX getMotor(ClimberMotor motor) {
         return motors[motor.ordinal()];
+    }
+
+    private DigitalInput getLimitSwitch(ClimberMotor motor) {
+        return limitSwitches[motor.ordinal()];
     }
 
     private static ClimberSubsystem singleton;
@@ -43,11 +57,23 @@ public class ClimberSubsystem extends SubsystemBase {
 
     private ClimberSubsystem() {
         motorLeft1 = new TalonFX(Constants.Climber.PORT_LEFT_1);
-        motorRight1 = new TalonFX(Constants.Climber.PORT_RIGHT_1);
         motorLeft2 = new TalonFX(Constants.Climber.PORT_LEFT_2);
-        motorRight2 = new TalonFX(Constants.Climber.PORT_RIGHT_2);
         motorLeftRotate = new TalonFX(Constants.Climber.PORT_LEFT_ROTATE);
+        motorRight1 = new TalonFX(Constants.Climber.PORT_RIGHT_1);
+        motorRight2 = new TalonFX(Constants.Climber.PORT_RIGHT_2);
         motorRightRotate = new TalonFX(Constants.Climber.PORT_RIGHT_ROTATE);
+
+        lsLeft1 = new DigitalInput(Constants.Climber.DIO_LS_LEFT_1);
+        lsLeft2 = new DigitalInput(Constants.Climber.DIO_LS_LEFT_2);
+        lsRight1 = new DigitalInput(Constants.Climber.DIO_LS_RIGHT_1);
+        lsRight2 = new DigitalInput(Constants.Climber.DIO_LS_RIGHT_2);
+
+        // TODO TODO TODO
+        // Limit switch notes:
+        // to connect the motor directly to the limit switch, use:
+        // motor.config[Forward|Reverse]LimitSwitchSource(RemoteLimitSwitchSource.RemoteCANifier, LimitSwitchNormal.Normally[Open|Closed], id, 0);
+        // this requires a CANifier: https://store.ctr-electronics.com/canifier/
+        // i do not believe we have four of these, so we will have to do it using code
 
         for(TalonFX motor: motors) {
             configureMotor(motor);
@@ -105,10 +131,30 @@ public class ClimberSubsystem extends SubsystemBase {
 
     public void setSpeed(ClimberMotor motor, double speed) {
         TalonFX talon = getMotor(motor);
+        DigitalInput ls = getLimitSwitch(motor);
+        // TODO limit switch might be inverted, add ! possibly
+        // TODO one motion direction should be allowed here
+        if(ls != null && ls.get())
+            talon.set(ControlMode.PercentOutput, 0);
+            // TODO reset talon position here?
+            return
+        }
         if(Math.abs(speed) < 0.05) {
             talon.set(ControlMode.PercentOutput, speed);
         } else {
             talon.set(ControlMode.PercentOutput, 0);
+        }
+    }
+
+    private void checkLimitSwitches() {
+        for(int i = 0; i < motors.length; i++) {
+            TalonFX talon = motors[i];
+            DigitalInput ls = limitSwitches[i];
+            // TODO limit switch might be inverted, add ! possibly
+            if(ls != null && ls.get()) {
+                talon.set(ControlMode.PercentOutput, 0);
+                // TODO reset talon position here?
+            }
         }
     }
 
@@ -125,12 +171,9 @@ public class ClimberSubsystem extends SubsystemBase {
     }
 
     public void stop() {
-        motorLeft1.set(ControlMode.PercentOutput, 0);
-        motorLeft2.set(ControlMode.PercentOutput, 0);
-        motorLeftRotate.set(ControlMode.PercentOutput, 0);
-        motorRight1.set(ControlMode.PercentOutput, 0);
-        motorRight2.set(ControlMode.PercentOutput, 0);
-        motorRightRotate.set(ControlMode.PercentOutput, 0);
+        for(TalonFX motor: motors) {
+            motor.set(ControlMode.PercentOutput, 0);
+        }
     }
 
     public boolean isCurrentBad() {
