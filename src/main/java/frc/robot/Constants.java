@@ -67,11 +67,6 @@ public final class Constants {
     public static final double KD = 0.001;
     public static final double KF = 0.0457; //0.0457
     public static final double RADIUS_DRIVE_MULTIPLIER = 1.8;   //1.3
-
-    public static final double KP_CANNON = 0.05;
-    public static final double KI_CANNON = 0.0;
-    public static final double KD_CANNON = 0.0;
-    public static final double KF_CANNON = 0.0475;
     
     //Tip control parameters
     public static final double WIDTH = 0.6; //Metric units
@@ -111,6 +106,15 @@ public final class Constants {
 
     public static final double FALCON_NU = 2048; // the number of native units per rotation
 
+    public static class Cannon {
+        public static final int PORT_TOP = 9;
+        public static final int PORT_BOTTOM = 10;
+
+        public static final double KP = 0.05;
+        public static final double KI = 0.0;
+        public static final double KD = 0.0;
+        public static final double KF = 0.0475;
+    }
     public static class Climber {
         public static final int PORT_LEFT_1 = 11;
         public static final int PORT_LEFT_2 = 12;
@@ -120,9 +124,9 @@ public final class Constants {
         public static final int PORT_RIGHT_ROTATE = 16;
 
         public static final int DIO_LS_LEFT_1 = 0; // TODO change
-        public static final int DIO_LS_LEFT_2 = 0; // TODO change
-        public static final int DIO_LS_RIGHT_1 = 0; // TODO change
-        public static final int DIO_LS_RIGHT_2 = 0; // TODO change
+        public static final int DIO_LS_LEFT_2 = 1; // TODO change
+        public static final int DIO_LS_RIGHT_1 = 2; // TODO change
+        public static final int DIO_LS_RIGHT_2 = 3; // TODO change
 
         public static final double KF = 0.0457;
 

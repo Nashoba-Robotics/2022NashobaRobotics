@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -28,21 +29,15 @@ public class ClimberSubsystem extends SubsystemBase {
     private DigitalInput lsRight1;
     private DigitalInput lsRight2;
 
-    private TalonFX[] motors = {
-        motorLeft1, motorLeft2, motorLeftRotate, 
-        motorRight1, motorRight2, motorRightRotate
-    };
+    private TalonFX[] motors;
 
-    private DigitalInput[] limitSwitches = {
-        lsLeft1, lsRight1, null,
-        lsLeft2, lsRight2, null
-    }
+    private DigitalInput[] limitSwitches;
 
     private TalonFX getMotor(ClimberMotor motor) {
         return motors[motor.ordinal()];
     }
 
-    private DigitalInput getLimitSwitch(ClimberMotor motor) {
+    public DigitalInput getLimitSwitch(ClimberMotor motor) {
         return limitSwitches[motor.ordinal()];
     }
 
@@ -63,10 +58,20 @@ public class ClimberSubsystem extends SubsystemBase {
         motorRight2 = new TalonFX(Constants.Climber.PORT_RIGHT_2);
         motorRightRotate = new TalonFX(Constants.Climber.PORT_RIGHT_ROTATE);
 
+        motors = new TalonFX[] {
+            motorLeft1, motorLeft2, motorLeftRotate, 
+            motorRight1, motorRight2, motorRightRotate
+        };
+
         lsLeft1 = new DigitalInput(Constants.Climber.DIO_LS_LEFT_1);
         lsLeft2 = new DigitalInput(Constants.Climber.DIO_LS_LEFT_2);
         lsRight1 = new DigitalInput(Constants.Climber.DIO_LS_RIGHT_1);
         lsRight2 = new DigitalInput(Constants.Climber.DIO_LS_RIGHT_2);
+
+        limitSwitches = new DigitalInput[] {
+            lsLeft1, lsLeft2, null,
+            lsRight1, lsRight2, null
+        };
 
         // TODO TODO TODO
         // Limit switch notes:
@@ -79,12 +84,15 @@ public class ClimberSubsystem extends SubsystemBase {
             configureMotor(motor);
         }
 
+        motorLeft1.setInverted(true);
+        motorLeft2.configForwardSoftLimitEnable(true);
+        motorLeft2.configForwardSoftLimitThreshold(170000);
+
         for(TalonFX motor1: new TalonFX[]{motorLeft1, motorRight1}) {
             motor1.config_kF(0, Constants.Climber.KF, Constants.TIMEOUT);
             motor1.config_kP(0, Constants.Climber.KP_1, Constants.TIMEOUT);
             motor1.config_kI(0, Constants.Climber.KI_1, Constants.TIMEOUT);
             motor1.config_kD(0, Constants.Climber.KD_1, Constants.TIMEOUT);
-            motor1.setSelectedSensorPosition(0);
         }
 
         for(TalonFX motor2: new TalonFX[]{motorLeft2, motorRight2}) {
@@ -92,7 +100,6 @@ public class ClimberSubsystem extends SubsystemBase {
             motor2.config_kP(0, Constants.Climber.KP_2, Constants.TIMEOUT);
             motor2.config_kI(0, Constants.Climber.KI_2, Constants.TIMEOUT);
             motor2.config_kD(0, Constants.Climber.KD_2, Constants.TIMEOUT);
-            motor2.setSelectedSensorPosition(0);
         }
 
         for(TalonFX rotate: new TalonFX[]{motorLeftRotate, motorRightRotate}) {
@@ -100,7 +107,6 @@ public class ClimberSubsystem extends SubsystemBase {
             rotate.config_kP(0, Constants.Climber.KP_ROTATE, Constants.TIMEOUT);
             rotate.config_kI(0, Constants.Climber.KI_ROTATE, Constants.TIMEOUT);
             rotate.config_kD(0, Constants.Climber.KD_ROTATE, Constants.TIMEOUT);
-            rotate.setSelectedSensorPosition(0);
         }
     }
 
@@ -134,26 +140,26 @@ public class ClimberSubsystem extends SubsystemBase {
         DigitalInput ls = getLimitSwitch(motor);
         // TODO limit switch might be inverted, add ! possibly
         // TODO one motion direction should be allowed here
-        if(ls != null && ls.get())
+        if(ls != null && !ls.get() && speed < 0) {
             talon.set(ControlMode.PercentOutput, 0);
-            // TODO reset talon position here?
-            return
+            talon.setSelectedSensorPosition(0);
+            return;
         }
-        if(Math.abs(speed) < 0.05) {
+        if(Math.abs(speed) <= 0.07) {
             talon.set(ControlMode.PercentOutput, speed);
         } else {
             talon.set(ControlMode.PercentOutput, 0);
         }
     }
 
-    private void checkLimitSwitches() {
+    public void checkLimitSwitches() {
         for(int i = 0; i < motors.length; i++) {
             TalonFX talon = motors[i];
             DigitalInput ls = limitSwitches[i];
             // TODO limit switch might be inverted, add ! possibly
-            if(ls != null && ls.get()) {
+            if(ls != null && !ls.get()) {
                 talon.set(ControlMode.PercentOutput, 0);
-                // TODO reset talon position here?
+                talon.setSelectedSensorPosition(0);
             }
         }
     }
@@ -177,7 +183,7 @@ public class ClimberSubsystem extends SubsystemBase {
     }
 
     public boolean isCurrentBad() {
-        double MAX_CURRENT = 10;
+        double MAX_CURRENT = 15;
 
         double currentLeft1 = Math.abs(motorLeft1.getStatorCurrent());
         double currentLeft2 = Math.abs(motorLeft2.getStatorCurrent());

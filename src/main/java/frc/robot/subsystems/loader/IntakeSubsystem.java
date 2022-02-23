@@ -8,22 +8,23 @@ import frc.robot.Constants;
 
 public class IntakeSubsystem extends SubsystemBase {
     private TalonFX intake;
+    private static IntakeSubsystem singleton;
 
     public IntakeSubsystem(){
         intake = new TalonFX(Constants.Loader.INTAKE_PORT);
     }
     
-    private static IntakeSubsystem singleton;
     public static IntakeSubsystem getInstance(){
         if(singleton == null) singleton = new IntakeSubsystem();
         return singleton;
     }
+    
     public void intake(){
-
+        intake.set(ControlMode.PercentOutput, 0.3);
     }
 
-    public void puke(){
-
+    public void stop() {
+        intake.set(ControlMode.PercentOutput, 0);
     }
 
     public void set(double speed) {

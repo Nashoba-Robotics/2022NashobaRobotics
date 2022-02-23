@@ -47,6 +47,8 @@ public class ClimberCommand extends CommandBase {
         SmartDashboard.putNumber("L 2 Pos", csi.getPosition(ClimberMotor.LEFT_2));
         SmartDashboard.putNumber("L Rotate Pos", csi.getPosition(ClimberMotor.LEFT_ROTATE));
 
+        SmartDashboard.putBoolean("L 1 Switch", csi.getLimitSwitch(ClimberMotor.LEFT_1).get());
+        SmartDashboard.putBoolean("L 2 Switch", csi.getLimitSwitch(ClimberMotor.LEFT_2).get());
     }
 
     @Override

@@ -29,8 +29,8 @@ public class CannonSubsystem extends SubsystemBase{
     }
 
     public CannonSubsystem(){
-        topCannonMotor = new TalonFX(7);
-        bottomCannonMotor = new TalonFX(0);
+        topCannonMotor = new TalonFX(Constants.Cannon.PORT_TOP);
+        bottomCannonMotor = new TalonFX(Constants.Cannon.PORT_BOTTOM);
         //bottomCannonMotor.setInverted(true);
         configureMotor(topCannonMotor);
         configureMotor(bottomCannonMotor);
@@ -55,10 +55,10 @@ public class CannonSubsystem extends SubsystemBase{
 		motor.configPeakOutputReverse(-1, Constants.TIMEOUT);
 
 		/* Config the Velocity closed loop gains in slot0 */
-		motor.config_kF(Constants.SLOT_IDX, Constants.KF_CANNON, Constants.TIMEOUT);
-		motor.config_kP(Constants.SLOT_IDX, Constants.KP_CANNON, Constants.TIMEOUT);
-		motor.config_kI(Constants.SLOT_IDX, Constants.KI_CANNON, Constants.TIMEOUT);
-        motor.config_kD(Constants.SLOT_IDX, Constants.KD_CANNON, Constants.TIMEOUT);
+		motor.config_kF(Constants.SLOT_IDX, Constants.Cannon.KF, Constants.TIMEOUT);
+		motor.config_kP(Constants.SLOT_IDX, Constants.Cannon.KP, Constants.TIMEOUT);
+		motor.config_kI(Constants.SLOT_IDX, Constants.Cannon.KI, Constants.TIMEOUT);
+        motor.config_kD(Constants.SLOT_IDX, Constants.Cannon.KD, Constants.TIMEOUT);
 
         motor.selectProfileSlot(Constants.SLOT_IDX, 0);
         motor.setNeutralMode(NeutralMode.Coast);

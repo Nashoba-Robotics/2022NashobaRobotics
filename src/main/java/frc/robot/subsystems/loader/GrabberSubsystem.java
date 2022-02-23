@@ -5,7 +5,6 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.AbstractDriveSubsystem;
 
 public class GrabberSubsystem extends SubsystemBase{
     private TalonFX grabber;
@@ -13,21 +12,23 @@ public class GrabberSubsystem extends SubsystemBase{
 
     public GrabberSubsystem(){
         grabber = new TalonFX(Constants.Loader.GRABBER_PORT);
+        grabber.setInverted(true);
     }
 
     public static GrabberSubsystem getInstance(){
         if(singleton == null) singleton = new GrabberSubsystem();
         return singleton;
     }
+ 
+    public void intake(){
+        grabber.set(ControlMode.PercentOutput, 0.3);
+    }
+
+    public void stop() {
+        grabber.set(ControlMode.PercentOutput, 0);
+    }
 
     public void set(double speed) {
         grabber.set(ControlMode.PercentOutput, speed);
-    }
-
-    public void intake(){
-    }
-
-    public void puke(){
-
     }
 }

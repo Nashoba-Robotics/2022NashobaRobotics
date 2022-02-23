@@ -5,7 +5,9 @@ import frc.robot.subsystems.loader.*;
 
 public class IntakeBallCommand extends CommandBase{
     public IntakeBallCommand(){
-
+        addRequirements(IntakeSubsystem.getInstance());
+        addRequirements(GrabberSubsystem.getInstance());
+        addRequirements(LoaderSubsystem.getInstance());
     }
 
     @Override
@@ -16,12 +18,15 @@ public class IntakeBallCommand extends CommandBase{
     @Override
     public void execute(){
         IntakeSubsystem.getInstance().intake();
+        GrabberSubsystem.getInstance().intake();
         LoaderSubsystem.getInstance().intake();
     }
 
     @Override
     public void end(boolean interrupted){
-
+        IntakeSubsystem.getInstance().set(0);
+        GrabberSubsystem.getInstance().set(0);
+        LoaderSubsystem.getInstance().set(0);
     }
 
     @Override

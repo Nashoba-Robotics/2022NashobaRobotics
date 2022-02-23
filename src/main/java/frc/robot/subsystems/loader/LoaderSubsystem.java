@@ -8,26 +8,23 @@ import frc.robot.Constants;
 
 public class LoaderSubsystem extends SubsystemBase{
     private TalonFX loader;
+    private static LoaderSubsystem singleton;
 
     public LoaderSubsystem(){
         loader = new TalonFX(Constants.Loader.LOADER_PORT);
     }
 
-    private static LoaderSubsystem singleton;
     public static LoaderSubsystem getInstance(){
         if(singleton == null) singleton = new LoaderSubsystem();
         return singleton;
     }
-    public void transferBall(){
-
-    }
 
     public void intake(){
-        
+        loader.set(ControlMode.PercentOutput, 0.3);
     }
 
-    public void puke(){
-        
+    public void stop() {
+        loader.set(ControlMode.PercentOutput, 0);
     }
 
     public void set(double speed) {

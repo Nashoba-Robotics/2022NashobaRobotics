@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.HybridDriveCommand;
+import frc.robot.commands.IntakeBallCommand;
 import frc.robot.commands.AutoDriveCommand;
 import frc.robot.commands.JoystickDriveCommand;
 import frc.robot.commands.LimelightCommand;
@@ -52,9 +53,10 @@ public class RobotContainer {
     //SmartDashboard.putData(new TurretCommand());
     // SmartDashboard.putData(new GyroTestCommand());
     // SmartDashboard.putData(new LimelightCommand());
-    // SmartDashboard.putData(new CannonTestCommand());
-    // SmartDashboard.putData(Drive2019Subsystem.getInstance());
-    SmartDashboard.putData(new ClimberCommand());
+    SmartDashboard.putData(new CannonTestCommand());
+    // SmartDashboard.putData(new ClimberCommand());
+    SmartDashboard.putData(new IntakeBallCommand());
+    SmartDashboard.putData(new LoaderCommand());
   }
 
   /**
