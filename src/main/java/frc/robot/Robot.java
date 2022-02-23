@@ -7,16 +7,24 @@
 
 package frc.robot;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.ArrayList;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryUtil;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.JoystickDriveCommand;
-import frc.robot.subsystems.AbstractDriveSubsystem;
+import frc.robot.commands.StopCommand;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.AbstractDriveSubsystem.DriveMode;
+import frc.robot.subsystems.DriveSubsystem.DriveMode;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -25,9 +33,12 @@ import frc.robot.subsystems.AbstractDriveSubsystem.DriveMode;
  * project.
  */
 public class Robot extends TimedRobot {
-  private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
+
+  private Command currCommand;
+  private int currCommandIndex = 0;
+  private boolean autoFinished = false;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -38,6 +49,8 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+
+    
   }
 
   /**
@@ -75,19 +88,36 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
-    // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
-    }
+    autoFinished = false;
+    currCommandIndex = 0;
   }
 
   /**
    * This function is called periodically during autonomous.
    */
+
   @Override
   public void autonomousPeriodic() {
+    if(!autoFinished
+    && (currCommand == null 
+    || !CommandScheduler.getInstance().isScheduled(currCommand)
+    && currCommandIndex < Constants.DriveTrain.AUTONOMOUS_ROUTINE.length)){
+      String[] parts = Constants.DriveTrain.AUTONOMOUS_ROUTINE[currCommandIndex].split(" ");
+      switch(parts[0]) {  //Trystani is baed
+        case "path":
+          currCommand = DriveSubsystem.getInstance().getAutonomousCommand(parts[1]);
+          break;
+        case "joystick":
+          currCommand = new JoystickDriveCommand();
+          break;
+          
+      } 
+      currCommand.schedule();
+      currCommandIndex++;
+    } else if(currCommandIndex >= Constants.DriveTrain.AUTONOMOUS_ROUTINE.length){
+      currCommandIndex = 0;
+      autoFinished = true;
+    }
   }
 
   @Override
@@ -96,9 +126,7 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
-    }
+    CommandScheduler.getInstance().cancelAll();
   }
 
   /**

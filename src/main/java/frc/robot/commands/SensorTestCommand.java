@@ -14,7 +14,7 @@ public class SensorTestCommand extends CommandBase{
     SensorSubsystem sensor6;
 
     public SensorTestCommand(){
-        sensor2 = new SensorSubsystem(3);
+        sensor2 = new SensorSubsystem(7);
         // sensor3 = new SensorSubsystem(3);
         // sensor4 = new SensorSubsystem(4);
         // sensor5 = new SensorSubsystem(5);

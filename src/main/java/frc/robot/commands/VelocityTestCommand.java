@@ -4,15 +4,16 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.lib.JoystickProcessing;
 import frc.robot.lib.JoystickValues;
 import frc.robot.lib.MotorValues;
-import frc.robot.subsystems.AbstractDriveSubsystem;
-import frc.robot.subsystems.AbstractDriveSubsystem.DriveMode;
+import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.DriveSubsystem.DriveMode;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 //gives ability to set percent output to motors manually through shuffleboard
 public class VelocityTestCommand extends CommandBase {
     public VelocityTestCommand(){
-        addRequirements(AbstractDriveSubsystem.getInstance());
+        addRequirements(DriveSubsystem.getInstance());
         SmartDashboard.putNumber("Movement%", 0);
         SmartDashboard.putNumber("Turning%", 0);
         SmartDashboard.putNumber("Vel-mode", 0);
@@ -22,8 +23,8 @@ public class VelocityTestCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        AbstractDriveSubsystem.getInstance().setDriveMode(DriveMode.PERCENT);
-        AbstractDriveSubsystem.getInstance().setSpeed(0, 0);
+        DriveSubsystem.getInstance().setDriveMode(DriveMode.PERCENT);
+        DriveSubsystem.getInstance().setSpeed(0, 0);
     }
 
     @Override
@@ -37,9 +38,9 @@ public class VelocityTestCommand extends CommandBase {
         //Sets Drive mode either to Velocity mode or Percent mode
         double velMode = SmartDashboard.getNumber("Vel-mode", 0);
         if(velMode != 0) {
-            AbstractDriveSubsystem.getInstance().setDriveMode(DriveMode.VELOCITY);
+            DriveSubsystem.getInstance().setDriveMode(DriveMode.VELOCITY);
         } else {
-            AbstractDriveSubsystem.getInstance().setDriveMode(DriveMode.PERCENT);
+            DriveSubsystem.getInstance().setDriveMode(DriveMode.PERCENT);
         }
 
         //Takes left and right velocities from SmartDashboards and uses it to set the motor velocities
@@ -47,22 +48,22 @@ public class VelocityTestCommand extends CommandBase {
         double rightVel = motorValues.right;
         SmartDashboard.putNumber("Left Value", leftVel);
         SmartDashboard.putNumber("Right Value", rightVel);
-        AbstractDriveSubsystem.getInstance().setSpeed(leftVel, rightVel);
+        DriveSubsystem.getInstance().setSpeed(leftVel, rightVel);
 
         //Motor diagnostic stuff
-        SmartDashboard.putNumber("L-velocity", AbstractDriveSubsystem.getInstance().getLeftMotorVelocity());
-        SmartDashboard.putNumber("R-velocity", AbstractDriveSubsystem.getInstance().getRightMotorVelocity());
-        SmartDashboard.putNumber("L-error", AbstractDriveSubsystem.getInstance().getLeftMotorError());
-        SmartDashboard.putNumber("R-error", AbstractDriveSubsystem.getInstance().getRightMotorError());
-        SmartDashboard.putNumber("leftCurrent", AbstractDriveSubsystem.getInstance().getLeftMotorCurrent());
-        SmartDashboard.putNumber("rightCurrent", AbstractDriveSubsystem.getInstance().getRightMotorCurrent());
+        SmartDashboard.putNumber("L-velocity", DriveSubsystem.getInstance().getLeftMotorVelocity());
+        SmartDashboard.putNumber("R-velocity", DriveSubsystem.getInstance().getRightMotorVelocity());
+        SmartDashboard.putNumber("L-error", DriveSubsystem.getInstance().getLeftMotorError());
+        SmartDashboard.putNumber("R-error", DriveSubsystem.getInstance().getRightMotorError());
+        SmartDashboard.putNumber("leftCurrent", DriveSubsystem.getInstance().getLeftMotorCurrent());
+        SmartDashboard.putNumber("rightCurrent", DriveSubsystem.getInstance().getRightMotorCurrent());
     }
 
     @Override
     public void end(boolean interrupted) {
         //Sets motor speeds to 0, so the robot stops when the command ends
-        AbstractDriveSubsystem.getInstance().setDriveMode(DriveMode.PERCENT);
-        AbstractDriveSubsystem.getInstance().setSpeed(0, 0);
+        DriveSubsystem.getInstance().setDriveMode(DriveMode.PERCENT);
+        DriveSubsystem.getInstance().setSpeed(0, 0);
     }
 
     @Override

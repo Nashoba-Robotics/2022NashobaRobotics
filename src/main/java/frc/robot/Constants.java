@@ -7,7 +7,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.lib.Units;
+import frc.robot.subsystems.DriveSubsystem;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -137,8 +139,18 @@ public final class Constants {
         public static final double KV = 1.8944;
         public static final double KA = 0.29877;
 
-        public static final double MAX_VELOCITY = .2; //max speed in meters per second
-        public static final double MAX_ACCELERATION = .2; //max speed in meters per second per second
+        public static final double MAX_VELOCITY = 1; //max speed in meters per second
+        public static final double MAX_ACCELERATION = 0.25; //max speed in meters per second per second
+
+        public static final double AUTO_B = 2; // We don't know what these do but DO NOT CHANGE
+        public static final double AUTO_ZETA = 0.7;
+
+        public static final String[] AUTONOMOUS_ROUTINE = {
+            "path paths/Unnamed_Forward.wpilib.json",
+            "path paths/Unnamed.wpilib.json"
+        };
+
+        public static final double MAX_AUTO_TURN = 0.25;
     }
 
 }

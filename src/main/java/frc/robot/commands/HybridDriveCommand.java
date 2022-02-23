@@ -9,7 +9,7 @@ import frc.robot.RobotContainer;
 import frc.robot.lib.JoystickProcessing;
 import frc.robot.lib.JoystickValues;
 import frc.robot.lib.MotorValues;
-import frc.robot.subsystems.AbstractDriveSubsystem;
+import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.JoystickSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.PhotonVisionSubsystem;
@@ -27,7 +27,7 @@ public class HybridDriveCommand extends CommandBase{
     public HybridDriveCommand(){
         addRequirements(LimelightSubsystem.getInstance());
         addRequirements(PhotonVisionSubsystem.getInstance());
-        addRequirements(AbstractDriveSubsystem.getInstance());
+        addRequirements(DriveSubsystem.getInstance());
     }
 
     @Override
@@ -86,7 +86,7 @@ public class HybridDriveCommand extends CommandBase{
         // Calculate motor values using arcade drive
         MotorValues vel = JoystickProcessing.arcadeDrive(new JoystickValues(moveShaped, turn));
         
-        AbstractDriveSubsystem.getInstance().setSpeed(vel.left, vel.right);
+        DriveSubsystem.getInstance().setSpeed(vel.left, vel.right);
     }
 
     @Override
@@ -96,7 +96,7 @@ public class HybridDriveCommand extends CommandBase{
 
     @Override
     public void end(boolean interrupted){
-        AbstractDriveSubsystem.getInstance().setRightMotorSpeed(0);
-        AbstractDriveSubsystem.getInstance().setLeftMotorSpeed(0);
+        DriveSubsystem.getInstance().setRightMotorSpeed(0);
+        DriveSubsystem.getInstance().setLeftMotorSpeed(0);
     }
 }

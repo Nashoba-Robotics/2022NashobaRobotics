@@ -7,7 +7,7 @@ import frc.robot.lib.AccelerationControl;
 import frc.robot.lib.JoystickProcessing;
 import frc.robot.lib.JoystickValues;
 import frc.robot.lib.MotorValues;
-import frc.robot.subsystems.AbstractDriveSubsystem;
+import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 
 /*
@@ -23,7 +23,7 @@ public class AutoDriveCommand extends CommandBase{
 
     public AutoDriveCommand(){
         addRequirements(LimelightSubsystem.getInstance());
-        addRequirements(AbstractDriveSubsystem.getInstance());
+        addRequirements(DriveSubsystem.getInstance());
     }
 
     @Override
@@ -109,7 +109,7 @@ public class AutoDriveCommand extends CommandBase{
         // Calculate the motor velocities using arcade drive
         MotorValues vel = JoystickProcessing.arcadeDrive(joystickValues);
         
-        AbstractDriveSubsystem.getInstance().setSpeed(vel.left, vel.right);
+        DriveSubsystem.getInstance().setSpeed(vel.left, vel.right);
     }
 
     @Override
@@ -119,7 +119,7 @@ public class AutoDriveCommand extends CommandBase{
 
     @Override
     public void end(boolean interrupted){
-        AbstractDriveSubsystem.getInstance().setRightMotorSpeed(0);
-        AbstractDriveSubsystem.getInstance().setLeftMotorSpeed(0);
+        DriveSubsystem.getInstance().setRightMotorSpeed(0);
+        DriveSubsystem.getInstance().setLeftMotorSpeed(0);
     }
 }

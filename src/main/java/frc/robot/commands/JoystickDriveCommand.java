@@ -10,10 +10,10 @@ import frc.robot.lib.JoystickProcessing;
 import frc.robot.lib.Units;
 import frc.robot.lib.JoystickValues;
 import frc.robot.lib.MotorValues;
-import frc.robot.subsystems.AbstractDriveSubsystem;
+import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.JoystickSubsystem;
-import frc.robot.subsystems.AbstractDriveSubsystem.DriveMode;
+import frc.robot.subsystems.DriveSubsystem.DriveMode;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /*
@@ -43,7 +43,7 @@ public class JoystickDriveCommand extends CommandBase {
     private AccelerationControl accelerationControl;
 
     public JoystickDriveCommand() {
-        addRequirements(AbstractDriveSubsystem.getInstance());
+        addRequirements(DriveSubsystem.getInstance());
         addRequirements(JoystickSubsystem.getInstance());
         joystickTriggerLeft = new JoystickButton(JoystickSubsystem.getInstance().getLeftJoystick(), 1);
         joystickTriggerRight = new JoystickButton(JoystickSubsystem.getInstance().getRightJoystick(), 1);
@@ -52,7 +52,7 @@ public class JoystickDriveCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        AbstractDriveSubsystem.getInstance().setSpeed(0, 0);
+        DriveSubsystem.getInstance().setSpeed(0, 0);
         // Default to enabling arcade drive
         arcadeDrive = true;
         invertDrive = false;
@@ -73,7 +73,7 @@ public class JoystickDriveCommand extends CommandBase {
     @Override
     public void execute() {
         // Joystick drive uses velocity mode
-        AbstractDriveSubsystem.getInstance().setDriveMode(DriveMode.VELOCITY);
+        DriveSubsystem.getInstance().setDriveMode(DriveMode.VELOCITY);
         
         // Toggle arcade drive when the left trigger is pressed
         //Temporarily switch left trigger to invert drive
@@ -87,7 +87,7 @@ public class JoystickDriveCommand extends CommandBase {
 
         // Enable break mode when the right trigger is pressed
         buttonPressedRight = joystickTriggerRight.get();
-        if(buttonPressedRight && lastPressedRight != buttonPressedRight) AbstractDriveSubsystem.getInstance().changeBrakeMode();
+        if(buttonPressedRight && lastPressedRight != buttonPressedRight) DriveSubsystem.getInstance().changeBrakeMode();
         lastPressedRight = buttonPressedRight;
 
         bottomPressed = joystickBottomRight.get();
@@ -99,14 +99,12 @@ public class JoystickDriveCommand extends CommandBase {
         lastPressedbottom = bottomPressed;
         
         // Show whether break mode is enabled
-        SmartDashboard.putBoolean("Brake Mode", AbstractDriveSubsystem.getInstance().getBrakeMode());
+        SmartDashboard.putBoolean("Brake Mode", DriveSubsystem.getInstance().getBrakeMode());
 
         // right joystick x position - turning
         double rightX = JoystickSubsystem.getInstance().getRightX();
         // left joystick y position - movement
         double leftY = JoystickSubsystem.getInstance().getLeftY();
-        // left joystick x position - h-drive
-        double leftX = JoystickSubsystem.getInstance().getLeftX();
         // creates a JoystickValues object to represent the output from the actual joysticks; before all processing
         JoystickValues joystickValues = new JoystickValues(leftY, rightX);
         // adds deadzone to joystick values while also keeping graph continuous
@@ -131,10 +129,8 @@ public class JoystickDriveCommand extends CommandBase {
         SmartDashboard.putBoolean("InvertedDrive?", invertDrive);
                 
         //Sets the speed
-        if(!invertDrive) AbstractDriveSubsystem.getInstance().setSpeed(motorValues.left, motorValues.right);
-        else AbstractDriveSubsystem.getInstance().setSpeed(-motorValues.left, -motorValues.right);
-        //H-Drive
-        AbstractDriveSubsystem.getInstance().setHDriveSpeed(leftX);
+        if(!invertDrive) DriveSubsystem.getInstance().setSpeed(motorValues.left, motorValues.right);
+        else DriveSubsystem.getInstance().setSpeed(-motorValues.left, -motorValues.right);
         
         // //Diagnostic values for Joysticks and motors
         // SmartDashboard.putNumber("Joystick Left Y", leftY);
@@ -142,8 +138,8 @@ public class JoystickDriveCommand extends CommandBase {
         // SmartDashboard.putNumber("Left percent", motorValues.left);
         // SmartDashboard.putNumber("Right percent", motorValues.right);
         // //Puts the velocity that the motor controller is reading to SmartDashboard
-        // SmartDashboard.putNumber("Left Motor Real Velocity", AbstractDriveSubsystem.getInstance().getLeftMotorVelocity());
-        // SmartDashboard.putNumber("Right Motor Real Velocity", AbstractDriveSubsystem.getInstance().getRightMotorVelocity());
+        // SmartDashboard.putNumber("Left Motor Real Velocity", DriveSubsystem.getInstance().getLeftMotorVelocity());
+        // SmartDashboard.putNumber("Right Motor Real Velocity", DriveSubsystem.getInstance().getRightMotorVelocity());
         SmartDashboard.putNumber("distanceX", DriveSubsystem.getInstance().getTranslationX());
         SmartDashboard.putNumber("distanceY", DriveSubsystem.getInstance().getTranslationY());
         SmartDashboard.putNumber("robotAngle", DriveSubsystem.getInstance().getAngle());
@@ -153,9 +149,9 @@ public class JoystickDriveCommand extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         //When this command ends, set everything to 0 and gets out of Brake Mode
-        AbstractDriveSubsystem.getInstance().setDriveMode(DriveMode.PERCENT);
-        AbstractDriveSubsystem.getInstance().setSpeed(0, 0);
-        AbstractDriveSubsystem.getInstance().setBrakeMode(false);
+        DriveSubsystem.getInstance().setDriveMode(DriveMode.PERCENT);
+        DriveSubsystem.getInstance().setSpeed(0, 0);
+        DriveSubsystem.getInstance().setBrakeMode(false);
         invertDrive = false;
     }
 

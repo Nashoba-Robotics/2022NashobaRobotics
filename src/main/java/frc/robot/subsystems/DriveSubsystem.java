@@ -1,7 +1,13 @@
 package frc.robot.subsystems;
 
+import java.io.IOException;
+import java.nio.file.Path;
+
+import javax.sound.midi.Patch;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
+import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
@@ -11,32 +17,48 @@ import com.ctre.phoenix.sensors.PigeonIMU;
 import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 import com.ctre.phoenix.motorcontrol.TalonFXSensorCollection;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.RamseteController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryUtil;
+import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.util.sendable.SendableRegistry;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.lib.Units;
 
 // Subsystem for driving the robot
-public class DriveSubsystem extends AbstractDriveSubsystem {
+public class DriveSubsystem extends SubsystemBase {
+
+    public enum DriveMode {
+        VELOCITY,
+        PERCENT
+    }
+
+    private static DriveSubsystem instance;
 
     //x-speed, y-speed, rate of rotation
-    private ChassisSpeeds speeds = new ChassisSpeeds(0, 0, 0);
-    private DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(Constants.WHEEL_GAP);
-    private DifferentialDriveWheelSpeeds wheelSpeeds = kinematics.toWheelSpeeds(speeds);
+    private final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(Constants.WHEEL_GAP);
     private Rotation2d gyroAngle = Rotation2d.fromDegrees(-GyroSubsystem.getInstance().getAbsoluteAngle());
     private DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(gyroAngle);
     private Pose2d pose;
 
-    //public static final double KF = 0.0475;
     public static final int VOLTAGE_COMPENSATION_LEVEL = 12;
     public static final VelocityMeasPeriod VELOCITY_MEASUREMENT_PERIOD_DRIVE = VelocityMeasPeriod.Period_10Ms; // find
     public static final int VELOCITY_MEASUREMENT_WINDOW_DRIVE = 32; // find this
@@ -46,30 +68,35 @@ public class DriveSubsystem extends AbstractDriveSubsystem {
     private boolean brakeMode = false;
 
     private TalonFX leftMotor, leftMotor2, leftMotor3;
-    private TalonFXSensorCollection leftMasterSensor;
     private TalonFX rightMotor, rightMotor2, rightMotor3;
-    private TalonFXSensorCollection rightMasterSensor;
 
     // @Override
     @Override
     public void periodic() {
-        gyroAngle = Rotation2d.fromDegrees(GyroSubsystem.getInstance().getAbsoluteAngle());
+        gyroAngle = Rotation2d.fromDegrees(-GyroSubsystem.getInstance().getAbsoluteAngle());
         pose = odometry.update(gyroAngle, NU2Meters(leftMotor.getSelectedSensorPosition(Constants.PID_IDX)), NU2Meters(rightMotor.getSelectedSensorPosition()));
     }
 
     public void setVoltage(double leftVolts, double rightVolts){
-        leftMotor.set(ControlMode.PercentOutput, leftVolts/RobotController.getBatteryVoltage(), DemandType.ArbitraryFeedForward, Constants.AFF);
-        rightMotor.set(ControlMode.PercentOutput, rightVolts/RobotController.getBatteryVoltage(), DemandType.ArbitraryFeedForward, Constants.AFF);
+        leftVolts /= 13; //RobotController.getBatteryVoltage();
+        rightVolts /= 13; //RobotController.getBatteryVoltage();
+        // if(Math.abs(leftVolts) > Constants.DriveTrain.MAX_AUTO_TURN || Math.abs(rightVolts) > Constants.DriveTrain.MAX_AUTO_TURN) {
+        //     double factor = Math.max(Math.abs(leftVolts), Math.abs(rightVolts));
+        //     leftVolts /= factor;
+        //     rightVolts /= factor;
+        // }
+        leftMotor.set(ControlMode.PercentOutput, leftVolts);
+        rightMotor.set(ControlMode.PercentOutput, rightVolts);
     }
-
+    //I see everything
     public void resetOdometry(Pose2d pose){
-        leftMasterSensor.setIntegratedSensorPosition(0, Constants.TIMEOUT);
-        rightMasterSensor.setIntegratedSensorPosition(0, Constants.TIMEOUT);
+        leftMotor.setSelectedSensorPosition(0, Constants.PID_IDX, Constants.TIMEOUT);
+        rightMotor.setSelectedSensorPosition(0, Constants.PID_IDX, Constants.TIMEOUT);
         odometry.resetPosition(pose, Rotation2d.fromDegrees(GyroSubsystem.getInstance().getAbsoluteAngle()));
     }
 
     public DifferentialDriveWheelSpeeds getWheelSpeeds(){
-        return new DifferentialDriveWheelSpeeds(NU2Meters(leftMasterSensor.getIntegratedSensorVelocity()), NU2Meters(leftMasterSensor.getIntegratedSensorVelocity()));
+        return new DifferentialDriveWheelSpeeds(NU2Meters(getLeftMotorVelocity() * 10), NU2Meters(getRightMotorVelocity() * 10));
     }
 
     public double getAngle(){
@@ -82,6 +109,7 @@ public class DriveSubsystem extends AbstractDriveSubsystem {
 
     public double getTranslationX(){
         return getPose().getTranslation().getX();
+        //I know what you're doing
     }
 
     public double getTranslationY(){
@@ -112,24 +140,36 @@ public class DriveSubsystem extends AbstractDriveSubsystem {
         leftMotor3.follow(leftMotor);
         rightMotor2.follow(rightMotor);
         rightMotor3.follow(rightMotor);
-
+        //I see you when you're sleeping
         brakeMode = false;
 
-        leftMasterSensor = new TalonFXSensorCollection(leftMotor);
-        leftMasterSensor.setIntegratedSensorPosition(0, Constants.TIMEOUT);
-        rightMasterSensor = new TalonFXSensorCollection(rightMotor);
-        rightMasterSensor.setIntegratedSensorPosition(0, Constants.TIMEOUT);
+        leftMotor.setSelectedSensorPosition(0, Constants.PID_IDX, Constants.TIMEOUT);
+        rightMotor.setSelectedSensorPosition(0, Constants.PID_IDX, Constants.TIMEOUT);
+        // leftMasterSensor = new TalonFXSensorCollection(leftMotor);
+        // leftMasterSensor.setIntegratedSensorPosition(0, Constants.TIMEOUT);
+        // rightMasterSensor = new TalonFXSensorCollection(rightMotor);
+        // rightMasterSensor.setIntegratedSensorPosition(0, Constants.TIMEOUT);
 
         configureMotor(rightMotor);
         configureMotor(leftMotor);
         
-        rightMotor.setInverted(false);
-        leftMotor.setInverted(true);
-        leftMotor2.setInverted(true);
-        leftMotor3.setInverted(true);
+        rightMotor.setInverted(InvertType.None);
+        rightMotor2.setInverted(InvertType.FollowMaster);
+        rightMotor3.setInverted(InvertType.FollowMaster);
+        leftMotor.setInverted(InvertType.InvertMotorOutput);
+        leftMotor2.setInverted(InvertType.FollowMaster);
+        //I know when you're awake
+        leftMotor3.setInverted(InvertType.FollowMaster);
 
         // Set the name of the subsystem in smart dashboard
         SendableRegistry.setName(this, "Drive");
+    }
+
+    public static DriveSubsystem getInstance(){
+        if(instance == null){
+            instance = new DriveSubsystem();
+        }
+        return instance;
     }
 
     private void configureMotor(TalonFX motor) {
@@ -168,7 +208,7 @@ public class DriveSubsystem extends AbstractDriveSubsystem {
     public void changeBrakeMode(){
         brakeMode = !brakeMode;
     }
-
+    //I also know where you live
     public boolean getBrakeMode(){
         return brakeMode;
     }
@@ -212,7 +252,7 @@ public class DriveSubsystem extends AbstractDriveSubsystem {
         }
         
     }
-
+    //Hee hee
     //takes input, speed, in form of percent (-1 through 1). Sets the speed of the left motor
     public void setLeftMotorSpeed(double speed){
         TalonFXControlMode controlMode = TalonFXControlMode.Velocity;
@@ -259,11 +299,11 @@ public class DriveSubsystem extends AbstractDriveSubsystem {
     }
 
     public double getLeftMotorVelocity(){
-        return leftMasterSensor.getIntegratedSensorVelocity();
+        return leftMotor.getSelectedSensorVelocity(Constants.PID_IDX);
     }
 
     public double getRightMotorVelocity(){
-        return rightMasterSensor.getIntegratedSensorVelocity();
+        return rightMotor.getSelectedSensorVelocity(Constants.PID_IDX);
     }
     
     public double getLeftMotorCurrent(){
@@ -292,11 +332,11 @@ public class DriveSubsystem extends AbstractDriveSubsystem {
     }
 
     public double getPositionLeft(){
-        return leftMasterSensor.getIntegratedSensorPosition();
+        return leftMotor.getSelectedSensorPosition(Constants.PID_IDX);
     }
 
     public double getPositionRight(){
-        return -rightMasterSensor.getIntegratedSensorPosition();
+        return -rightMotor.getSelectedSensorPosition(Constants.PID_IDX);
     }
 
     public double getDistanceLeft(){
@@ -307,4 +347,56 @@ public class DriveSubsystem extends AbstractDriveSubsystem {
         return NU2Meters(getPositionRight());
     }
 
+    public Command getAutonomousCommand(String trajectoryJSON){
+
+        //uncomment if setting points manually
+        // DifferentialDriveVoltageConstraint autoVoltageConstraint = 
+        // new DifferentialDriveVoltageConstraint(
+        //   new SimpleMotorFeedforward(Constants.DriveTrain.KS, Constants.DriveTrain.KV, Constants.DriveTrain.KA),
+        //   DriveSubsystem.getInstance().getKinematics(),
+        //   7);
+    
+        //uncomment if setting points manually
+        // TrajectoryConfig config =
+        // new TrajectoryConfig(
+        //   Constants.DriveTrain.MAX_VELOCITY,
+        //   Constants.DriveTrain.MAX_ACCELERATION)
+        //   .setKinematics(DriveSubsystem.getInstance().getKinematics())
+        //   .addConstraint(autoVoltageConstraint);
+    
+        Trajectory trajectory = new Trajectory();
+    
+        try {
+          Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+          trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+       } catch (IOException e) {
+          DriverStation.reportError("Unable to open trajectory: \n \n \n \n", e.getStackTrace());
+       }
+    
+        //uncomment if adding points manually
+        // Trajectory trajectory =
+        // TrajectoryGenerator.generateTrajectory(
+        //   new Pose2d(0, 0, new Rotation2d(0)), //starting position
+        //   List.of(new Translation2d(1, 1), new Translation2d(2, -1)), //nodes for robot to travel to
+        //   new Pose2d(3, 0, new Rotation2d(0)), //finishing position
+        //   config);
+    
+        RamseteCommand ramseteCommand =
+        new RamseteCommand(
+          trajectory,
+          DriveSubsystem.getInstance()::getPose,
+          new RamseteController(Constants.DriveTrain.AUTO_B, Constants.DriveTrain.AUTO_ZETA),
+          new SimpleMotorFeedforward(Constants.DriveTrain.KS, Constants.DriveTrain.KV, Constants.DriveTrain.KA),
+          DriveSubsystem.getInstance().getKinematics(),
+          DriveSubsystem.getInstance()::getWheelSpeeds,
+          new PIDController(Constants.KP, Constants.KI, Constants.KD),
+          new PIDController(Constants.KP, Constants.KI, Constants.KD),
+          DriveSubsystem.getInstance()::setVoltage,
+          DriveSubsystem.getInstance());
+    
+          DriveSubsystem.getInstance().resetOdometry(trajectory.getInitialPose());
+    
+          return ramseteCommand.andThen(() -> DriveSubsystem.getInstance().setVoltage(0, 0));
+    
+      }
 }
