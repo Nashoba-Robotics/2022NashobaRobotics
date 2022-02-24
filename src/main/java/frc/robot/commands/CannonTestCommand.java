@@ -26,7 +26,7 @@ public class CannonTestCommand extends CommandBase {
 
     @Override
     public void execute(){
-        CannonSubsystem.getInstance().shoot(speed);
+        CannonSubsystem.getInstance().set(speed);
         
         speed = SmartDashboard.getNumber("Cannon Speed", 0);
         SmartDashboard.putNumber("topCurrent", CannonSubsystem.getInstance().getCurrentTop());
@@ -39,7 +39,7 @@ public class CannonTestCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted){
-        CannonSubsystem.getInstance().shoot(0);
+        CannonSubsystem.getInstance().set(0);
     }
 
     @Override

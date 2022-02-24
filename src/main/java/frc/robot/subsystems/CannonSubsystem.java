@@ -73,14 +73,14 @@ public class CannonSubsystem extends SubsystemBase{
     }
 
     //sets the speed of each individual motor
-    public void shoot(double topSpeed, double bottomSpeed){
+    public void set(double topSpeed, double bottomSpeed){
         topCannonMotor.set(ControlMode.Velocity, Units.percent2Velocity(topSpeed));
         bottomCannonMotor.set(ControlMode.Velocity, Units.percent2Velocity(bottomSpeed));
     }
     
     //sets the speed of both motors to same value
-    public void shoot(double speeeeeeed){
-        shoot(speeeeeeed, speeeeeeed);
+    public void set(double speed){
+        set(speed, speed);
     }
 
     public void setProportional(double p){

@@ -152,10 +152,13 @@ public final class Constants {
         public static final double MAX_ACCELERATION = .2; //max speed in meters per second per second
     }
 
-    public static class Loader {
-        public static final int INTAKE_PORT = 6;
-        public static final int GRABBER_PORT = 7;
-        public static final int LOADER_PORT = 8;
+    public static class Intake {
+        public static final int PORT_INTAKE = 6;
+        public static final int PORT_GRABBER = 7;
+        public static final int PORT_LOADER = 8;
+
+        public static final int DIO_SENSOR_1 = 0;
+        public static final int DIO_SENSOR_2 = 0;
     }
 
 }
