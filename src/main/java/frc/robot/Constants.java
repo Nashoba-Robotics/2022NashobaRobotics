@@ -41,6 +41,8 @@ public final class Constants {
 
     public static final int LEFT_JOYSTICK_PORT = 1;
     public static final int RIGHT_JOYSTICK_PORT = 0;
+    public static final int LEFT_OPERATOR_JOYSTICK_PORT = 4;
+    public static final int RIGHT_OPERATOR_JOYSTICK_PORT = 5;
 
     // 1 is a linear relationship between joystick position and speed
     // Higher values yield more precision in lower speeds and less in higher speeds
@@ -157,8 +159,8 @@ public final class Constants {
         public static final int PORT_GRABBER = 7;
         public static final int PORT_LOADER = 8;
 
-        public static final int DIO_SENSOR_1 = 0;
-        public static final int DIO_SENSOR_2 = 0;
+        public static final int DIO_SENSOR_1 = 4;
+        public static final int DIO_SENSOR_2 = 5;
     }
 
 }

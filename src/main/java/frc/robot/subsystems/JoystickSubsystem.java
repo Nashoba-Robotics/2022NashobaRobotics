@@ -13,10 +13,14 @@ public class JoystickSubsystem extends SubsystemBase {
 
     private Joystick leftJoystick;
     private Joystick rightJoystick;
+    private Joystick leftOperatorJoystick;
+    private Joystick rightOperatorJoystick;
 
     private JoystickSubsystem() {
         leftJoystick = new Joystick(Constants.LEFT_JOYSTICK_PORT);
         rightJoystick = new Joystick(Constants.RIGHT_JOYSTICK_PORT);
+        leftOperatorJoystick = new Joystick(Constants.LEFT_OPERATOR_JOYSTICK_PORT);
+        rightOperatorJoystick = new Joystick(Constants.RIGHT_OPERATOR_JOYSTICK_PORT);
         // Set the name of the subsystem in smart dashboard
         SendableRegistry.setName(this, "Joystick");
     }
@@ -46,5 +50,11 @@ public class JoystickSubsystem extends SubsystemBase {
     }
     public Joystick getRightJoystick(){
         return rightJoystick;
+    }
+    public Joystick getLeftOperatorJoystick(){
+        return leftOperatorJoystick;
+    }
+    public Joystick getRightOperatorJoystick(){
+        return rightOperatorJoystick;
     }
 }

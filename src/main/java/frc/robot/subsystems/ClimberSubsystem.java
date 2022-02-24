@@ -72,19 +72,13 @@ public class ClimberSubsystem extends SubsystemBase {
             lsLeft1, lsLeft2, null,
             lsRight1, lsRight2, null
         };
-
-        // TODO TODO TODO
-        // Limit switch notes:
-        // to connect the motor directly to the limit switch, use:
-        // motor.config[Forward|Reverse]LimitSwitchSource(RemoteLimitSwitchSource.RemoteCANifier, LimitSwitchNormal.Normally[Open|Closed], id, 0);
-        // this requires a CANifier: https://store.ctr-electronics.com/canifier/
-        // i do not believe we have four of these, so we will have to do it using code
-
+        
         for(TalonFX motor: motors) {
             configureMotor(motor);
         }
 
         motorLeft1.setInverted(true);
+        motorRight2.setInverted(true);
         motorLeft2.configForwardSoftLimitEnable(true);
         motorLeft2.configForwardSoftLimitThreshold(170000);
 

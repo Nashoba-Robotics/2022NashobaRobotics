@@ -13,9 +13,19 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.JoystickDriveCommand;
+import frc.robot.commands.intakeshoot.DeployIntakeCommand;
+import frc.robot.commands.intakeshoot.EjectBackCommand;
+import frc.robot.commands.intakeshoot.EjectFrontCommand;
+import frc.robot.commands.intakeshoot.PukeCommand;
+import frc.robot.commands.intakeshoot.RunIntakeCommand;
+import frc.robot.commands.intakeshoot.ShootCommand;
+import frc.robot.commands.intakeshoot.UndeployIntakeCommand;
 import frc.robot.subsystems.AbstractDriveSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.JoystickSubsystem;
 import frc.robot.subsystems.AbstractDriveSubsystem.DriveMode;
 
 /**
@@ -104,8 +114,28 @@ public class Robot extends TimedRobot {
   /**
    * This function is called periodically during operator control.
    */
+
+   //TODO: Add indexes for every button
+  double smolValue = 0.1;
+  Trigger deployIntakeSwitch = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 0);
+  Trigger runIntakeButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 0).debounce(smolValue); //Creates an instance of a button
+  Trigger stopIntakeButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 0).debounce(smolValue);//First parameter is the Joystick the button is on
+  RunIntakeCommand runIntakeCommand = new RunIntakeCommand();                                                                     //Second parameter is the index of the Joystick
+  Trigger ejectFrontButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 0).debounce(smolValue);//VERY IMPORTANT: Joysticks are 1-indexed, not 0-indexed
+  Trigger ejectBackButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 0).debounce(smolValue);
+  Trigger pukeButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 0).debounce(smolValue);
+  Trigger shootButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 0).debounce(smolValue);
+
   @Override
   public void teleopPeriodic() {
+    deployIntakeSwitch.whenActive(new DeployIntakeCommand());
+    deployIntakeSwitch.whenInactive(new UndeployIntakeCommand());
+    runIntakeButton.whenActive(runIntakeCommand);
+    stopIntakeButton.cancelWhenActive(runIntakeCommand);
+    ejectFrontButton.whenActive(new EjectFrontCommand());
+    ejectBackButton.whenActive(new EjectBackCommand());
+    pukeButton.whenActive(new PukeCommand());
+    shootButton.whenActive(new ShootCommand());
   }
 
   @Override

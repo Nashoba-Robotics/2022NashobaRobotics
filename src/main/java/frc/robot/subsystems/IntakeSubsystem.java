@@ -4,6 +4,10 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -14,6 +18,9 @@ public class IntakeSubsystem extends SubsystemBase {
 
     private DigitalInput sensor1;
     private DigitalInput sensor2;
+
+    private boolean intakeOut = false;
+    private DoubleSolenoid intakePiston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 0);
 
     private static IntakeSubsystem singleton;
 
@@ -42,6 +49,24 @@ public class IntakeSubsystem extends SubsystemBase {
         
     public IntakeSubsystem setLoader(double speed){
         loader.set(ControlMode.PercentOutput, speed);
+        return this;
+    }
+
+    public IntakeSubsystem deployIntake() {
+        if(!intakeOut){
+            intakePiston.set(DoubleSolenoid.Value.kForward);//Sets the solenoid forward
+            intakeOut = true;
+        } 
+        // TODO deploy intake
+        return this;
+    }
+
+    public IntakeSubsystem retractIntake() {
+        if(intakeOut){
+            intakePiston.set(DoubleSolenoid.Value.kReverse);//Sets the solenoid back;
+            intakeOut = false;
+        }
+        // TODO retract intake
         return this;
     }
 
