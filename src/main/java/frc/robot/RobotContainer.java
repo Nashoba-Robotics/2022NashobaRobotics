@@ -52,9 +52,10 @@ public class RobotContainer {
     //SmartDashboard.putData(new TurretCommand());
     // SmartDashboard.putData(new GyroTestCommand());
     // SmartDashboard.putData(new LimelightCommand());
-    SmartDashboard.putData(new CannonTestCommand());
+    //SmartDashboard.putData(new CannonTestCommand());
     SmartDashboard.putData(new ClimberCommand());
-    SmartDashboard.putData(new LoaderCommand());
+    //SmartDashboard.putData(new LoaderCommand());
+    // SmartDashboard.putData(new TalonTestCommand());
   }
 
   /**

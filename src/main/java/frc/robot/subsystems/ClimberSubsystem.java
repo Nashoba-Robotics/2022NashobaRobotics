@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
+import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
@@ -24,21 +26,21 @@ public class ClimberSubsystem extends SubsystemBase {
     private TalonFX motorRight2;
     private TalonFX motorRightRotate;
 
-    private DigitalInput lsLeft1;
-    private DigitalInput lsLeft2;
-    private DigitalInput lsRight1;
-    private DigitalInput lsRight2;
+    // private DigitalInput lsLeft1;
+    // private DigitalInput lsLeft2;
+    // private DigitalInput lsRight1;
+    // private DigitalInput lsRight2;
 
     private TalonFX[] motors;
 
-    private DigitalInput[] limitSwitches;
+    // private DigitalInput[] limitSwitches;
 
     private TalonFX getMotor(ClimberMotor motor) {
         return motors[motor.ordinal()];
     }
 
-    public DigitalInput getLimitSwitch(ClimberMotor motor) {
-        return limitSwitches[motor.ordinal()];
+    public boolean getLimitSwitch(ClimberMotor motor) {
+         return getMotor(motor).getSensorCollection().isRevLimitSwitchClosed() == 1;
     }
 
     private static ClimberSubsystem singleton;
@@ -62,16 +64,6 @@ public class ClimberSubsystem extends SubsystemBase {
             motorLeft1, motorLeft2, motorLeftRotate, 
             motorRight1, motorRight2, motorRightRotate
         };
-
-        lsLeft1 = new DigitalInput(Constants.Climber.DIO_LS_LEFT_1);
-        lsLeft2 = new DigitalInput(Constants.Climber.DIO_LS_LEFT_2);
-        lsRight1 = new DigitalInput(Constants.Climber.DIO_LS_RIGHT_1);
-        lsRight2 = new DigitalInput(Constants.Climber.DIO_LS_RIGHT_2);
-
-        limitSwitches = new DigitalInput[] {
-            lsLeft1, lsLeft2, null,
-            lsRight1, lsRight2, null
-        };
         
         for(TalonFX motor: motors) {
             configureMotor(motor);
@@ -79,8 +71,24 @@ public class ClimberSubsystem extends SubsystemBase {
 
         motorLeft1.setInverted(true);
         motorRight2.setInverted(true);
+
+        motorLeft1.configForwardSoftLimitEnable(true);
+        motorLeft1.configForwardSoftLimitThreshold(140000);
         motorLeft2.configForwardSoftLimitEnable(true);
         motorLeft2.configForwardSoftLimitThreshold(170000);
+        motorRight1.configForwardSoftLimitEnable(true);
+        motorRight1.configForwardSoftLimitThreshold(140000);
+        motorRight2.configForwardSoftLimitEnable(true);
+        motorRight2.configForwardSoftLimitThreshold(170000);
+
+        motorLeftRotate.setNeutralMode(NeutralMode.Brake);
+        motorRightRotate.setNeutralMode(NeutralMode.Brake);
+       
+        motorLeft1.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
+        motorLeft2.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
+       
+        motorRight1.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
+        motorRight2.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
 
         for(TalonFX motor1: new TalonFX[]{motorLeft1, motorRight1}) {
             motor1.config_kF(0, Constants.Climber.KF, Constants.TIMEOUT);
@@ -131,33 +139,13 @@ public class ClimberSubsystem extends SubsystemBase {
 
     public void setSpeed(ClimberMotor motor, double speed) {
         TalonFX talon = getMotor(motor);
-        DigitalInput ls = getLimitSwitch(motor);
-        // TODO limit switch might be inverted, add ! possibly
-        // TODO one motion direction should be allowed here
-        if(ls != null && !ls.get() && speed < 0) {
-            talon.set(ControlMode.PercentOutput, 0);
-            talon.setSelectedSensorPosition(0);
-            return;
-        }
-        if(Math.abs(speed) <= 0.07) {
+        if(Math.abs(speed) <= 0.2) {
             talon.set(ControlMode.PercentOutput, speed);
         } else {
             talon.set(ControlMode.PercentOutput, 0);
         }
     }
-
-    public void checkLimitSwitches() {
-        for(int i = 0; i < motors.length; i++) {
-            TalonFX talon = motors[i];
-            DigitalInput ls = limitSwitches[i];
-            // TODO limit switch might be inverted, add ! possibly
-            if(ls != null && !ls.get()) {
-                talon.set(ControlMode.PercentOutput, 0);
-                talon.setSelectedSensorPosition(0);
-            }
-        }
-    }
-
+    
     public double getPosition(ClimberMotor motor) {
         return getMotor(motor).getSelectedSensorPosition();
     }
