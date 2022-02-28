@@ -9,7 +9,11 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PneumaticHub;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -22,7 +26,7 @@ import frc.robot.commands.intakeshoot.EjectFrontCommand;
 import frc.robot.commands.intakeshoot.PukeCommand;
 import frc.robot.commands.intakeshoot.RunIntakeCommand;
 import frc.robot.commands.intakeshoot.ShootCommand;
-import frc.robot.commands.intakeshoot.UndeployIntakeCommand;
+import frc.robot.commands.intakeshoot.RetractIntakeCommand;
 import frc.robot.subsystems.AbstractDriveSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.JoystickSubsystem;
@@ -38,6 +42,9 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
+  private PowerDistribution pdh;
+  Compressor compressor;
+  PneumaticHub ph = new PneumaticHub();
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -48,6 +55,11 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    pdh = new PowerDistribution();
+    pdh.setSwitchableChannel(true);
+    // compressor = new Compressor(1, PneumaticsModuleType.REVPH);
+    // compressor.enableDigital();
+    ph.enableCompressorAnalog(100, 110);
   }
 
   /**
@@ -129,7 +141,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     deployIntakeSwitch.whenActive(new DeployIntakeCommand());
-    deployIntakeSwitch.whenInactive(new UndeployIntakeCommand());
+    deployIntakeSwitch.whenInactive(new RetractIntakeCommand());
     runIntakeButton.whenActive(runIntakeCommand);
     stopIntakeButton.cancelWhenActive(runIntakeCommand);
     ejectFrontButton.whenActive(new EjectFrontCommand());

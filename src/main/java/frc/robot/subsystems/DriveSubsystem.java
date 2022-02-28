@@ -123,10 +123,10 @@ public class DriveSubsystem extends AbstractDriveSubsystem {
         configureMotor(rightMotor);
         configureMotor(leftMotor);
         
-        rightMotor.setInverted(false);
-        leftMotor.setInverted(true);
-        leftMotor2.setInverted(true);
-        leftMotor3.setInverted(true);
+        leftMotor.setInverted(false);
+        rightMotor.setInverted(true);
+        rightMotor2.setInverted(true);
+        rightMotor3.setInverted(true);
 
         // Set the name of the subsystem in smart dashboard
         SendableRegistry.setName(this, "Drive");

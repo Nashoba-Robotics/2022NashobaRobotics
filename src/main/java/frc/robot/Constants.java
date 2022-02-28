@@ -20,14 +20,8 @@ import frc.robot.lib.Units;
 public final class Constants {
     //the ports on the CAN bus for the left and right motors respectively on 2020 robot
     //index 0 should be master motor
-    public static final int[] LEFT_MOTOR_PORTS = {12,13,14};// {3, 4, 5}; //;
-    public static final int[] RIGHT_MOTOR_PORTS = {1,2,3};//  {0, 1, 2}; //;
-
-    //the ports on the CAN bus for the left and right motors respectively on 2019 robot
-    //index 0 should be master motor
-    public static final int[] LEFT_MOTOR_PORTS_2019 = {0, 1, 2};
-    public static final int[] RIGHT_MOTOR_PORTS_2019 = {12, 13, 14};
-    public static final int HDRIVEPORT = 11; //Hopefully the right port
+    public static final int[] LEFT_MOTOR_PORTS = {0, 1, 2};// {3, 4, 5}; //;
+    public static final int[] RIGHT_MOTOR_PORTS = {3, 4, 5};//  {0, 1, 2}; //;
 
     public static final int[] GRABBER_MOTOR_PORTS = {};
     public static final int[] INTAKE_MOTOR_PORTS = {};
@@ -161,6 +155,9 @@ public final class Constants {
 
         public static final int DIO_SENSOR_1 = 4;
         public static final int DIO_SENSOR_2 = 5;
+
+        public static final int INTAKE_SOLENOID_PORT = 8;
+        public static final int INTAKE_SOLENOID_PORT2 = 9;
     }
 
 }

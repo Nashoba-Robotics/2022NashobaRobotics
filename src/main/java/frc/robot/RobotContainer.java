@@ -25,10 +25,15 @@ import frc.robot.commands.LimelightCommand;
 import frc.robot.commands.LoaderCommand;
 import frc.robot.commands.SensorTestCommand;
 import frc.robot.commands.StopCommand;
-import frc.robot.commands.TalonTestCommand;
 import frc.robot.commands.TurretCommand;
 import frc.robot.commands.VelocityTestCommand;
-import frc.robot.subsystems.Drive2019Subsystem;
+import frc.robot.commands.intakeshoot.DeployIntakeCommand;
+import frc.robot.commands.intakeshoot.EjectBackCommand;
+import frc.robot.commands.intakeshoot.EjectFrontCommand;
+import frc.robot.commands.intakeshoot.PukeCommand;
+import frc.robot.commands.intakeshoot.RetractIntakeCommand;
+import frc.robot.commands.intakeshoot.RunIntakeCommand;
+import frc.robot.commands.intakeshoot.ShootCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.JoystickSubsystem;
 import frc.robot.commands.GyroTestCommand;
@@ -42,7 +47,7 @@ public class RobotContainer {
 
   public RobotContainer() {
     configureButtonBindings();
-    // SmartDashboard.putData(joystickDriveCommand);
+    SmartDashboard.putData(joystickDriveCommand);
     // SmartDashboard.putData(new VelocityTestCommand());
     SmartDashboard.putData(new StopCommand());
     // SmartDashboard.putData(new SensorTestCommand());
@@ -53,9 +58,19 @@ public class RobotContainer {
     // SmartDashboard.putData(new GyroTestCommand());
     // SmartDashboard.putData(new LimelightCommand());
     //SmartDashboard.putData(new CannonTestCommand());
-    SmartDashboard.putData(new ClimberCommand());
+    // SmartDashboard.putData(new ClimberCommand());
     //SmartDashboard.putData(new LoaderCommand());
     // SmartDashboard.putData(new TalonTestCommand());
+    SmartDashboard.putData(new DeployIntakeCommand());
+    SmartDashboard.putData(new RetractIntakeCommand());
+    SmartDashboard.putData(new EjectFrontCommand());
+    SmartDashboard.putData(new EjectBackCommand());
+    SmartDashboard.putData(new PukeCommand());
+    SmartDashboard.putData(new RunIntakeCommand());
+    SmartDashboard.putData(new ShootCommand());
+    SmartDashboard.putData(new LoaderCommand());
+    SmartDashboard.putData(new CannonTestCommand());
+    
   }
 
   /**
