@@ -13,7 +13,6 @@ import java.util.ArrayList;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
-<<<<<<< HEAD
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.Compressor;
@@ -27,15 +26,11 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.Intake2021Command;
 import frc.robot.commands.JoystickDriveCommand;
 import frc.robot.commands.StopCommand;
-import frc.robot.commands.StopIntake2021Command;
-import frc.robot.commands.TristanCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.JoystickSubsystem;
 import frc.robot.subsystems.DriveSubsystem.DriveMode;
-=======
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticHub;
@@ -54,11 +49,9 @@ import frc.robot.commands.intakeshoot.PukeCommand;
 import frc.robot.commands.intakeshoot.RunIntakeCommand;
 import frc.robot.commands.intakeshoot.ShootCommand;
 import frc.robot.commands.intakeshoot.RetractIntakeCommand;
-import frc.robot.subsystems.AbstractDriveSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.JoystickSubsystem;
-import frc.robot.subsystems.AbstractDriveSubsystem.DriveMode;
->>>>>>> origin/loader_climber
+
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -87,16 +80,12 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-<<<<<<< HEAD
-
     
-=======
     pdh = new PowerDistribution();
     pdh.setSwitchableChannel(true);
     // compressor = new Compressor(1, PneumaticsModuleType.REVPH);
     // compressor.enableDigital();
     ph.enableCompressorAnalog(100, 110);
->>>>>>> origin/loader_climber
   }
 
   /**
@@ -152,20 +141,11 @@ public class Robot extends TimedRobot {
     || !CommandScheduler.getInstance().isScheduled(currCommand)
     && currCommandIndex < auto.length)){
       String[] parts = auto[currCommandIndex].split(" ");
-      switch(parts[0]) {  //Trystani is baed
+      switch(parts[0]) {  
         case "path":
           currCommand = DriveSubsystem.getInstance().getAutonomousCommand(parts[1]);
           break;
-        case "joystick":
-          currCommand = new JoystickDriveCommand();
-          break;
-        case "intake":
-          System.out.println("Fuck You");
-          currCommand = new Intake2021Command();
-          break;
-        case "stopIntake":
-          System.out.println("Fuck Ben");
-          currCommand = new StopIntake2021Command();
+        
           
       } 
       currCommand.schedule();
@@ -175,14 +155,7 @@ public class Robot extends TimedRobot {
       autoFinished = true;
     }
   }
-
-
-  double smallValue = 0.1;
-  Trigger tristanButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 10).debounce(smallValue);
-  JoystickButton stopTristanButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 2);
-  TristanCommand tristanCommand = new TristanCommand();
-  Trigger intakeButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 12).debounce(smallValue);
-  Trigger stopIntakeButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 11).debounce(smallValue);
+  
   
   //Compressor compressor = new Compressor(PneumaticsModuleType.REVPH);
   
@@ -213,12 +186,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-<<<<<<< HEAD
-    //tristanButton.whenActive(new TristanCommand(), false);
-    tristanButton.toggleWhenActive(tristanCommand, true);
-    intakeButton.whenActive(new Intake2021Command());
-    stopIntakeButton.whenActive(new StopIntake2021Command());
-=======
+
     deployIntakeSwitch.whenActive(new DeployIntakeCommand());
     deployIntakeSwitch.whenInactive(new RetractIntakeCommand());
     runIntakeButton.whenActive(runIntakeCommand);
@@ -227,7 +195,7 @@ public class Robot extends TimedRobot {
     ejectBackButton.whenActive(new EjectBackCommand());
     pukeButton.whenActive(new PukeCommand());
     shootButton.whenActive(new ShootCommand());
->>>>>>> origin/loader_climber
+
   }
 
   @Override

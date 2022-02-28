@@ -17,7 +17,7 @@ public class LimelightCommand extends CommandBase {
         SmartDashboard.putNumber("ta", LimelightSubsystem.getInstance().getTa());   //Area of the target
         SmartDashboard.putNumber("tx", LimelightSubsystem.getInstance().getTx());   //X position of the target
         SmartDashboard.putNumber("ty", LimelightSubsystem.getInstance().getTy());   //Y position of the target
-        SmartDashboard.putNumber("distance", LimelightSubsystem.getInstance().getDistanceBall());   //Distance from the ball
+        SmartDashboard.putNumber("distance", LimelightSubsystem.getInstance().getDistanceHub());
     }
     @Override
     public boolean isFinished() {

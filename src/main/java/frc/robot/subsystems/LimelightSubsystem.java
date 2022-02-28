@@ -117,20 +117,18 @@ public class LimelightSubsystem extends SubsystemBase {
         ledMode.setDouble(led);    
     }
 
-    public double getDistance(double h2){
-        // d = 2 m
-        // hieght 1 = 0.915 m
-        // hieght 2 = 1.08 cm
-        // a1 = 16 deg = 2tau/45
-        double h1 = 0.915;
-        double a1 = -16*Constants.TAU/360;
-        double a2 = getTy() * Constants.TAU/360;
+    public double getDistanceHub(){
+        double h1 = 0.915; // height of camera
+        double h2 = 0; // height of hub
+        double a1 = -16*Constants.TAU/360; // angle that camera is facing
+        double a2 = getTy() * Constants.TAU/360; // angle that limelight sees target
         double distance = (h2-h1) / Math.tan(a1+a2);
-        if(distance >= 0){
-            return distance;
-        }else{
-            return 0;
-        }
+        return distance;
+        // if(distance >= 0){
+        //     return distance;
+        // }else{
+        //     return 0;
+        // }
     }
 
     public double getDistanceBall(){
