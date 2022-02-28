@@ -17,11 +17,6 @@ public class CannonTestCommand extends CommandBase {
     @Override
     public void initialize(){
         speed = SmartDashboard.getNumber("Cannon Speed", 0);
-        SmartDashboard.putNumber("Cannon Speed", speed);
-        SmartDashboard.putNumber("Cannon P", 0);
-        SmartDashboard.putNumber("Cannon I", 0);
-        SmartDashboard.putNumber("Cannon D", 0);
-        SmartDashboard.putNumber("Cannon kF", 0);
     }
 
     @Override
@@ -31,10 +26,10 @@ public class CannonTestCommand extends CommandBase {
         speed = SmartDashboard.getNumber("Cannon Speed", 0);
         SmartDashboard.putNumber("topCurrent", CannonSubsystem.getInstance().getCurrentTop());
         SmartDashboard.putNumber("bottomCurrent", CannonSubsystem.getInstance().getCurretBottom());
-        // CannonSubsystem.getInstance().setProportional(SmartDashboard.getNumber("Cannon P", 0));
-        // CannonSubsystem.getInstance().setIntegral(SmartDashboard.getNumber("Cannon I", 0));
-        // CannonSubsystem.getInstance().setDerivative(SmartDashboard.getNumber("Cannon D", 0));
-        // CannonSubsystem.getInstance().setKF(SmartDashboard.getNumber("Cannon kF", 0));
+        CannonSubsystem.getInstance().setProportional(SmartDashboard.getNumber("Cannon P", 0));
+        CannonSubsystem.getInstance().setIntegral(SmartDashboard.getNumber("Cannon I", 0));
+        CannonSubsystem.getInstance().setDerivative(SmartDashboard.getNumber("Cannon D", 0));
+        CannonSubsystem.getInstance().setKF(SmartDashboard.getNumber("Cannon kF", 0));
     }
 
     @Override
