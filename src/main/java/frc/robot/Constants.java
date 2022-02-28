@@ -22,8 +22,8 @@ import frc.robot.subsystems.DriveSubsystem;
 public final class Constants {
     //the ports on the CAN bus for the left and right motors respectively on 2020 robot
     //index 0 should be master motor
-    public static final int[] LEFT_MOTOR_PORTS = {12,13,14};// {3, 4, 5}; //;
-    public static final int[] RIGHT_MOTOR_PORTS = {1,2,3};//  {0, 1, 2}; //;
+    public static final int[] LEFT_MOTOR_PORTS = {0, 1, 2}; // {12,13,14};
+    public static final int[] RIGHT_MOTOR_PORTS = {3, 4, 5}; //{1,2,3};
 
     //the ports on the CAN bus for the left and right motors respectively on 2019 robot
     //index 0 should be master motor
@@ -43,6 +43,8 @@ public final class Constants {
 
     public static final int LEFT_JOYSTICK_PORT = 1;
     public static final int RIGHT_JOYSTICK_PORT = 0;
+    public static final int LEFT_OPERATOR_JOYSTICK_PORT = 4;
+    public static final int RIGHT_OPERATOR_JOYSTICK_PORT = 5;
 
     // 1 is a linear relationship between joystick position and speed
     // Higher values yield more precision in lower speeds and less in higher speeds
@@ -63,8 +65,8 @@ public final class Constants {
 	public static final double AFF = 0.051;
 
     // motor constants
-    //public static final double KP = 0.0457;
-    public static final double KP = 0.12;
+    public static final double KP = 0.0457;
+    //public static final double KP = 0.12;
     public static final double KI = 0.001;
     public static final double KD = 0.001;
     public static final double KF = 0.0457; //0.0457
@@ -146,8 +148,18 @@ public final class Constants {
         public static final double AUTO_ZETA = 0.7;
 
         public static final String[] AUTONOMOUS_ROUTINE = {
-            "path paths/Unnamed_Forward.wpilib.json",
-            "path paths/Unnamed.wpilib.json"
+            "path paths/VroomVroom.wpilib.json"
+            // "path paths/Unnamed_Forward.wpilib.json",
+            // "intake",
+            // "path paths/Unnamed.wpilib.json",
+            // "stopIntake"
+        };
+
+        public static final String[] RIGHT_RIGHT_TARMAC_TO_RIGHT_BALL_BLUE = {
+            "path paths/RightRightTarmacToRightBall-Blue.wpilib.json",
+            "intake",
+            "path paths/RightRightTarmacToRightBall-Blue-Return.wpilib.json",
+            "stopIntake"
         };
 
         public static final double MAX_AUTO_TURN = 0.25;

@@ -34,6 +34,7 @@ import frc.robot.commands.LimelightCommand;
 import frc.robot.commands.SensorTestCommand;
 import frc.robot.commands.StopCommand;
 import frc.robot.commands.TalonTestCommand;
+import frc.robot.commands.TristanCommand;
 import frc.robot.commands.TurretCommand;
 import frc.robot.commands.VelocityTestCommand;
 import frc.robot.subsystems.DriveSubsystem;
@@ -59,6 +60,7 @@ public class RobotContainer {
     SmartDashboard.putData(new GyroTestCommand());
     SmartDashboard.putData(new LimelightCommand());
     SmartDashboard.putData(new CannonTestCommand());
+    SmartDashboard.putData(new TristanCommand());
     // SmartDashboard.putData(Drive2019Subsystem.getInstance());
   }
   /**
@@ -69,6 +71,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     new JoystickButton(JoystickSubsystem.getInstance().getLeftJoystick(), 0);
+    
   }
 
 }

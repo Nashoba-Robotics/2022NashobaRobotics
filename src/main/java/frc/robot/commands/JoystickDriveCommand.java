@@ -11,7 +11,6 @@ import frc.robot.lib.Units;
 import frc.robot.lib.JoystickValues;
 import frc.robot.lib.MotorValues;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.JoystickSubsystem;
 import frc.robot.subsystems.DriveSubsystem.DriveMode;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -40,7 +39,7 @@ public class JoystickDriveCommand extends CommandBase {
 
     private JoystickButton joystickBottomRight;
 
-    private AccelerationControl accelerationControl;
+    //private AccelerationControl accelerationControl;
 
     public JoystickDriveCommand() {
         addRequirements(DriveSubsystem.getInstance());
@@ -62,9 +61,9 @@ public class JoystickDriveCommand extends CommandBase {
         buttonPressedRight = joystickTriggerRight.get();
         lastPressedRight = joystickTriggerRight.get();
 
-        accelerationControl = new AccelerationControl(
-            Constants.MAX_ACCEL, Constants.MAX_DECEL, 
-            Constants.MAX_ACCEL_TURN, Constants.MAX_DECEL_TURN);
+        // accelerationControl = new AccelerationControl(
+        //     Constants.MAX_ACCEL, Constants.MAX_DECEL, 
+        //     Constants.MAX_ACCEL_TURN, Constants.MAX_DECEL_TURN);
 
         SmartDashboard.putNumber("distanceX", 0);
         SmartDashboard.putNumber("distanceY", 0);
@@ -81,7 +80,7 @@ public class JoystickDriveCommand extends CommandBase {
         if(buttonPressedLeft && lastPressedLeft != buttonPressedLeft){
             //arcadeDrive = !arcadeDrive;
             invertDrive = !invertDrive;
-            accelerationControl.invert();
+            // accelerationControl.invert();
         } 
         lastPressedLeft = buttonPressedLeft;
 
@@ -113,7 +112,7 @@ public class JoystickDriveCommand extends CommandBase {
         joystickValues = JoystickProcessing.shapeJoysticks(joystickValues);
 
         // changes joystickValues if exceeds acceleration limit
-        joystickValues = accelerationControl.next(joystickValues);
+        //joystickValues = accelerationControl.next(joystickValues);
 
         //Switches between Arcade Drive and Radius Drive
         //motorValues are move/turn instead of left/right
@@ -140,6 +139,8 @@ public class JoystickDriveCommand extends CommandBase {
         // //Puts the velocity that the motor controller is reading to SmartDashboard
         // SmartDashboard.putNumber("Left Motor Real Velocity", DriveSubsystem.getInstance().getLeftMotorVelocity());
         // SmartDashboard.putNumber("Right Motor Real Velocity", DriveSubsystem.getInstance().getRightMotorVelocity());
+        SmartDashboard.putNumber("leftCurrent", DriveSubsystem.getInstance().getLeftMotorCurrent());
+        SmartDashboard.putNumber("rightCurrent", DriveSubsystem.getInstance().getRightMotorCurrent());
         SmartDashboard.putNumber("distanceX", DriveSubsystem.getInstance().getTranslationX());
         SmartDashboard.putNumber("distanceY", DriveSubsystem.getInstance().getTranslationY());
         SmartDashboard.putNumber("robotAngle", DriveSubsystem.getInstance().getAngle());

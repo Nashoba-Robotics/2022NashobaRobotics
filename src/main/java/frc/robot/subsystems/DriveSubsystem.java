@@ -140,7 +140,6 @@ public class DriveSubsystem extends SubsystemBase {
         leftMotor3.follow(leftMotor);
         rightMotor2.follow(rightMotor);
         rightMotor3.follow(rightMotor);
-        //I see you when you're sleeping
         brakeMode = false;
 
         leftMotor.setSelectedSensorPosition(0, Constants.PID_IDX, Constants.TIMEOUT);
@@ -153,13 +152,18 @@ public class DriveSubsystem extends SubsystemBase {
         configureMotor(rightMotor);
         configureMotor(leftMotor);
         
-        rightMotor.setInverted(InvertType.None);
-        rightMotor2.setInverted(InvertType.FollowMaster);
-        rightMotor3.setInverted(InvertType.FollowMaster);
-        leftMotor.setInverted(InvertType.InvertMotorOutput);
-        leftMotor2.setInverted(InvertType.FollowMaster);
-        //I know when you're awake
-        leftMotor3.setInverted(InvertType.FollowMaster);
+        // rightMotor.setInverted(InvertType.InvertMotorOutput);
+        rightMotor.setInverted(true);
+        rightMotor2.setInverted(true);
+        rightMotor3.setInverted(true);
+        // rightMotor2.setInverted(InvertType.FollowMaster);
+        // rightMotor3.setInverted(InvertType.FollowMaster);
+        leftMotor.setInverted(false);
+        leftMotor2.setInverted(false);
+        leftMotor3.setInverted(false);
+        // leftMotor.setInverted(InvertType.None);
+        // leftMotor2.setInverted(InvertType.FollowMaster);
+        // leftMotor3.setInverted(InvertType.FollowMaster);
 
         // Set the name of the subsystem in smart dashboard
         SendableRegistry.setName(this, "Drive");
