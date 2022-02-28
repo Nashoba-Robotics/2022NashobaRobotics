@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
+<<<<<<< HEAD
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.Compressor;
@@ -34,6 +35,30 @@ import frc.robot.commands.TristanCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.JoystickSubsystem;
 import frc.robot.subsystems.DriveSubsystem.DriveMode;
+=======
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PneumaticHub;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.JoystickDriveCommand;
+import frc.robot.commands.intakeshoot.DeployIntakeCommand;
+import frc.robot.commands.intakeshoot.EjectBackCommand;
+import frc.robot.commands.intakeshoot.EjectFrontCommand;
+import frc.robot.commands.intakeshoot.PukeCommand;
+import frc.robot.commands.intakeshoot.RunIntakeCommand;
+import frc.robot.commands.intakeshoot.ShootCommand;
+import frc.robot.commands.intakeshoot.RetractIntakeCommand;
+import frc.robot.subsystems.AbstractDriveSubsystem;
+import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.JoystickSubsystem;
+import frc.robot.subsystems.AbstractDriveSubsystem.DriveMode;
+>>>>>>> origin/loader_climber
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -44,6 +69,9 @@ import frc.robot.subsystems.DriveSubsystem.DriveMode;
 public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
+  private PowerDistribution pdh;
+  Compressor compressor;
+  PneumaticHub ph = new PneumaticHub();
 
   private Command currCommand;
   private int currCommandIndex = 0;
@@ -59,8 +87,16 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+<<<<<<< HEAD
 
     
+=======
+    pdh = new PowerDistribution();
+    pdh.setSwitchableChannel(true);
+    // compressor = new Compressor(1, PneumaticsModuleType.REVPH);
+    // compressor.enableDigital();
+    ph.enableCompressorAnalog(100, 110);
+>>>>>>> origin/loader_climber
   }
 
   /**
@@ -163,12 +199,35 @@ public class Robot extends TimedRobot {
   /**
    * This function is called periodically during operator control.
    */
+
+   //TODO: Add indexes for every button
+  double smolValue = 0.1;
+  Trigger deployIntakeSwitch = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 0);
+  Trigger runIntakeButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 0).debounce(smolValue); //Creates an instance of a button
+  Trigger stopIntakeButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 0).debounce(smolValue);//First parameter is the Joystick the button is on
+  RunIntakeCommand runIntakeCommand = new RunIntakeCommand();                                                                     //Second parameter is the index of the Joystick
+  Trigger ejectFrontButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 0).debounce(smolValue);//VERY IMPORTANT: Joysticks are 1-indexed, not 0-indexed
+  Trigger ejectBackButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 0).debounce(smolValue);
+  Trigger pukeButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 0).debounce(smolValue);
+  Trigger shootButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 0).debounce(smolValue);
+
   @Override
   public void teleopPeriodic() {
+<<<<<<< HEAD
     //tristanButton.whenActive(new TristanCommand(), false);
     tristanButton.toggleWhenActive(tristanCommand, true);
     intakeButton.whenActive(new Intake2021Command());
     stopIntakeButton.whenActive(new StopIntake2021Command());
+=======
+    deployIntakeSwitch.whenActive(new DeployIntakeCommand());
+    deployIntakeSwitch.whenInactive(new RetractIntakeCommand());
+    runIntakeButton.whenActive(runIntakeCommand);
+    stopIntakeButton.cancelWhenActive(runIntakeCommand);
+    ejectFrontButton.whenActive(new EjectFrontCommand());
+    ejectBackButton.whenActive(new EjectBackCommand());
+    pukeButton.whenActive(new PukeCommand());
+    shootButton.whenActive(new ShootCommand());
+>>>>>>> origin/loader_climber
   }
 
   @Override

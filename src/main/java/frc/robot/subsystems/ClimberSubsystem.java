@@ -1,23 +1,50 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
+import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 import frc.robot.lib.Units;
 
 public class ClimberSubsystem extends SubsystemBase {
-    private TalonFX motorUp1;
-    private TalonFX motorUp2;
-    private TalonFX motorDown;
-    private TalonFX motorRotate;
+    public enum ClimberMotor {
+        LEFT_1, LEFT_2, LEFT_ROTATE, 
+        RIGHT_1, RIGHT_2, RIGHT_ROTATE
+    }
+    private TalonFX motorLeft1;
+    private TalonFX motorLeft2;
+    private TalonFX motorLeftRotate;
+    private TalonFX motorRight1;
+    private TalonFX motorRight2;
+    private TalonFX motorRightRotate;
+
+    // private DigitalInput lsLeft1;
+    // private DigitalInput lsLeft2;
+    // private DigitalInput lsRight1;
+    // private DigitalInput lsRight2;
+
+    private TalonFX[] motors;
+
+    // private DigitalInput[] limitSwitches;
+
+    private TalonFX getMotor(ClimberMotor motor) {
+        return motors[motor.ordinal()];
+    }
+
+    public boolean getLimitSwitch(ClimberMotor motor) {
+         return getMotor(motor).getSensorCollection().isRevLimitSwitchClosed() == 1;
+    }
 
     private static ClimberSubsystem singleton;
+
     public static ClimberSubsystem getInstance(){
         if(singleton == null){
             singleton = new ClimberSubsystem();
@@ -26,34 +53,63 @@ public class ClimberSubsystem extends SubsystemBase {
     }
 
     private ClimberSubsystem() {
-        motorUp1 = new TalonFX(Constants.Climber.PORT_UP1);
-        motorUp2 = new TalonFX(Constants.Climber.PORT_UP2);
-        motorDown = new TalonFX(Constants.Climber.PORT_DOWN);
-        motorRotate = new TalonFX(Constants.Climber.PORT_ROTATE);
+        motorLeft1 = new TalonFX(Constants.Climber.PORT_LEFT_1);
+        motorLeft2 = new TalonFX(Constants.Climber.PORT_LEFT_2);
+        motorLeftRotate = new TalonFX(Constants.Climber.PORT_LEFT_ROTATE);
+        motorRight1 = new TalonFX(Constants.Climber.PORT_RIGHT_1);
+        motorRight2 = new TalonFX(Constants.Climber.PORT_RIGHT_2);
+        motorRightRotate = new TalonFX(Constants.Climber.PORT_RIGHT_ROTATE);
 
-        configureMotor(motorUp1);
-        configureMotor(motorUp2);
-        configureMotor(motorDown);
-        configureMotor(motorRotate);
-
-		motorUp1.config_kF(0, Constants.Climber.KF, Constants.TIMEOUT);
-		motorUp1.config_kP(0, Constants.Climber.KP_UP, Constants.TIMEOUT);
-		motorUp1.config_kI(0, Constants.Climber.KI_UP, Constants.TIMEOUT);
-        motorUp1.config_kD(0, Constants.Climber.KD_UP, Constants.TIMEOUT);
-        motorUp2.config_kF(0, Constants.Climber.KF, Constants.TIMEOUT);
-		motorUp2.config_kP(0, Constants.Climber.KP_UP, Constants.TIMEOUT);
-		motorUp2.config_kI(0, Constants.Climber.KI_UP, Constants.TIMEOUT);
-        motorUp2.config_kD(0, Constants.Climber.KD_UP, Constants.TIMEOUT);
+        motors = new TalonFX[] {
+            motorLeft1, motorLeft2, motorLeftRotate, 
+            motorRight1, motorRight2, motorRightRotate
+        };
         
-		motorDown.config_kF(0, Constants.Climber.KF, Constants.TIMEOUT);
-		motorDown.config_kP(0, Constants.Climber.KP_DOWN, Constants.TIMEOUT);
-		motorDown.config_kI(0, Constants.Climber.KI_DOWN, Constants.TIMEOUT);
-        motorDown.config_kD(0, Constants.Climber.KD_DOWN, Constants.TIMEOUT);
+        for(TalonFX motor: motors) {
+            configureMotor(motor);
+        }
 
-        motorRotate.config_kF(0, Constants.Climber.KF, Constants.TIMEOUT);
-		motorRotate.config_kP(0, Constants.Climber.KP_ROTATE, Constants.TIMEOUT);
-		motorRotate.config_kI(0, Constants.Climber.KI_ROTATE, Constants.TIMEOUT);
-        motorRotate.config_kD(0, Constants.Climber.KD_ROTATE, Constants.TIMEOUT);
+        motorLeft1.setInverted(true);
+        motorRight2.setInverted(true);
+
+        motorLeft1.configForwardSoftLimitEnable(true);
+        motorLeft1.configForwardSoftLimitThreshold(140000);
+        motorLeft2.configForwardSoftLimitEnable(true);
+        motorLeft2.configForwardSoftLimitThreshold(170000);
+        motorRight1.configForwardSoftLimitEnable(true);
+        motorRight1.configForwardSoftLimitThreshold(140000);
+        motorRight2.configForwardSoftLimitEnable(true);
+        motorRight2.configForwardSoftLimitThreshold(170000);
+
+        motorLeftRotate.setNeutralMode(NeutralMode.Brake);
+        motorRightRotate.setNeutralMode(NeutralMode.Brake);
+       
+        motorLeft1.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
+        motorLeft2.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
+       
+        motorRight1.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
+        motorRight2.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
+
+        for(TalonFX motor1: new TalonFX[]{motorLeft1, motorRight1}) {
+            motor1.config_kF(0, Constants.Climber.KF, Constants.TIMEOUT);
+            motor1.config_kP(0, Constants.Climber.KP_1, Constants.TIMEOUT);
+            motor1.config_kI(0, Constants.Climber.KI_1, Constants.TIMEOUT);
+            motor1.config_kD(0, Constants.Climber.KD_1, Constants.TIMEOUT);
+        }
+
+        for(TalonFX motor2: new TalonFX[]{motorLeft2, motorRight2}) {
+            motor2.config_kF(0, Constants.Climber.KF, Constants.TIMEOUT);
+            motor2.config_kP(0, Constants.Climber.KP_2, Constants.TIMEOUT);
+            motor2.config_kI(0, Constants.Climber.KI_2, Constants.TIMEOUT);
+            motor2.config_kD(0, Constants.Climber.KD_2, Constants.TIMEOUT);
+        }
+
+        for(TalonFX rotate: new TalonFX[]{motorLeftRotate, motorRightRotate}) {
+            rotate.config_kF(0, Constants.Climber.KF, Constants.TIMEOUT);
+            rotate.config_kP(0, Constants.Climber.KP_ROTATE, Constants.TIMEOUT);
+            rotate.config_kI(0, Constants.Climber.KI_ROTATE, Constants.TIMEOUT);
+            rotate.config_kD(0, Constants.Climber.KD_ROTATE, Constants.TIMEOUT);
+        }
     }
 
     private void configureMotor(TalonFX motor) {
@@ -81,37 +137,48 @@ public class ClimberSubsystem extends SubsystemBase {
         motor.setNeutralMode(NeutralMode.Coast);
     }
 
-    public void setPositionValue(double pos){
-        motorRotate.setSelectedSensorPosition(pos, Constants.PID_IDX, Constants.TIMEOUT);
+    public void setSpeed(ClimberMotor motor, double speed) {
+        TalonFX talon = getMotor(motor);
+        if(Math.abs(speed) <= 0.2) {
+            talon.set(ControlMode.PercentOutput, speed);
+        } else {
+            talon.set(ControlMode.PercentOutput, 0);
+        }
+    }
+    
+    public double getPosition(ClimberMotor motor) {
+        return getMotor(motor).getSelectedSensorPosition();
     }
 
-    public void resetPositionValue(){
-        motorRotate.setSelectedSensorPosition(0, Constants.PID_IDX, Constants.TIMEOUT);
+    public double getStatorCurrent(ClimberMotor motor) {
+        return getMotor(motor).getStatorCurrent();
     }
 
-    public void setMotorRotate(double speed){
-        motorRotate.set(ControlMode.Velocity, speed);
+    public double getSupplyCurrent(ClimberMotor motor) {
+        return getMotor(motor).getSupplyCurrent();
     }
 
-    public void setMotorRotate(ControlMode mode, double value){
-        motorRotate.set(mode, value);
+    public void stop() {
+        for(TalonFX motor: motors) {
+            motor.set(ControlMode.PercentOutput, 0);
+        }
     }
 
-    public void setMotorDown(double speed){
-        motorDown.set(ControlMode.Velocity, speed);
-    }
+    public boolean isCurrentBad() {
+        double MAX_CURRENT = 15;
 
-    public void setMotorDown(ControlMode mode, double value){
-        motorDown.set(mode, value);
-    }
+        double currentLeft1 = Math.abs(motorLeft1.getStatorCurrent());
+        double currentLeft2 = Math.abs(motorLeft2.getStatorCurrent());
+        double currentLeftRotate = Math.abs(motorLeftRotate.getStatorCurrent());
+        double currentRight1 = Math.abs(motorRight1.getStatorCurrent());
+        double currentRight2 = Math.abs(motorRight2.getStatorCurrent());
+        double currentRightRotate = Math.abs(motorRightRotate.getStatorCurrent());
 
-    public void setMotorUp(double speed){
-        motorUp1.set(ControlMode.Velocity, Units.percent2Velocity(speed));
-        motorUp2.set(ControlMode.Velocity, Units.percent2Velocity(speed));
-    }
-
-    public void setMotorUp(ControlMode mode, double value){
-        motorUp1.set(mode, value);
-        motorUp2.set(mode, value);
+        return currentLeft1 > MAX_CURRENT
+        || currentLeft2 > MAX_CURRENT
+        || currentLeftRotate > MAX_CURRENT
+        || currentRight1 > MAX_CURRENT
+        || currentRight2 > MAX_CURRENT
+        || currentRightRotate > MAX_CURRENT;
     }
 }
