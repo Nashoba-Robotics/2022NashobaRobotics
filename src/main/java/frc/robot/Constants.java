@@ -134,19 +134,29 @@ public final class Constants {
         public static final int DIO_LS_RIGHT_1 = 2; // TODO change
         public static final int DIO_LS_RIGHT_2 = 3; // TODO change
 
-        public static final double KF = 0.0457;
+        public static final int DEPLOY_POS = 140000; //140000;
 
-        public static final double KP_1 = 0;
+        public static final int RETRACT_POS = 15000; // TODO change
+
+        public static final double KF = 0.051; 
+
+        public static final double KP_1 = 0.025;
         public static final double KI_1 = 0;
         public static final double KD_1 = 0;
         
-        public static final double KP_2 = 0;
+        public static final double KP_2 = 0.025;
         public static final double KI_2 = 0;
         public static final double KD_2 = 0;
 
         public static final double KP_ROTATE = 0;
         public static final double KI_ROTATE = 0;
         public static final double KD_ROTATE = 0;
+
+        public static final double DEPLOY_ACCELERATION = 100000;
+        public static final double DEPLOY_CRUISE_VELOCITY = 17500;
+
+        public static final double RETRACT_ACCELERATION = 200000;
+        public static final double RETRACT_CRUISE_VELOCITY = 10000;
     }
 
     public static class DriveTrain {
