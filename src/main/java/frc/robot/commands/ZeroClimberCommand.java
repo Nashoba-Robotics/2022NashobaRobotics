@@ -34,14 +34,14 @@ public class ZeroClimberCommand extends CommandBase {
             ClimberSubsystem.getInstance().setSpeed(ClimberMotor.LEFT_1, 0);
             leftEnd = true;
         }
-        if(rightFinished && rightPos >= 100 && rightPos <= 800){
+        if(rightFinished && rightPos >= 0 && rightPos <= 500){
             ClimberSubsystem.getInstance().setSpeed(ClimberMotor.RIGHT_1, 0);
             rightEnd = true;
         }
 
         if(!ClimberSubsystem.getInstance().getLimitSwitch(ClimberMotor.LEFT_1) && !leftFinished)
             ClimberSubsystem.getInstance().setSpeed(ClimberMotor.LEFT_1, -0.05);
-        else {
+        else if(!leftFinished){
             ClimberSubsystem.getInstance().setSpeed(ClimberMotor.LEFT_1, 0.03);
             leftFinished = true;
         }
@@ -49,7 +49,7 @@ public class ZeroClimberCommand extends CommandBase {
 
         if(!ClimberSubsystem.getInstance().getLimitSwitch(ClimberMotor.RIGHT_1) && !rightFinished)
             ClimberSubsystem.getInstance().setSpeed(ClimberMotor.RIGHT_1, -0.05);
-        else {
+        else if(!leftFinished){
             ClimberSubsystem.getInstance().setSpeed(ClimberMotor.RIGHT_1, 0.03);
             rightFinished = true;
         }
