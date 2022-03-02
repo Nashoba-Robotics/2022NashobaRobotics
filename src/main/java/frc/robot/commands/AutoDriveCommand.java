@@ -37,7 +37,7 @@ public class AutoDriveCommand extends CommandBase{
         spinDirection = 1;
 
         // Choose which Limelight pipeline is used
-        LimelightSubsystem.getInstance().setPipeline(0);
+        LimelightSubsystem.getInstance().setIntakePipeline(0);
 
         accelerationControl = new AccelerationControl(
             Constants.MAX_ACCEL, Constants.MAX_DECEL, 
@@ -47,14 +47,14 @@ public class AutoDriveCommand extends CommandBase{
     @Override
     public void execute() {
         // Get the X position of the tracked object (-27 to +27)
-        double tx = LimelightSubsystem.getInstance().getTx();
+        double tx = LimelightSubsystem.getInstance().getIntakeTx();
         // Will be set in conditional later
         double turn = 0;
         double move = 0;
         // Should the robot spin in place if no object is found?
         boolean spin = SmartDashboard.getNumber("spin?", 0) == 1;
 
-        if(LimelightSubsystem.getInstance().validTarget()) {
+        if(LimelightSubsystem.getInstance().intakeValidTarget()) {
             // If a target is found
 
             // if(Math.abs(tx) > 5) {
@@ -73,7 +73,7 @@ public class AutoDriveCommand extends CommandBase{
                 turn = Math.min(turn, 1);
                 turn *= Math.signum(txPercent);
             }
-            double ballDistance = LimelightSubsystem.getInstance().getDistanceBall();
+            double ballDistance = LimelightSubsystem.getInstance().getDistanceIntake();
 
             // Depending on the distance to the ball, there are three different behaviors:
             if (ballDistance > Constants.SPEED_THRESHOLD_AUTO) {
@@ -103,8 +103,8 @@ public class AutoDriveCommand extends CommandBase{
         
         // Put diagnostics on Shuffleboard
         SmartDashboard.putNumber("move", move);
-        SmartDashboard.putBoolean("target?", LimelightSubsystem.getInstance().validTarget());
-        SmartDashboard.putNumber("distance auto", LimelightSubsystem.getInstance().getDistanceBall());
+        SmartDashboard.putBoolean("target?", LimelightSubsystem.getInstance().intakeValidTarget());
+        SmartDashboard.putNumber("distance auto", LimelightSubsystem.getInstance().getDistanceIntake());
         
         // Calculate the motor velocities using arcade drive
         MotorValues vel = JoystickProcessing.arcadeDrive(joystickValues);

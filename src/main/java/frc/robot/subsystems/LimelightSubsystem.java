@@ -10,36 +10,32 @@ import frc.robot.Constants;
 public class LimelightSubsystem extends SubsystemBase {
     private static LimelightSubsystem instance;
     
-    private NetworkTableEntry validTarget;
-    private NetworkTableEntry tx;
-    private NetworkTableEntry ty;
-    private NetworkTableEntry ta;
-    private NetworkTableEntry ts;
-    private NetworkTableEntry tl;
-    private NetworkTableEntry tshort;
-    private NetworkTableEntry tlong;
-    private NetworkTableEntry thor;
-    private NetworkTableEntry tvert;
-    private NetworkTableEntry pipeline;
-    private NetworkTableEntry camTrain;
-    private NetworkTableEntry ledMode;
+    private NetworkTableEntry intakeValidTarget;
+    private NetworkTableEntry intakeTx;
+    private NetworkTableEntry intakeTy;
+    private NetworkTableEntry intakePipeline;
+    private NetworkTableEntry intakeLedMode;
+
+    private NetworkTableEntry shooterValidTarget;
+    private NetworkTableEntry shooterTx;
+    private NetworkTableEntry shooterTy;
+    private NetworkTableEntry shooterPipeline;
+    private NetworkTableEntry shooterLedMode;
 
     private LimelightSubsystem() {
         SendableRegistry.setName(this, "Limelight");
-        NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-        validTarget = table.getEntry("tv");
-        tx = table.getEntry("tx");
-        ty = table.getEntry("ty");
-        ta = table.getEntry("ta");
-        ts = table.getEntry("ts");
-        tl = table.getEntry("tl");
-        tshort = table.getEntry("tshort");
-        tlong = table.getEntry("tlong");
-        thor = table.getEntry("thor");
-        tvert = table.getEntry("tvert");
-        pipeline = table.getEntry("pipeline");
-        camTrain = table.getEntry("camTrain");
-        ledMode = table.getEntry("ledMode");
+        NetworkTable intake = NetworkTableInstance.getDefault().getTable("limelight-intake");
+        intakeValidTarget = intake.getEntry("tv");
+        intakeTx = intake.getEntry("tx");
+        intakeTy = intake.getEntry("ty");
+        intakePipeline = intake.getEntry("pipeline");
+        intakeLedMode = intake.getEntry("ledMode");
+        NetworkTable shooter = NetworkTableInstance.getDefault().getTable("limelight-shooter");
+        shooterValidTarget = shooter.getEntry("tv");
+        shooterTx = shooter.getEntry("tx");
+        shooterTy = shooter.getEntry("ty");
+        shooterPipeline = shooter.getEntry("pipeline");
+        shooterLedMode = shooter.getEntry("ledMode");
     }
 
     public static LimelightSubsystem getInstance() {
@@ -50,97 +46,74 @@ public class LimelightSubsystem extends SubsystemBase {
     }
 
     //Sets the current limelight pipeline (0-9)
-    public void setPipeline(int input){
-        pipeline.setDouble(input);
-    }
-
-    //Sets camera mode to Vision Processor(0) or driver camera(1)
-    public void setCamTrain(int input){
-        camTrain.setDouble(input);
+    public void setIntakePipeline(int input){
+        intakePipeline.setDouble(input);
     }
 
     //Has the limelight locked on to a valid target?
-    public boolean validTarget(){
-        return validTarget.getDouble(0) == 1;
+    public boolean intakeValidTarget(){
+        return intakeValidTarget.getDouble(0) == 1;
+    }
+
+    //Has the limelight locked on to a valid target?
+    public boolean shooterValidTarget(){
+        return shooterValidTarget.getDouble(0) == 1;
     }
 
     //What is the pipeline that we are currently using?
-    public double getPipe(){
-        return pipeline.getDouble(0);
+    public double getIntakePipe(){
+        return intakePipeline.getDouble(0);
     }
 
-    //What is the vertical sidelength of the rough bounding box? (0 - 320 pixels)
-    public double getTvert(){
-        return tvert.getDouble(0);
+    //What is the pipeline that we are currently using?
+    public double getShooterPipe(){
+        return shooterPipeline.getDouble(0);
     }
 
-    //What is the horizontal sidelength of the rough bounding box? (0 - 320 pixels)
-    public double getThor(){
-        return thor.getDouble(0);
-    }
 
-    //What is the longer sidelength of the fitted bounding box? (in pixels)
-    public double getTlong(){
-        return tlong.getDouble(0);
-    }
-
-    //What is the shorter sidelength of the fitted bounding box? (in pixels)
-    public double getTshort(){
-        return tshort.getDouble(0);
-    }
-
-    //What is the latency of the limelight? (Your really using this? It isn't useful)
-    public double getTl(){
-        return tl.getDouble(0);
-    }
-
-    //What is the skew/rotation (0 to -90 degrees)
-    public double getTs(){
-        return ts.getDouble(0);
+    //What is the x value of the object from the crosshair that the limelight has locked on to? (-27 to 27 degrees)
+    public double getIntakeTx() {
+        return intakeTx.getDouble(0);
     }
 
     //What is the x value of the object from the crosshair that the limelight has locked on to? (-27 to 27 degrees)
-    public double getTx() {
-        return tx.getDouble(0);
+    public double getShooterTx() {
+        return shooterTx.getDouble(0);
     }
 
-    //what is the y value of the object from the crosshair that the limelight has locked on to? (-20.5 to 20.5 degrees)
-    public double getTy() {
-        return ty.getDouble(0);
+     //What is the x value of the object from the crosshair that the limelight has locked on to? (-27 to 27 degrees)
+     public double getIntakeTy() {
+        return intakeTy.getDouble(0);
     }
 
-    public double getTa() {
-        return ta.getDouble(0);
+    //What is the x value of the object from the crosshair that the limelight has locked on to? (-27 to 27 degrees)
+    public double getShooterTy() {
+        return shooterTy.getDouble(0);
     }
 
-    public void setLed(double led) {
-        ledMode.setDouble(led);    
+    public void setIntakeLed(double led) {
+        intakeLedMode.setDouble(led);    
     }
 
-    public double getDistanceHub(){
-        double h1 = 0.915; // height of camera
-        double h2 = 0; // height of hub
-        double a1 = -16*Constants.TAU/360; // angle that camera is facing
-        double a2 = getTy() * Constants.TAU/360; // angle that limelight sees target
+    public void setShooterLed(double led) {
+        shooterLedMode.setDouble(led);    
+    }
+
+    public double getDistanceShooter(){
+        double h1 = Constants.Limelight.SHOOTER_HEIGHT;
+        double h2 = Constants.Limelight.HUB_HEIGHT;
+        double a1 = Constants.Limelight.SHOOTER_ANGLE;
+        double a2 = getShooterTy() * Constants.TAU/360; // angle that limelight sees target
         double distance = (h2-h1) / Math.tan(a1+a2);
         return distance;
-        // if(distance >= 0){
-        //     return distance;
-        // }else{
-        //     return 0;
-        // }
     }
 
-    public double getDistanceBall(){
-        double h1 = 0.565;
-        double h2 =  0;
-        double a1 = 0*Constants.TAU/360;
-        double a2 = getTy() * Constants.TAU/360;
-        double distance = ((h2-h1) / Math.tan(a1+a2)) * 0.794 - .119;
-        if(distance >= 0){
-            return distance;
-        }else{
-            return 0;
-        }
+    public double getDistanceIntake(){
+        double h1 = Constants.Limelight.INTAKE_HEIGHT;
+        double h2 = Constants.Limelight.BALL_HEIGHT;
+        double a1 = Constants.Limelight.INTAKE_ANGLE;
+        double a2 = getIntakeTy() * Constants.TAU/360; // angle that limelight sees target
+        double distance = (h2-h1) / Math.tan(a1+a2);
+        return distance;
     }
 }

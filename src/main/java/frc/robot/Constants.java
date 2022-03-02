@@ -118,6 +118,8 @@ public final class Constants {
         public static final double KI = 0.0;
         public static final double KD = 0.0;
         public static final double KF = 0.0475;
+
+        public static final int SOLENOID_PORT = 7;
     }
     public static class Climber {
         public static final int PORT_LEFT_1 = 11;
@@ -181,11 +183,21 @@ public final class Constants {
         public static final int PORT_GRABBER = 7;
         public static final int PORT_LOADER = 8;
 
-        public static final int DIO_SENSOR_1 = 4;
-        public static final int DIO_SENSOR_2 = 5;
+        public static final int DIO_SENSOR_1 = 8;
+        public static final int DIO_SENSOR_2 = 9;
 
         public static final int INTAKE_SOLENOID_PORT = 8;
         public static final int INTAKE_SOLENOID_PORT2 = 9;
+    }
+
+    public static class Limelight {
+        public static final double SHOOTER_HEIGHT = 0;
+        public static final double SHOOTER_ANGLE = 44 * TAU/360;
+        public static final double HUB_HEIGHT = 0;
+
+        public static final double INTAKE_HEIGHT = 0;
+        public static final double INTAKE_ANGLE = 0;
+        public static final double BALL_HEIGHT = 0;
     }
 
 }

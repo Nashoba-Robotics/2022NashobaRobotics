@@ -5,6 +5,8 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.lib.Units;
@@ -21,6 +23,9 @@ public class CannonSubsystem extends SubsystemBase{
     private static CannonSubsystem singleton;
     public TalonFX topCannonMotor;
     public TalonFX bottomCannonMotor;
+
+    private Solenoid solenoid;
+
     public static CannonSubsystem getInstance(){
         if(singleton == null){
             singleton = new CannonSubsystem();
@@ -31,6 +36,9 @@ public class CannonSubsystem extends SubsystemBase{
     public CannonSubsystem(){
         topCannonMotor = new TalonFX(Constants.Cannon.PORT_TOP);
         bottomCannonMotor = new TalonFX(Constants.Cannon.PORT_BOTTOM);
+        solenoid = new Solenoid(PneumaticsModuleType.REVPH, Constants.Cannon.SOLENOID_PORT);
+        topCannonMotor.setInverted(true);
+        bottomCannonMotor.setInverted(true);
         //bottomCannonMotor.setInverted(true);
         configureMotor(topCannonMotor);
         configureMotor(bottomCannonMotor);
@@ -101,6 +109,10 @@ public class CannonSubsystem extends SubsystemBase{
     public void setKF(double kF){
         topCannonMotor.config_kF(Constants.SLOT_IDX, kF, Constants.TIMEOUT);
         bottomCannonMotor.config_kF(Constants.SLOT_IDX, kF, Constants.TIMEOUT);
+    }
+
+    public void setSolenoid(boolean on) {
+        solenoid.set(on);
     }
 }
 

@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -29,6 +30,8 @@ public class IntakeSubsystem extends SubsystemBase {
         loader = new TalonFX(Constants.Intake.PORT_LOADER);
         sensor1 = new DigitalInput(Constants.Intake.DIO_SENSOR_1);
         sensor2 = new DigitalInput(Constants.Intake.DIO_SENSOR_2);
+
+        loader.setNeutralMode(NeutralMode.Brake);
 
         grabber.setInverted(true);
 
@@ -69,8 +72,8 @@ public class IntakeSubsystem extends SubsystemBase {
         return this;
     }
 
-    public boolean getSensor1() { return sensor1.get(); }
-    public boolean getSensor2() { return sensor2.get(); }
+    public boolean getSensor1() { return !sensor1.get(); }
+    public boolean getSensor2() { return !sensor2.get(); }
 
     public void stop() {
         intake.set(ControlMode.PercentOutput, 0);

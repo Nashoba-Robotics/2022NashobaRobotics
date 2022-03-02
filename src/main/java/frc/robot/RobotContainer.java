@@ -65,7 +65,7 @@ public class RobotContainer {
     // SmartDashboard.putData(new TalonTestCommand());
     //SmartDashboard.putData(new TurretCommand());
     // SmartDashboard.putData(new GyroTestCommand());
-    // SmartDashboard.putData(new LimelightCommand());
+    SmartDashboard.putData(new LimelightCommand());
     //SmartDashboard.putData(new CannonTestCommand());
     // SmartDashboard.putData(new ClimberCommand());
     //SmartDashboard.putData(new LoaderCommand());

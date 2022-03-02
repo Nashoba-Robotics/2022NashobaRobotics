@@ -1,7 +1,6 @@
 package frc.robot.commands.intakeshoot;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.Intake;
 import frc.robot.subsystems.CannonSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 
@@ -17,11 +16,12 @@ public class EjectBackCommand extends CommandBase {
 
     @Override
     public void execute() { 
+        boolean sensor1 = IntakeSubsystem.getInstance().getSensor1();
         IntakeSubsystem.getInstance()
             .setIntake(0)
             .setGrabber(0)
-            .setLoader(0.3);
-        CannonSubsystem.getInstance().set(0.3);
+            .setLoader(sensor1 ? 0.2 : 0);
+        CannonSubsystem.getInstance().set(0.1);
     }
 
     @Override
