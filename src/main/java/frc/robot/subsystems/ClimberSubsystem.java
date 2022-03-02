@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -32,6 +33,7 @@ public class ClimberSubsystem extends SubsystemBase {
     // private DigitalInput lsRight2;
 
     private TalonFX[] motors;
+    private boolean[] lastLSState;
 
     // private DigitalInput[] limitSwitches;
 
@@ -64,6 +66,8 @@ public class ClimberSubsystem extends SubsystemBase {
             motorLeft1, motorLeft2, motorLeftRotate, 
             motorRight1, motorRight2, motorRightRotate
         };
+
+        lastLSState = new boolean[6];
         
         for(TalonFX motor: motors) {
             configureMotor(motor);
@@ -134,16 +138,69 @@ public class ClimberSubsystem extends SubsystemBase {
         motor.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_1Ms, 30);
         motor.configVelocityMeasurementWindow(8, 30);
 
-        motor.setNeutralMode(NeutralMode.Coast);
+        motor.setNeutralMode(NeutralMode.Brake);
     }
 
     public void setSpeed(ClimberMotor motor, double speed) {
         TalonFX talon = getMotor(motor);
-        if(Math.abs(speed) <= 0.2) {
+        if(Math.abs(speed) <= 1) {
             talon.set(ControlMode.PercentOutput, speed);
         } else {
             talon.set(ControlMode.PercentOutput, 0);
         }
+    }
+
+    @Override
+    public void periodic() {
+        // Zero on exit from limit switch
+        for(int i = 0; i < motors.length; i++) {
+            boolean ls = getLimitSwitch(ClimberMotor.values()[i]);
+            boolean lastLs = lastLSState[i];
+
+            // arm is leaving limit switch; zero position
+            if(lastLs == true && ls == false) {
+                getMotor(ClimberMotor.values()[i]).setSelectedSensorPosition(0);
+            }
+            
+            lastLSState[i] = ls;
+        }
+    }
+
+    public void deployClimb(){
+        TalonFX leftClimber = getMotor(ClimberMotor.LEFT_1);
+        TalonFX rightClimber = getMotor(ClimberMotor.RIGHT_1);
+        leftClimber.configMotionAcceleration(Constants.Climber.DEPLOY_ACCELERATION);
+        leftClimber.configMotionCruiseVelocity(Constants.Climber.DEPLOY_CRUISE_VELOCITY);
+
+        rightClimber.configMotionAcceleration(Constants.Climber.DEPLOY_ACCELERATION);
+        rightClimber.configMotionCruiseVelocity(Constants.Climber.DEPLOY_CRUISE_VELOCITY);
+
+        leftClimber.set(ControlMode.MotionMagic, Constants.Climber.DEPLOY_POS);
+        rightClimber.set(ControlMode.MotionMagic, Constants.Climber.DEPLOY_POS);
+    }
+
+    public void undeployClimb(){
+        TalonFX leftClimber = getMotor(ClimberMotor.LEFT_1);
+        TalonFX rightClimber = getMotor(ClimberMotor.RIGHT_1);
+        leftClimber.configMotionAcceleration(Constants.Climber.RETRACT_ACCELERATION);
+        leftClimber.configMotionCruiseVelocity(Constants.Climber.RETRACT_CRUISE_VELOCITY);
+
+        rightClimber.configMotionAcceleration(Constants.Climber.RETRACT_ACCELERATION);
+        rightClimber.configMotionCruiseVelocity(Constants.Climber.RETRACT_CRUISE_VELOCITY);
+
+        leftClimber.set(ControlMode.MotionMagic, Constants.Climber.RETRACT_POS);
+        rightClimber.set(ControlMode.MotionMagic, Constants.Climber.RETRACT_POS);
+    }
+
+    public void mantainPositionRetract(ClimberMotor motor) {
+        TalonFX talon = getMotor(motor);
+
+        talon.set(ControlMode.Position, Constants.Climber.RETRACT_POS);
+    }
+
+    public void mantainPositionRetract() {
+        mantainPositionRetract(ClimberMotor.LEFT_1);
+        mantainPositionRetract(ClimberMotor.RIGHT_1);
     }
     
     public double getPosition(ClimberMotor motor) {
