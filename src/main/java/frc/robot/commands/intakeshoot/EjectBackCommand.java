@@ -16,11 +16,11 @@ public class EjectBackCommand extends CommandBase {
 
     @Override
     public void execute() { 
-        boolean sensor1 = IntakeSubsystem.getInstance().getSensor1();
+        boolean sensor2 = IntakeSubsystem.getInstance().getSensor2();
         IntakeSubsystem.getInstance()
             .setIntake(0)
             .setGrabber(0)
-            .setLoader(sensor1 ? 0.2 : 0);
+            .setLoader(sensor2 ? 0.2 : 0);
         CannonSubsystem.getInstance().set(0.1);
     }
 

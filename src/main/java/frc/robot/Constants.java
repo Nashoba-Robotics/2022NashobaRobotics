@@ -7,9 +7,7 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.lib.Units;
-import frc.robot.subsystems.DriveSubsystem;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -29,7 +27,7 @@ public final class Constants {
     //index 0 should be master motor
     public static final int[] LEFT_MOTOR_PORTS_2019 = {0, 1, 2};
     public static final int[] RIGHT_MOTOR_PORTS_2019 = {12, 13, 14};
-    public static final int HDRIVEPORT = 11; //Hopefully the right port
+    public static final int HDRIVEPORT = 11;
 
     public static final int[] GRABBER_MOTOR_PORTS = {};
     public static final int[] INTAKE_MOTOR_PORTS = {};
@@ -43,7 +41,7 @@ public final class Constants {
 
     public static final int LEFT_JOYSTICK_PORT = 1;
     public static final int RIGHT_JOYSTICK_PORT = 0;
-    public static final int LEFT_OPERATOR_JOYSTICK_PORT = 4;
+    public static final int LEFT_OPERATOR_JOYSTICK_PORT =  4;
     public static final int RIGHT_OPERATOR_JOYSTICK_PORT = 5;
 
     // 1 is a linear relationship between joystick position and speed
@@ -103,10 +101,10 @@ public final class Constants {
 
     public static final String PHOTONVISION_NICKNAME = "cargodetectooor"; // TODO
 
-    public static final double WHEEL_GAP = Units.inches2Meters(21); // distance between wheels in meters
-    public static final double WHEEL_RADIUS = 0.085; // wheel radius in meters
+    public static final double WHEEL_GAP = Units.inches2Meters(25.5); // distance between wheels in meters
+    public static final double WHEEL_RADIUS = Units.inches2Meters(2); // wheel radius in meters
 
-    public static final double DRIVE_GEAR_RATIO = 9.65;
+    public static final double DRIVE_GEAR_RATIO = 6.666667;
 
     public static final double FALCON_NU = 2048; // the number of native units per rotation
 
@@ -129,14 +127,22 @@ public final class Constants {
         public static final int PORT_RIGHT_2 = 15;
         public static final int PORT_RIGHT_ROTATE = 16;
 
+        public static final int FIXED_MANUAL_CLIMB_JOYSTICK_PORT = 5;   //Y axis
+        public static final double FIXED_MANUAL_CLIMB_JOYSTICK_DEADZONE = 0.12;
+        public static final int ROTATING_MANUAL_CLIMB_JOYSTICK_PORT = 5;    //X axis
+        public static final double ROTATING_MANUAL_CLIMB_JOYSTICK_DEADZONE = 0.12;
+        public static final int ROTATING_ANGLE_JOYSTICK_PORT = 4;   //X axis
+        public static final double ROTATING_ANGLE_JOYSTICK_DEADZONE = 0.12;
+
         public static final int DIO_LS_LEFT_1 = 0; // TODO change
         public static final int DIO_LS_LEFT_2 = 1; // TODO change
         public static final int DIO_LS_RIGHT_1 = 2; // TODO change
         public static final int DIO_LS_RIGHT_2 = 3; // TODO change
 
-        public static final int DEPLOY_POS = 140000; //140000;
+        public static final int DEPLOY_RIGHT_POS = 143000; //140000;
+        public static final int DEPLOY_LEFT_POS = 145000;
 
-        public static final int RETRACT_POS = 15000; // TODO change
+        public static final int RETRACT_POS = 4000; // TODO change
 
         public static final double KF = 0.051; 
 
@@ -185,6 +191,24 @@ public final class Constants {
             "stopIntake"
         };
 
+        public static final String[] SIMPLE_AUTO = {
+            "shoot",
+           "path paths/UniversalShootGoBack.wpilib.json"
+        };
+
+        public static final String[] SIMPLE_TWO_BALL_AUTO = {
+            "shoot",
+            "intake",
+            "path paths/TwoBallToBall.wpilib.json",
+            "stopIntake",
+            "path paths/TwoBallFromBallToShoot.wpilib.json",
+            "shoot60"
+        };
+
+        public static final String[] SHOOT_ONLY_AUTO = {
+            "shoot"
+        };
+
         public static final double MAX_AUTO_TURN = 0.25;
     }
 
@@ -197,7 +221,7 @@ public final class Constants {
         public static final int DIO_SENSOR_2 = 9;
 
         public static final int INTAKE_SOLENOID_PORT = 8;
-        public static final int INTAKE_SOLENOID_PORT2 = 9;
+        public static final int INTAKE_SOLENOID_PORT2 = 15;
     }
 
     public static class Limelight {

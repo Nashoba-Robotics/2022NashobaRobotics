@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -37,6 +38,9 @@ public class ClimberSubsystem extends SubsystemBase {
 
     // private DigitalInput[] limitSwitches;
 
+    private Joystick fixedClimbJoystick;
+    private Joystick rotatingClimbJoystick;
+
     private TalonFX getMotor(ClimberMotor motor) {
         return motors[motor.ordinal()];
     }
@@ -62,6 +66,9 @@ public class ClimberSubsystem extends SubsystemBase {
         motorRight2 = new TalonFX(Constants.Climber.PORT_RIGHT_2);
         motorRightRotate = new TalonFX(Constants.Climber.PORT_RIGHT_ROTATE);
 
+        fixedClimbJoystick = new Joystick(Constants.Climber.FIXED_MANUAL_CLIMB_JOYSTICK_PORT);
+        rotatingClimbJoystick = new Joystick(Constants.Climber.ROTATING_MANUAL_CLIMB_JOYSTICK_PORT);
+
         motors = new TalonFX[] {
             motorLeft1, motorLeft2, motorLeftRotate, 
             motorRight1, motorRight2, motorRightRotate
@@ -77,11 +84,11 @@ public class ClimberSubsystem extends SubsystemBase {
         motorRight2.setInverted(true);
 
         motorLeft1.configForwardSoftLimitEnable(true);
-        motorLeft1.configForwardSoftLimitThreshold(140000);
+        motorLeft1.configForwardSoftLimitThreshold(145500);
         motorLeft2.configForwardSoftLimitEnable(true);
         motorLeft2.configForwardSoftLimitThreshold(170000);
         motorRight1.configForwardSoftLimitEnable(true);
-        motorRight1.configForwardSoftLimitThreshold(140000);
+        motorRight1.configForwardSoftLimitThreshold(145500);
         motorRight2.configForwardSoftLimitEnable(true);
         motorRight2.configForwardSoftLimitThreshold(170000);
 
@@ -175,8 +182,8 @@ public class ClimberSubsystem extends SubsystemBase {
         rightClimber.configMotionAcceleration(Constants.Climber.DEPLOY_ACCELERATION);
         rightClimber.configMotionCruiseVelocity(Constants.Climber.DEPLOY_CRUISE_VELOCITY);
 
-        leftClimber.set(ControlMode.MotionMagic, Constants.Climber.DEPLOY_POS);
-        rightClimber.set(ControlMode.MotionMagic, Constants.Climber.DEPLOY_POS);
+        leftClimber.set(ControlMode.MotionMagic, Constants.Climber.DEPLOY_LEFT_POS);
+        rightClimber.set(ControlMode.MotionMagic, Constants.Climber.DEPLOY_RIGHT_POS);
     }
 
     public void undeployClimb(){
@@ -237,5 +244,27 @@ public class ClimberSubsystem extends SubsystemBase {
         || currentRight1 > MAX_CURRENT
         || currentRight2 > MAX_CURRENT
         || currentRightRotate > MAX_CURRENT;
+    }
+
+    public double getFixedValue(){
+        double rawY = fixedClimbJoystick.getY();
+        double value = rawY * 0.15;
+        return value;
+    }
+
+    public void manualFixedClimb(){
+        getMotor(ClimberMotor.LEFT_1).set(ControlMode.PercentOutput, getFixedValue());
+        getMotor(ClimberMotor.RIGHT_1).set(ControlMode.PercentOutput, getFixedValue());
+    }
+
+    public double getRotatingValue(){
+        double rawX = rotatingClimbJoystick.getX();
+        double value = rawX * 0.15;
+        return value;
+    }
+
+    public void manualRotatingClimb(){
+        getMotor(ClimberMotor.LEFT_1).set(ControlMode.PercentOutput, getRotatingValue());
+        getMotor(ClimberMotor.RIGHT_1).set(ControlMode.PercentOutput, getRotatingValue());
     }
 }

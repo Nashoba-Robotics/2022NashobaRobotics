@@ -26,8 +26,15 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.AutoIntakeCommand;
+import frc.robot.commands.AutoShoot60Command;
+import frc.robot.commands.AutoShootCommand;
+import frc.robot.commands.AutoStopIntakeCommand;
+import frc.robot.commands.DeployStaticClimberCommad;
 import frc.robot.commands.JoystickDriveCommand;
+import frc.robot.commands.RetractStaticClimberCommand;
 import frc.robot.commands.StopCommand;
+import frc.robot.commands.ZeroClimberCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.JoystickSubsystem;
 import frc.robot.subsystems.DriveSubsystem.DriveMode;
@@ -42,12 +49,14 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.JoystickDriveCommand;
+import frc.robot.commands.intakeshoot.CannonAngleCommand;
 import frc.robot.commands.intakeshoot.DeployIntakeCommand;
 import frc.robot.commands.intakeshoot.EjectBackCommand;
 import frc.robot.commands.intakeshoot.EjectFrontCommand;
 import frc.robot.commands.intakeshoot.PukeCommand;
 import frc.robot.commands.intakeshoot.RunIntakeCommand;
 import frc.robot.commands.intakeshoot.ShootCommand;
+import frc.robot.commands.intakeshoot.StopIntakeCommand;
 import frc.robot.commands.intakeshoot.RetractIntakeCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.JoystickSubsystem;
@@ -85,7 +94,8 @@ public class Robot extends TimedRobot {
     pdh.setSwitchableChannel(true);
     // compressor = new Compressor(1, PneumaticsModuleType.REVPH);
     // compressor.enableDigital();
-    ph.enableCompressorAnalog(100, 110);
+    ph.enableCompressorAnalog(100, 120);
+    CommandScheduler.getInstance().setDefaultCommand(DriveSubsystem.getInstance(), new JoystickDriveCommand());
   }
 
   /**
@@ -126,7 +136,7 @@ public class Robot extends TimedRobot {
     autoFinished = false;
     currCommandIndex = 0;
 
-    auto = Constants.DriveTrain.RIGHT_RIGHT_TARMAC_TO_RIGHT_BALL_BLUE; //Change here to switch the auto routine
+    auto = Constants.DriveTrain.SIMPLE_AUTO; //Change here to switch the auto routine
   }
 
   /**
@@ -145,8 +155,18 @@ public class Robot extends TimedRobot {
         case "path":
           currCommand = DriveSubsystem.getInstance().getAutonomousCommand(parts[1]);
           break;
-        
-          
+        case "shoot":
+          currCommand = new AutoShootCommand();
+          break;
+        case "intake":
+          currCommand = new AutoIntakeCommand();
+          break;
+        case "stopIntake":
+          currCommand = new AutoStopIntakeCommand();
+          break;
+        case "shoot60":
+          currCommand = new AutoShoot60Command();
+          break;
       } 
       currCommand.schedule();
       currCommandIndex++;
@@ -167,35 +187,72 @@ public class Robot extends TimedRobot {
     // this line or comment it out.
     CommandScheduler.getInstance().cancelAll();
     //compressor.enableDigital();
+    CommandScheduler.getInstance().schedule(new ZeroClimberCommand());
+
+    deployIntakeSwitch.whenInactive(new DeployIntakeCommand());
+    deployIntakeSwitch.whenActive(new RetractIntakeCommand());
+
+
+    runIntakeButton.whenActive(runIntakeCommand);
+    stopIntakeButton.whenActive(new StopIntakeCommand());
+
+    shooterAngleSwitch.whenActive(new CannonAngleCommand(true));
+    shooterAngleSwitch.whenInactive(new CannonAngleCommand(false));
+
+    ejectFrontButton.whenActive(new EjectFrontCommand());
+    ejectBackButton.whenActive(new EjectBackCommand());
+    pukeButton.whenActive(new PukeCommand());
+
+    ShootCommand shootCommand = new ShootCommand();
+    runShooterButton.whenActive(shootCommand);
+    rotatingClimberReleaseButton.cancelWhenActive(shootCommand);
+    // runShooterButton.whenActive(new StopCommand()); //TODO: Change to actual Run Shooter Command
+
+    fixedClimbDeployButton.whenActive(new DeployStaticClimberCommad());
+    fixedClimbUndeployButton.whenActive(new RetractStaticClimberCommand());
+    // fixedClimbeGrabButton.whenActive(new StopCommand());  //TODO: Change to actual Grab Command
+    // fixedClimberReleaseButton.whenActive();
+
+    // rotatingClimbDeployButton.whenActive(new StopCommand());  //TODO: Change to actual Rotating Deploy Command
+    // rotatingClimbUndeployButton.whenActive(new StopCommand());  //TODO: Change to actual Rotating Undeploy Command
+    // rotatingClimbeGrabButton.whenActive(new StopCommand());   //TODO: Change to actual Rotating Grab Command
+    // rotatingClimberReleaseButton.whenActive();
   }
 
   /**
    * This function is called periodically during operator control.
    */
 
-   //TODO: Add indexes for every button
   double smolValue = 0.1;
-  Trigger deployIntakeSwitch = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 0);
-  Trigger runIntakeButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 0).debounce(smolValue); //Creates an instance of a button
-  Trigger stopIntakeButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 0).debounce(smolValue);//First parameter is the Joystick the button is on
-  RunIntakeCommand runIntakeCommand = new RunIntakeCommand();                                                                     //Second parameter is the index of the Joystick
-  Trigger ejectFrontButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 0).debounce(smolValue);//VERY IMPORTANT: Joysticks are 1-indexed, not 0-indexed
-  Trigger ejectBackButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 0).debounce(smolValue);
-  Trigger pukeButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 0).debounce(smolValue);
-  Trigger shootButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 0).debounce(smolValue);
+  Trigger deployIntakeSwitch = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 10);
+
+  Trigger runIntakeButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 1).debounce(smolValue); //Creates an instance of a button
+  Trigger stopIntakeButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 2).debounce(smolValue);//First parameter is the Joystick the button is on
+  RunIntakeCommand runIntakeCommand = new RunIntakeCommand();      
+                                                                                                                                  //Second parameter is the index of the Joystick
+  Trigger ejectFrontButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 4).debounce(smolValue);//VERY IMPORTANT: Joysticks are 1-indexed, not 0-indexed
+  Trigger ejectBackButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 6).debounce(smolValue);
+  Trigger pukeButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 3).debounce(smolValue);
+
+  Trigger shootButton = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), 9).debounce(smolValue);
+  Trigger runShooterButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 8).debounce(smolValue);
+  Trigger shooterAngleSwitch = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), 7).debounce(smolValue);
+
+  Trigger fixedClimbDeployButton = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), 3).debounce(smolValue);
+  Trigger fixedClimbUndeployButton = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), 2).debounce(smolValue);
+  Trigger fixedClimbeGrabButton = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), 1).debounce(smolValue);
+  Trigger fixedClimberReleaseButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 11).debounce(smolValue);
+
+  Trigger rotatingClimbDeployButton = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), 6).debounce(smolValue);
+  Trigger rotatingClimbUndeployButton = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), 5).debounce(smolValue);
+  Trigger rotatingClimbeGrabButton = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), 4).debounce(smolValue);
+  Trigger rotatingClimberReleaseButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 5).debounce(smolValue);
+
+
 
   @Override
   public void teleopPeriodic() {
-
-    deployIntakeSwitch.whenActive(new DeployIntakeCommand());
-    deployIntakeSwitch.whenInactive(new RetractIntakeCommand());
-    runIntakeButton.whenActive(runIntakeCommand);
-    stopIntakeButton.cancelWhenActive(runIntakeCommand);
-    ejectFrontButton.whenActive(new EjectFrontCommand());
-    ejectBackButton.whenActive(new EjectBackCommand());
-    pukeButton.whenActive(new PukeCommand());
-    shootButton.whenActive(new ShootCommand());
-
+    
   }
 
   @Override

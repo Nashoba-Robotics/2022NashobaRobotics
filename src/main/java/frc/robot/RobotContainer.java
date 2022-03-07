@@ -59,23 +59,23 @@ public class RobotContainer {
 
   public RobotContainer() {
     configureButtonBindings();
-    SmartDashboard.putData(joystickDriveCommand);
+    // SmartDashboard.putData(joystickDriveCommand);
     // SmartDashboard.putData(new VelocityTestCommand());
-    SmartDashboard.putData(new StopCommand());
+    // SmartDashboard.putData(new StopCommand());
     // SmartDashboard.putData(new SensorTestCommand());
     // SmartDashboard.putData(hybridDriveCommand);
     // SmartDashboard.putData(new AutoDriveCommand());
     // SmartDashboard.putData(new TalonTestCommand());
-    //SmartDashboard.putData(new TurretCommand());
+    // SmartDashboard.putData(new TurretCommand());
     // SmartDashboard.putData(new GyroTestCommand());
-    SmartDashboard.putData(new LimelightCommand());
-    //SmartDashboard.putData(new CannonTestCommand());
+    // SmartDashboard.putData(new LimelightCommand());
+    // SmartDashboard.putData(new CannonTestCommand());
     SmartDashboard.putData(new ClimberCommand());
-    SmartDashboard.putData(new DeployStaticClimberCommad());
-    SmartDashboard.putData(new RetractStaticClimberCommand());
-    SmartDashboard.putData(new ZeroClimberCommand());
-    //SmartDashboard.putData(new LoaderCommand());
-    // // SmartDashboard.putData(new TalonTestCommand());
+    // SmartDashboard.putData(new DeployStaticClimberCommad());
+    // SmartDashboard.putData(new RetractStaticClimberCommand());
+    // SmartDashboard.putData(new ZeroClimberCommand());
+    // SmartDashboard.putData(new LoaderCommand());
+    // SmartDashboard.putData(new TalonTestCommand());
     // SmartDashboard.putData(new DeployIntakeCommand());
     // SmartDashboard.putData(new RetractIntakeCommand());
     // SmartDashboard.putData(new EjectFrontCommand());
@@ -93,7 +93,6 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(JoystickSubsystem.getInstance().getLeftJoystick(), 0);
     
   }
 

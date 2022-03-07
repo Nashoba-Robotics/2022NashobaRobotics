@@ -11,6 +11,8 @@ public class RetractIntakeCommand extends CommandBase{
     @Override   //Tristan is bad
     public void initialize(){
         IntakeSubsystem.getInstance().retractIntake();
+        IntakeSubsystem.getInstance().setIntake(0);
+        IntakeSubsystem.getInstance().setGrabber(0);
     }
 
     @Override

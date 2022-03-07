@@ -33,13 +33,13 @@ public class ClimberCommand extends CommandBase {
             return;
         }
         csi.setSpeed(ClimberMotor.RIGHT_1, SmartDashboard.getNumber("R 1",0));
-        // csi.setSpeed(ClimberMotor.RIGHT_2, SmartDashboard.getNumber("R 2",0));
-        // csi.setSpeed(ClimberMotor.RIGHT_ROTATE, SmartDashboard.getNumber("R Rotate",0));
+        //csi.setSpeed(ClimberMotor.RIGHT_2, SmartDashboard.getNumber("R 2",0));
+        //csi.setSpeed(ClimberMotor.RIGHT_ROTATE, SmartDashboard.getNumber("R Rotate",0));
 
         SmartDashboard.putNumber("R 1 Stator", csi.getStatorCurrent(ClimberMotor.RIGHT_1));
         // SmartDashboard.putNumber("R 2 Stator", csi.getStatorCurrent(ClimberMotor.RIGHT_2));
         // SmartDashboard.putNumber("R Rotate Stator", csi.getStatorCurrent(ClimberMotor.RIGHT_ROTATE));
-        SmartDashboard.putNumber("R 1 Supply", csi.getSupplyCurrent(ClimberMotor.RIGHT_1));
+        //SmartDashboard.putNumber("R 1 Supply", csi.getSupplyCurrent(ClimberMotor.RIGHT_1));
         // SmartDashboard.putNumber("R 2 Supply", csi.getSupplyCurrent(ClimberMotor.RIGHT_2));
         // SmartDashboard.putNumber("R Rotate Supply", csi.getSupplyCurrent(ClimberMotor.RIGHT_ROTATE));
         SmartDashboard.putNumber("R 1 Pos", csi.getPosition(ClimberMotor.RIGHT_1));

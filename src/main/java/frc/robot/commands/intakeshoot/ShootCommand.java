@@ -2,14 +2,22 @@ package frc.robot.commands.intakeshoot;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.Intake;
 import frc.robot.subsystems.CannonSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.JoystickSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 
 public class ShootCommand extends CommandBase {
     long startMillis;
-    boolean onLast;
+    long stopMillis;
+    boolean on;
+    boolean finished;
+
+    Trigger shoot = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), 9).debounce(0.1);
+    Trigger angle = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), 7).debounce(0.1);
 
     public ShootCommand() {
         addRequirements(IntakeSubsystem.getInstance());
@@ -20,58 +28,64 @@ public class ShootCommand extends CommandBase {
     @Override
     public void initialize() {
         startMillis = System.currentTimeMillis();
-        SmartDashboard.putNumber("Shooter", 0);
-        SmartDashboard.putNumber("On", 0);
-        onLast = false;
+        stopMillis = System.currentTimeMillis();
+        on = false;
+        finished = false;
+        SmartDashboard.putBoolean("Shooter On?", true);
     }
 
     @Override
-    public void execute() { 
-        //double ty = LimelightSubsystem.getInstance().getShooterTy();
-        //double speed = 0.815 - 0.00951*ty;
+    public void execute() {         
+        long millis = System.currentTimeMillis();
 
-
-        boolean on = SmartDashboard.getNumber("On", 0) != 0;
-
-        if(on && !onLast) {
-            startMillis = System.currentTimeMillis();
+        if(shoot.get()) {
+            on = true;
+            startMillis = millis;
+            stopMillis = Long.MAX_VALUE;
         }
 
-        onLast = on;
+        boolean eightydeg = angle.get();
+        double cannonSpeed;
 
-        double speed = SmartDashboard.getNumber("Shooter", 0);
+        if(!eightydeg) {
+            double ty = LimelightSubsystem.getInstance().getShooterTy();
+            // cannonSpeed = 0.445 - 0.00527 * ty; // limelight math
+            cannonSpeed = 0.47 - 0.00527 * ty; // limelight math
+        } else {
+            cannonSpeed = 0.5; // close up shot
+        }
+
+        CannonSubsystem.getInstance().set(cannonSpeed);    
 
         if(on) {
-            CannonSubsystem.getInstance().set(speed);    
-
-            if(System.currentTimeMillis() > startMillis + 300) {
-                IntakeSubsystem.getInstance()
+            double loaderSpeed = eightydeg ? 0.4 : 0.5;
+            IntakeSubsystem.getInstance()
                 .setIntake(0)
                 .setGrabber(0)
-                .setLoader(0.5);
-                // 0.5 far away, 0.4 up close
-            } else {
-                IntakeSubsystem.getInstance()
-                .setIntake(0)
-                .setGrabber(0)
-                .setLoader(0);
-            }
+                .setLoader(loaderSpeed);
         } else {
             IntakeSubsystem.getInstance().stop();
-            CannonSubsystem.getInstance().set(0);
         }
 
-        
+        if(millis < stopMillis && !IntakeSubsystem.getInstance().getSensor1() && !IntakeSubsystem.getInstance().getSensor2()) {
+            stopMillis = millis;
+        }
+
+        // if(millis > stopMillis + 500) {
+        //     finished = true;
+        //     SmartDashboard.putString("Logging", "finished");
+        // }
     }
 
     @Override
     public void end(boolean interrupted) {
         IntakeSubsystem.getInstance().stop();
         CannonSubsystem.getInstance().set(0);
+        SmartDashboard.putBoolean("Shooter On?", false);
     }
 
     @Override
     public boolean isFinished() {
-       return false;
+       return finished;
     }
 }  

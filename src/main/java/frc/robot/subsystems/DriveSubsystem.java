@@ -109,7 +109,6 @@ public class DriveSubsystem extends SubsystemBase {
 
     public double getTranslationX(){
         return getPose().getTranslation().getX();
-        //I know what you're doing
     }
 
     public double getTranslationY(){
@@ -152,18 +151,12 @@ public class DriveSubsystem extends SubsystemBase {
         configureMotor(rightMotor);
         configureMotor(leftMotor);
         
-        // rightMotor.setInverted(InvertType.InvertMotorOutput);
-        rightMotor.setInverted(true);
-        rightMotor2.setInverted(true);
-        rightMotor3.setInverted(true);
-        // rightMotor2.setInverted(InvertType.FollowMaster);
-        // rightMotor3.setInverted(InvertType.FollowMaster);
-        leftMotor.setInverted(false);
-        leftMotor2.setInverted(false);
-        leftMotor3.setInverted(false);
-        // leftMotor.setInverted(InvertType.None);
-        // leftMotor2.setInverted(InvertType.FollowMaster);
-        // leftMotor3.setInverted(InvertType.FollowMaster);
+        rightMotor.setInverted(InvertType.InvertMotorOutput);
+        rightMotor2.setInverted(InvertType.FollowMaster);
+        rightMotor3.setInverted(InvertType.FollowMaster);
+        leftMotor.setInverted(InvertType.None);
+        leftMotor2.setInverted(InvertType.FollowMaster);
+        leftMotor3.setInverted(InvertType.FollowMaster);
 
         // Set the name of the subsystem in smart dashboard
         SendableRegistry.setName(this, "Drive");
