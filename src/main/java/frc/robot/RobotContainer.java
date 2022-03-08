@@ -59,7 +59,7 @@ public class RobotContainer {
 
   public RobotContainer() {
     configureButtonBindings();
-    // SmartDashboard.putData(joystickDriveCommand);
+    SmartDashboard.putData(joystickDriveCommand);
     // SmartDashboard.putData(new VelocityTestCommand());
     // SmartDashboard.putData(new StopCommand());
     // SmartDashboard.putData(new SensorTestCommand());

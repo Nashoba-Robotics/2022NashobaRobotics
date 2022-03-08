@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
 
 import javax.sound.midi.Patch;
 
@@ -22,24 +23,30 @@ import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
+import edu.wpi.first.math.trajectory.Trajectory.State;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.lib.Units;
 
@@ -54,7 +61,7 @@ public class DriveSubsystem extends SubsystemBase {
     private static DriveSubsystem instance;
 
     //x-speed, y-speed, rate of rotation
-    private final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(Constants.WHEEL_GAP);
+    private final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(Constants.DriveTrain.WHEEL_GAP);
     private Rotation2d gyroAngle = Rotation2d.fromDegrees(-GyroSubsystem.getInstance().getAbsoluteAngle());
     private DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(gyroAngle);
     private Pose2d pose;
@@ -73,21 +80,15 @@ public class DriveSubsystem extends SubsystemBase {
     // @Override
     @Override
     public void periodic() {
-        gyroAngle = Rotation2d.fromDegrees(-GyroSubsystem.getInstance().getAbsoluteAngle());
-        pose = odometry.update(gyroAngle, NU2Meters(leftMotor.getSelectedSensorPosition(Constants.PID_IDX)), NU2Meters(rightMotor.getSelectedSensorPosition()));
+            gyroAngle = Rotation2d.fromDegrees(-GyroSubsystem.getInstance().getAbsoluteAngle());
+            pose = odometry.update(gyroAngle, NU2Meters(leftMotor.getSelectedSensorPosition(Constants.PID_IDX)), NU2Meters(rightMotor.getSelectedSensorPosition(Constants.PID_IDX)));
     }
 
-    public void setVoltage(double leftVolts, double rightVolts){
-        leftVolts /= 13; //RobotController.getBatteryVoltage();
-        rightVolts /= 13; //RobotController.getBatteryVoltage();
-        // if(Math.abs(leftVolts) > Constants.DriveTrain.MAX_AUTO_TURN || Math.abs(rightVolts) > Constants.DriveTrain.MAX_AUTO_TURN) {
-        //     double factor = Math.max(Math.abs(leftVolts), Math.abs(rightVolts));
-        //     leftVolts /= factor;
-        //     rightVolts /= factor;
-        // }
-        leftMotor.set(ControlMode.PercentOutput, leftVolts);
-        rightMotor.set(ControlMode.PercentOutput, rightVolts);
+    public void setMetersPerSecond(double left, double right){
+        leftMotor.set(ControlMode.Velocity, meters2NUSpeed(left));
+        rightMotor.set(ControlMode.Velocity, meters2NUSpeed(right));
     }
+
     //I see everything
     public void resetOdometry(Pose2d pose){
         leftMotor.setSelectedSensorPosition(0, Constants.PID_IDX, Constants.TIMEOUT);
@@ -96,7 +97,7 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public DifferentialDriveWheelSpeeds getWheelSpeeds(){
-        return new DifferentialDriveWheelSpeeds(NU2Meters(getLeftMotorVelocity() * 10), NU2Meters(getRightMotorVelocity() * 10));
+        return new DifferentialDriveWheelSpeeds(NU2Meters(getLeftMotorVelocity() / 10), NU2Meters(getRightMotorVelocity() / 10));
     }
 
     public double getAngle(){
@@ -115,9 +116,13 @@ public class DriveSubsystem extends SubsystemBase {
         return getPose().getTranslation().getY();
     }
 
-    private double NU2Meters(double nu){
-        double rate = Constants.TAU * (Constants.WHEEL_RADIUS / Constants.DRIVE_GEAR_RATIO) / Constants.FALCON_NU;
+    public double NU2Meters(double nu){
+        double rate = Constants.TAU * (Constants.DriveTrain.WHEEL_RADIUS / Constants.DriveTrain.DRIVE_GEAR_RATIO) / Constants.FALCON_NU;
         return nu * rate;
+    }
+
+    public double meters2NUSpeed(double metersPerSecond){
+        return metersPerSecond * 3.133 * Constants.DriveTrain.DRIVE_GEAR_RATIO * Constants.FALCON_NU / 10;
     }
 
     private Rotation2d toRotation2d(double angle){
@@ -150,6 +155,16 @@ public class DriveSubsystem extends SubsystemBase {
 
         configureMotor(rightMotor);
         configureMotor(leftMotor);
+
+        rightMotor.config_kF(Constants.SLOT_IDX, Constants.DriveTrain.KF_RIGHT, Constants.TIMEOUT);
+		rightMotor.config_kP(Constants.SLOT_IDX, Constants.DriveTrain.P_RIGHT, Constants.TIMEOUT);
+		rightMotor.config_kI(Constants.SLOT_IDX, Constants.DriveTrain.I_RIGHT, Constants.TIMEOUT);
+        rightMotor.config_kD(Constants.SLOT_IDX, Constants.DriveTrain.D_RIGHT, Constants.TIMEOUT);
+
+        leftMotor.config_kF(Constants.SLOT_IDX, Constants.DriveTrain.KF_LEFT, Constants.TIMEOUT);
+		leftMotor.config_kP(Constants.SLOT_IDX, Constants.DriveTrain.P_LEFT, Constants.TIMEOUT);
+		leftMotor.config_kI(Constants.SLOT_IDX, Constants.DriveTrain.I_LEFT, Constants.TIMEOUT);
+        leftMotor.config_kD(Constants.SLOT_IDX, Constants.DriveTrain.D_LEFT, Constants.TIMEOUT);
         
         rightMotor.setInverted(InvertType.InvertMotorOutput);
         rightMotor2.setInverted(InvertType.FollowMaster);
@@ -185,12 +200,6 @@ public class DriveSubsystem extends SubsystemBase {
 		motor.configNominalOutputReverse(0, Constants.TIMEOUT);
 		motor.configPeakOutputForward(1, Constants.TIMEOUT);
 		motor.configPeakOutputReverse(-1, Constants.TIMEOUT);
-
-		/* Config the Velocity closed loop gains in slot0 */
-		motor.config_kF(Constants.SLOT_IDX, Constants.KF, Constants.TIMEOUT);
-		motor.config_kP(Constants.SLOT_IDX, Constants.KP, Constants.TIMEOUT);
-		motor.config_kI(Constants.SLOT_IDX, Constants.KI, Constants.TIMEOUT);
-        motor.config_kD(Constants.SLOT_IDX, Constants.KD, Constants.TIMEOUT);
 
         motor.selectProfileSlot(Constants.SLOT_IDX, 0);
 
@@ -240,7 +249,7 @@ public class DriveSubsystem extends SubsystemBase {
             controlMode = TalonFXControlMode.PercentOutput;
         }
         
-        double aff = Constants.AFF * Math.signum(speed);
+        double aff = Constants.DriveTrain.AFF_RIGHT * Math.signum(speed);
         
         if(!brakeMode){
             rightMotor.set(controlMode, speed, DemandType.ArbitraryFeedForward, aff);
@@ -261,7 +270,7 @@ public class DriveSubsystem extends SubsystemBase {
             controlMode = TalonFXControlMode.PercentOutput;
         }
 
-        double aff = Constants.AFF * Math.signum(speed);
+        double aff = Constants.DriveTrain.AFF_LEFT * Math.signum(speed);
 
         leftMotor.set(controlMode, speed, DemandType.ArbitraryFeedForward, aff);
 
@@ -284,10 +293,8 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public void setRawMotorVelocity(double left, double right){
-        //left = Units.percent2Velocity(left);
-        //right = Units.percent2Velocity(right);
-        leftMotor.set(ControlMode.Velocity, left, DemandType.ArbitraryFeedForward, Constants.AFF);
-        rightMotor.set(ControlMode.Velocity, right, DemandType.ArbitraryFeedForward, Constants.AFF);
+        leftMotor.set(ControlMode.Velocity, left, DemandType.ArbitraryFeedForward, Constants.DriveTrain.AFF_LEFT);
+        rightMotor.set(ControlMode.Velocity, right, DemandType.ArbitraryFeedForward, Constants.DriveTrain.AFF_RIGHT);
     }
 
     public void setRawPercent(double left, double right){
@@ -344,56 +351,71 @@ public class DriveSubsystem extends SubsystemBase {
         return NU2Meters(getPositionRight());
     }
 
+    public void setDistance(double meters) {
+        double lPos = getPositionLeft() + 
+        (Constants.FALCON_NU * meters) /
+        (Constants.TAU * (Constants.DriveTrain.WHEEL_RADIUS / Constants.DriveTrain.DRIVE_GEAR_RATIO));
+        
+        double rPos = getPositionRight() +
+        (Constants.FALCON_NU * meters) /
+        (Constants.TAU * (Constants.DriveTrain.WHEEL_RADIUS / Constants.DriveTrain.DRIVE_GEAR_RATIO));
+
+        leftMotor.configMotionAcceleration(Constants.DriveTrain.MAX_ACCELERATION);
+        leftMotor.configMotionCruiseVelocity(Constants.DriveTrain.MAX_VELOCITY);
+
+        rightMotor.configMotionAcceleration(Constants.DriveTrain.MAX_ACCELERATION);
+        rightMotor.configMotionCruiseVelocity(Constants.DriveTrain.MAX_VELOCITY);
+
+        leftMotor.set(ControlMode.MotionMagic, lPos);
+        rightMotor.set(ControlMode.MotionMagic, rPos);
+    }
+
     public Command getAutonomousCommand(String trajectoryJSON){
 
         //uncomment if setting points manually
-        // DifferentialDriveVoltageConstraint autoVoltageConstraint = 
-        // new DifferentialDriveVoltageConstraint(
-        //   new SimpleMotorFeedforward(Constants.DriveTrain.KS, Constants.DriveTrain.KV, Constants.DriveTrain.KA),
-        //   DriveSubsystem.getInstance().getKinematics(),
-        //   7);
-    
-        //uncomment if setting points manually
-        // TrajectoryConfig config =
-        // new TrajectoryConfig(
-        //   Constants.DriveTrain.MAX_VELOCITY,
-        //   Constants.DriveTrain.MAX_ACCELERATION)
-        //   .setKinematics(DriveSubsystem.getInstance().getKinematics())
-        //   .addConstraint(autoVoltageConstraint);
-    
-        Trajectory trajectory = new Trajectory();
-    
-        try {
-          Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-          trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-       } catch (IOException e) {
-          DriverStation.reportError("Unable to open trajectory: \n \n \n \n", e.getStackTrace());
-       }
-    
-        //uncomment if adding points manually
-        // Trajectory trajectory =
-        // TrajectoryGenerator.generateTrajectory(
-        //   new Pose2d(0, 0, new Rotation2d(0)), //starting position
-        //   List.of(new Translation2d(1, 1), new Translation2d(2, -1)), //nodes for robot to travel to
-        //   new Pose2d(3, 0, new Rotation2d(0)), //finishing position
-        //   config);
-    
-        RamseteCommand ramseteCommand =
-        new RamseteCommand(
-          trajectory,
-          DriveSubsystem.getInstance()::getPose,
-          new RamseteController(Constants.DriveTrain.AUTO_B, Constants.DriveTrain.AUTO_ZETA),
+        DifferentialDriveVoltageConstraint autoVoltageConstraint = 
+        new DifferentialDriveVoltageConstraint(
           new SimpleMotorFeedforward(Constants.DriveTrain.KS, Constants.DriveTrain.KV, Constants.DriveTrain.KA),
           DriveSubsystem.getInstance().getKinematics(),
-          DriveSubsystem.getInstance()::getWheelSpeeds,
-          new PIDController(Constants.KP, Constants.KI, Constants.KD),
-          new PIDController(Constants.KP, Constants.KI, Constants.KD),
-          DriveSubsystem.getInstance()::setVoltage,
-          DriveSubsystem.getInstance());
+          10);
+    
+        //uncomment if setting points manually
+        TrajectoryConfig config =
+        new TrajectoryConfig(
+          Constants.DriveTrain.MAX_VELOCITY,
+          Constants.DriveTrain.MAX_ACCELERATION)
+          .setKinematics(DriveSubsystem.getInstance().getKinematics())
+          .addConstraint(autoVoltageConstraint);
+    
+    //     Trajectory trajectory = new Trajectory();
+    
+    //     try {
+    //       Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+    //       trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+    //    } catch (IOException e) {
+    //       DriverStation.reportError("Unable to open trajectory: \n \n \n \n", e.getStackTrace());
+    //    }
+    
+        //uncomment if adding points manually
+        Trajectory trajectory =
+        TrajectoryGenerator.generateTrajectory(
+          new Pose2d(0, 0, new Rotation2d(0)), //starting position
+          List.of(new Translation2d(4, 0)), //nodes for robot to travel to
+          new Pose2d(4, 0, new Rotation2d(0)), //finishing position
+          config);
+
+        RamseteCommand ramseteCommand =
+            new RamseteCommand(
+                trajectory,
+                DriveSubsystem.getInstance()::getPose,
+                new RamseteController(Constants.DriveTrain.AUTO_B, Constants.DriveTrain.AUTO_ZETA),
+                DriveSubsystem.getInstance().getKinematics(),
+                DriveSubsystem.getInstance()::setMetersPerSecond,
+                DriveSubsystem.getInstance());
     
           DriveSubsystem.getInstance().resetOdometry(trajectory.getInitialPose());
     
-          return ramseteCommand.andThen(() -> DriveSubsystem.getInstance().setVoltage(0, 0));
+          return ramseteCommand.andThen(() -> DriveSubsystem.getInstance().setMetersPerSecond(0, 0));
     
       }
 }
