@@ -80,6 +80,8 @@ public class ZeroClimberCommand extends CommandBase {
         // SmartDashboard.putNumber("R 1 Pos", rightPos);
         // SmartDashboard.putBoolean("L finished", leftEnd);
         // SmartDashboard.putBoolean("R finished", rightEnd);
+
+        ClimberSubsystem.getInstance().checkLimitSwitches();
     }
 
     @Override

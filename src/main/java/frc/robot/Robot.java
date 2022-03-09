@@ -7,59 +7,23 @@
 
 package frc.robot;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.ArrayList;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.AutoIntakeCommand;
 import frc.robot.commands.AutoShoot60Command;
 import frc.robot.commands.AutoShootCommand;
 import frc.robot.commands.AutoStopIntakeCommand;
-import frc.robot.commands.DeployStaticClimberCommad;
 import frc.robot.commands.JoystickDriveCommand;
-import frc.robot.commands.RetractStaticClimberCommand;
-import frc.robot.commands.StopCommand;
 import frc.robot.commands.ZeroClimberCommand;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.JoystickSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.DriveSubsystem.DriveMode;
-import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticHub;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.PowerDistribution;
-import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.JoystickDriveCommand;
-import frc.robot.commands.intakeshoot.CannonAngleCommand;
-import frc.robot.commands.intakeshoot.DeployIntakeCommand;
-import frc.robot.commands.intakeshoot.EjectBackCommand;
-import frc.robot.commands.intakeshoot.EjectFrontCommand;
-import frc.robot.commands.intakeshoot.PukeCommand;
-import frc.robot.commands.intakeshoot.RunIntakeCommand;
-import frc.robot.commands.intakeshoot.ShootCommand;
-import frc.robot.commands.intakeshoot.StopIntakeCommand;
-import frc.robot.commands.intakeshoot.RetractIntakeCommand;
-import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.JoystickSubsystem;
 
 
 /**
@@ -100,7 +64,7 @@ public class Robot extends TimedRobot {
 
   /**
    * This function is called every robot packet, no matter the mode. Use this for items like
-   * diagnostics that you want ran during disabled, autonomous, teleoperated and test.
+   * diagnostics that you want run during disabled, autonomous, teleoperated and test.
    *
    * <p>This runs after the mode specific periodic functions, but before
    * LiveWindow and SmartDashboard integrated updating.
@@ -112,16 +76,18 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    //CommandScheduler.getInstance().setDefaultCommand(AbstractDriveSubsystem.getInstance(), new JoystickDriveCommand());
   }
 
   /**
    * This function is called once each time the robot enters Disabled mode.
    */
   @Override
-  public void disabledInit() {
+  public void disabledInit() {  //Ensures that everything is stopped and is in an "off" state
     DriveSubsystem.getInstance().setDriveMode(DriveMode.VELOCITY);
     DriveSubsystem.getInstance().setSpeed(0, 0);
+    IntakeSubsystem.getInstance().stop();
+    IntakeSubsystem.getInstance().retractIntake();  //Undeploys the intake when the robot is disabled
+    DriveSubsystem.getInstance().changeNeutralMode(NeutralMode.Coast);  //Sets the robot into "coast" mode after robot is diabled -> Easier to move
   }
 
   @Override
@@ -143,7 +109,9 @@ public class Robot extends TimedRobot {
    * This function is called periodically during autonomous.
    */
 
-
+  //Iterates through an Auto Path array
+  //If the instruction starts with "Path", then it will follow a path
+  //Otherwise it will run the specified command
   @Override
   public void autonomousPeriodic() {
     if(!autoFinished
@@ -186,69 +154,14 @@ public class Robot extends TimedRobot {
     // continue until interrupted by another command, remove
     // this line or comment it out.
     CommandScheduler.getInstance().cancelAll();
-    //compressor.enableDigital();
+
+    //Zeroes the climbers when teleop starts
     CommandScheduler.getInstance().schedule(new ZeroClimberCommand());
-
-    deployIntakeSwitch.whenInactive(new DeployIntakeCommand());
-    deployIntakeSwitch.whenActive(new RetractIntakeCommand());
-
-
-    runIntakeButton.whenActive(runIntakeCommand);
-    stopIntakeButton.whenActive(new StopIntakeCommand());
-
-    shooterAngleSwitch.whenActive(new CannonAngleCommand(true));
-    shooterAngleSwitch.whenInactive(new CannonAngleCommand(false));
-
-    ejectFrontButton.whenActive(new EjectFrontCommand());
-    ejectBackButton.whenActive(new EjectBackCommand());
-    pukeButton.whenActive(new PukeCommand());
-
-    ShootCommand shootCommand = new ShootCommand();
-    runShooterButton.whenActive(shootCommand);
-    rotatingClimberReleaseButton.cancelWhenActive(shootCommand);
-    // runShooterButton.whenActive(new StopCommand()); //TODO: Change to actual Run Shooter Command
-
-    fixedClimbDeployButton.whenActive(new DeployStaticClimberCommad());
-    fixedClimbUndeployButton.whenActive(new RetractStaticClimberCommand());
-    // fixedClimbeGrabButton.whenActive(new StopCommand());  //TODO: Change to actual Grab Command
-    // fixedClimberReleaseButton.whenActive();
-
-    // rotatingClimbDeployButton.whenActive(new StopCommand());  //TODO: Change to actual Rotating Deploy Command
-    // rotatingClimbUndeployButton.whenActive(new StopCommand());  //TODO: Change to actual Rotating Undeploy Command
-    // rotatingClimbeGrabButton.whenActive(new StopCommand());   //TODO: Change to actual Rotating Grab Command
-    // rotatingClimberReleaseButton.whenActive();
   }
 
   /**
    * This function is called periodically during operator control.
    */
-
-  double smolValue = 0.1;
-  Trigger deployIntakeSwitch = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 10);
-
-  Trigger runIntakeButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 1).debounce(smolValue); //Creates an instance of a button
-  Trigger stopIntakeButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 2).debounce(smolValue);//First parameter is the Joystick the button is on
-  RunIntakeCommand runIntakeCommand = new RunIntakeCommand();      
-                                                                                                                                  //Second parameter is the index of the Joystick
-  Trigger ejectFrontButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 4).debounce(smolValue);//VERY IMPORTANT: Joysticks are 1-indexed, not 0-indexed
-  Trigger ejectBackButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 6).debounce(smolValue);
-  Trigger pukeButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 3).debounce(smolValue);
-
-  Trigger shootButton = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), 9).debounce(smolValue);
-  Trigger runShooterButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 8).debounce(smolValue);
-  Trigger shooterAngleSwitch = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), 7).debounce(smolValue);
-
-  Trigger fixedClimbDeployButton = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), 3).debounce(smolValue);
-  Trigger fixedClimbUndeployButton = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), 2).debounce(smolValue);
-  Trigger fixedClimbeGrabButton = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), 1).debounce(smolValue);
-  Trigger fixedClimberReleaseButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 11).debounce(smolValue);
-
-  Trigger rotatingClimbDeployButton = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), 6).debounce(smolValue);
-  Trigger rotatingClimbUndeployButton = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), 5).debounce(smolValue);
-  Trigger rotatingClimbeGrabButton = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), 4).debounce(smolValue);
-  Trigger rotatingClimberReleaseButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 5).debounce(smolValue);
-
-
 
   @Override
   public void teleopPeriodic() {

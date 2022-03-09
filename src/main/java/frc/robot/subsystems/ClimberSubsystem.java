@@ -157,8 +157,7 @@ public class ClimberSubsystem extends SubsystemBase {
         }
     }
 
-    @Override
-    public void periodic() {
+    public void checkLimitSwitches() {
         // Zero on exit from limit switch
         for(int i = 0; i < motors.length; i++) {
             boolean ls = getLimitSwitch(ClimberMotor.values()[i]);

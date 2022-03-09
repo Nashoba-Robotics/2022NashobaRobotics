@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import java.io.IOException;
 import java.nio.file.Path;
 
-import javax.sound.midi.Patch;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
@@ -13,34 +12,25 @@ import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.sensors.PigeonIMU;
 import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
-import com.ctre.phoenix.motorcontrol.TalonFXSensorCollection;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
-import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 import frc.robot.lib.Units;
 
 // Subsystem for driving the robot
@@ -60,7 +50,7 @@ public class DriveSubsystem extends SubsystemBase {
     private Pose2d pose;
 
     public static final int VOLTAGE_COMPENSATION_LEVEL = 12;
-    public static final VelocityMeasPeriod VELOCITY_MEASUREMENT_PERIOD_DRIVE = VelocityMeasPeriod.Period_10Ms; // find
+    //public static final VelocityMeasPeriod VELOCITY_MEASUREMENT_PERIOD_DRIVE = VelocityMeasPeriod.Period_10Ms; // find
     public static final int VELOCITY_MEASUREMENT_WINDOW_DRIVE = 32; // find this
 
     private DriveMode driveMode = DriveMode.VELOCITY;
@@ -130,11 +120,12 @@ public class DriveSubsystem extends SubsystemBase {
     
     public DriveSubsystem() {
         leftMotor = new TalonFX(Constants.LEFT_MOTOR_PORTS[0]);
-        leftMotor3 = new TalonFX(Constants.LEFT_MOTOR_PORTS[2]);
         leftMotor2 = new TalonFX(Constants.LEFT_MOTOR_PORTS[1]);
+        leftMotor3 = new TalonFX(Constants.LEFT_MOTOR_PORTS[2]);
         rightMotor = new TalonFX(Constants.RIGHT_MOTOR_PORTS[0]);
         rightMotor2 = new TalonFX(Constants.RIGHT_MOTOR_PORTS[1]);
         rightMotor3 = new TalonFX(Constants.RIGHT_MOTOR_PORTS[2]);
+
         leftMotor2.follow(leftMotor);
         leftMotor3.follow(leftMotor);
         rightMotor2.follow(rightMotor);
@@ -143,10 +134,6 @@ public class DriveSubsystem extends SubsystemBase {
 
         leftMotor.setSelectedSensorPosition(0, Constants.PID_IDX, Constants.TIMEOUT);
         rightMotor.setSelectedSensorPosition(0, Constants.PID_IDX, Constants.TIMEOUT);
-        // leftMasterSensor = new TalonFXSensorCollection(leftMotor);
-        // leftMasterSensor.setIntegratedSensorPosition(0, Constants.TIMEOUT);
-        // rightMasterSensor = new TalonFXSensorCollection(rightMotor);
-        // rightMasterSensor.setIntegratedSensorPosition(0, Constants.TIMEOUT);
 
         configureMotor(rightMotor);
         configureMotor(leftMotor);
@@ -212,6 +199,12 @@ public class DriveSubsystem extends SubsystemBase {
 
     public void setBrakeMode(boolean brakeMode){
         this.brakeMode = brakeMode;
+    }
+
+    //Changes the netural mode of both sets of drive motors (Defaults as Coast);
+    public void changeNeutralMode(NeutralMode n){
+        leftMotor.setNeutralMode(n);
+        rightMotor.setNeutralMode(n);
     }
 
     public void setProportional(double p){

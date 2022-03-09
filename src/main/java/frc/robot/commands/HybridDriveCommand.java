@@ -26,7 +26,7 @@ public class HybridDriveCommand extends CommandBase{
 
     public HybridDriveCommand(){
         addRequirements(LimelightSubsystem.getInstance());
-        addRequirements(PhotonVisionSubsystem.getInstance());
+        //addRequirements(PhotonVisionSubsystem.getInstance());
         addRequirements(DriveSubsystem.getInstance());
     }
 

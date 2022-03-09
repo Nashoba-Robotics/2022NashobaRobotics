@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.HybridDriveCommand;
 import frc.robot.commands.AutoDriveCommand;
 import frc.robot.commands.JoystickDriveCommand;
@@ -35,9 +36,8 @@ import frc.robot.commands.LoaderCommand;
 import frc.robot.commands.RetractStaticClimberCommand;
 import frc.robot.commands.SensorTestCommand;
 import frc.robot.commands.StopCommand;
-import frc.robot.commands.VelocityTestCommand;
 import frc.robot.commands.ZeroClimberCommand;
-import frc.robot.commands.VelocityTestCommand;
+import frc.robot.commands.intakeshoot.CannonAngleCommand;
 import frc.robot.commands.intakeshoot.DeployIntakeCommand;
 import frc.robot.commands.intakeshoot.EjectBackCommand;
 import frc.robot.commands.intakeshoot.EjectFrontCommand;
@@ -45,9 +45,9 @@ import frc.robot.commands.intakeshoot.PukeCommand;
 import frc.robot.commands.intakeshoot.RetractIntakeCommand;
 import frc.robot.commands.intakeshoot.RunIntakeCommand;
 import frc.robot.commands.intakeshoot.ShootCommand;
+import frc.robot.commands.intakeshoot.StopIntakeCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.JoystickSubsystem;
-import frc.robot.commands.GyroTestCommand;
 import frc.robot.commands.CannonTestCommand;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.DeployStaticClimberCommad;
@@ -56,6 +56,34 @@ public class RobotContainer {
 
   public static JoystickDriveCommand joystickDriveCommand = new JoystickDriveCommand();
   public static HybridDriveCommand hybridDriveCommand = new HybridDriveCommand();
+
+  //Initializes all buttons used for commands
+  //Takes in a joystick and the button poer
+  //IMPORTANT!!: Joystick Buttons are 1 indexed (They start at 1 instead of 0)
+  Trigger deployIntakeSwitch = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), Constants.Buttons.DEPLOY_INTAKE);
+
+  Trigger runIntakeButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), Constants.Buttons.RUN_INTAKE).debounce(Constants.Buttons.DEBOUNCE_VALUE);
+  Trigger stopIntakeButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), Constants.Buttons.STOP_INTAKE).debounce(Constants.Buttons.DEBOUNCE_VALUE);
+                                                                                                                                  
+  Trigger ejectFrontButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), Constants.Buttons.EJECT_FRONT).debounce(Constants.Buttons.DEBOUNCE_VALUE);
+  Trigger ejectBackButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), Constants.Buttons.EJECT_BACK).debounce(Constants.Buttons.DEBOUNCE_VALUE);
+  Trigger pukeButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), Constants.Buttons.PUKE).debounce(Constants.Buttons.DEBOUNCE_VALUE);
+
+  Trigger shootButton = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), Constants.Buttons.SHOOT).debounce(Constants.Buttons.DEBOUNCE_VALUE);
+  Trigger runShooterButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), Constants.Buttons.RUN_SHOOTER).debounce(Constants.Buttons.DEBOUNCE_VALUE);
+  Trigger stopShooterButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), Constants.Buttons.STOP_SHOOTER);
+  Trigger shooterAngleSwitch = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), Constants.Buttons.SHOOTER_ANGLE).debounce(Constants.Buttons.DEBOUNCE_VALUE);
+
+  Trigger fixedClimbDeployButton = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), Constants.Buttons.FIXED_CLIMB_DEPLOY).debounce(Constants.Buttons.DEBOUNCE_VALUE);
+  Trigger fixedClimbButton = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), Constants.Buttons.FIXED_CLIMB).debounce(Constants.Buttons.DEBOUNCE_VALUE);
+  Trigger fixedClimbeGrabButton = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), Constants.Buttons.FIXED_CLIMB_GRAB).debounce(Constants.Buttons.DEBOUNCE_VALUE);
+  Trigger fixedClimberReleaseButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), Constants.Buttons.FIXED_CLIMB_RELEASE).debounce(Constants.Buttons.DEBOUNCE_VALUE);
+
+  // Trigger rotatingClimbDeployButton = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), 6).debounce(Constants.Buttons.DEBOUNCE_VALUE);
+  // Trigger rotatingClimbUndeployButton = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), 5).debounce(Constants.Buttons.DEBOUNCE_VALUE);
+  // Trigger rotatingClimbeGrabButton = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), 4).debounce(Constants.Buttons.DEBOUNCE_VALUE);
+  // Trigger rotatingClimberReleaseButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 5).debounce(Constants.Buttons.DEBOUNCE_VALUE);
+
 
   public RobotContainer() {
     configureButtonBindings();
@@ -85,6 +113,8 @@ public class RobotContainer {
     // SmartDashboard.putData(new ShootCommand());
     // SmartDashboard.putData(new LoaderCommand());
     // SmartDashboard.putData(new CannonTestCommand());
+
+    
   }
   /**
    * Use this method to define your button->command mappings.  Buttons can be created by
@@ -93,7 +123,34 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    
+    deployIntakeSwitch.whenInactive(new DeployIntakeCommand());
+    deployIntakeSwitch.whenActive(new RetractIntakeCommand());
+
+
+    runIntakeButton.whenActive(new RunIntakeCommand());
+    stopIntakeButton.whenActive(new StopIntakeCommand());
+
+    shooterAngleSwitch.whenActive(new CannonAngleCommand(true));
+    shooterAngleSwitch.whenInactive(new CannonAngleCommand(false));
+
+    ejectFrontButton.whenActive(new EjectFrontCommand());
+    ejectBackButton.whenActive(new EjectBackCommand());
+    pukeButton.whenActive(new PukeCommand());
+
+    ShootCommand shootCommand = new ShootCommand();
+    runShooterButton.whenActive(shootCommand);
+    stopShooterButton.cancelWhenActive(shootCommand);
+    // runShooterButton.whenActive(new StopCommand()); //TODO: Change to actual Run Shooter Command
+
+    fixedClimbDeployButton.whenActive(new DeployStaticClimberCommad());
+    fixedClimbButton.whenActive(new RetractStaticClimberCommand());
+    // fixedClimbeGrabButton.whenActive(new StopCommand());  //TODO: Change to actual Grab Command
+    // fixedClimberReleaseButton.whenActive();
+
+    // rotatingClimbDeployButton.whenActive(new StopCommand());  //TODO: Change to actual Rotating Deploy Command
+    // rotatingClimbUndeployButton.whenActive(new StopCommand());  //TODO: Change to actual Rotating Undeploy Command
+    // rotatingClimbeGrabButton.whenActive(new StopCommand());   //TODO: Change to actual Rotating Grab Command
+    // rotatingClimberReleaseButton.whenActive();
   }
 
 }

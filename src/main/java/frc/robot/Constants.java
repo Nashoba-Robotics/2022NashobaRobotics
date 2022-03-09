@@ -234,4 +234,30 @@ public final class Constants {
         public static final double BALL_HEIGHT = 0;
     }
 
+    //Declares the Button Ports    IMPORTANT: Buttons start at index 1
+    public static class Buttons{
+        public static final double DEBOUNCE_VALUE = 0.1;
+
+        //Ports for Intake
+        public static final int DEPLOY_INTAKE = 10;
+        public static final int RUN_INTAKE = 1;
+        public static final int STOP_INTAKE = 2;
+
+        //Ports for Ejecting balls of the wrong color
+        public static final int EJECT_FRONT = 4;
+        public static final int EJECT_BACK = 6;
+        public static final int PUKE = 3;
+
+        //Ports for Shooting
+        public static final int SHOOT = 9;
+        public static final int RUN_SHOOTER = 8;
+        public static final int STOP_SHOOTER = 5;
+        public static final int SHOOTER_ANGLE = 7;
+
+        //Ports for static climber
+        public static final int FIXED_CLIMB_DEPLOY = 3;
+        public static final int FIXED_CLIMB = 2;
+        public static final int FIXED_CLIMB_GRAB = 1;
+        public static final int FIXED_CLIMB_RELEASE = 11;
+    }
 }

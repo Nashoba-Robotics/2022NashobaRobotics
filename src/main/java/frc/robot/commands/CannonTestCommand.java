@@ -16,25 +16,25 @@ public class CannonTestCommand extends CommandBase {
 
     @Override
     public void initialize(){
-        // SmartDashboard.putNumber("Cannon Speed", 0);
-        // SmartDashboard.putNumber("Solenoid", 0);
+        SmartDashboard.putNumber("Cannon Speed", 0);
+        SmartDashboard.putNumber("Solenoid", 0);
     }
 
     @Override
     public void execute(){
 
-       // double speed = SmartDashboard.getNumber("Cannon Speed", 0);
-        //CannonSubsystem.getInstance().set(speed);
-        // CannonSubsystem.getInstance().setSolenoid(SmartDashboard.getNumber("Solenoid", 0) != 0);
+       double speed = SmartDashboard.getNumber("Cannon Speed", 0);
+        CannonSubsystem.getInstance().set(speed);
+        CannonSubsystem.getInstance().setSolenoid(SmartDashboard.getNumber("Solenoid", 0) != 0);
         
         
 
-        // SmartDashboard.putNumber("topCurrent", CannonSubsystem.getInstance().getCurrentTop());
-        // SmartDashboard.putNumber("bottomCurrent", CannonSubsystem.getInstance().getCurretBottom());
-        // CannonSubsystem.getInstance().setProportional(SmartDashboard.getNumber("Cannon P", 0));
-        // CannonSubsystem.getInstance().setIntegral(SmartDashboard.getNumber("Cannon I", 0));
-        // CannonSubsystem.getInstance().setDerivative(SmartDashboard.getNumber("Cannon D", 0));
-        // CannonSubsystem.getInstance().setKF(SmartDashboard.getNumber("Cannon kF", 0));
+        SmartDashboard.putNumber("topCurrent", CannonSubsystem.getInstance().getCurrentTop());
+        SmartDashboard.putNumber("bottomCurrent", CannonSubsystem.getInstance().getCurretBottom());
+        CannonSubsystem.getInstance().setProportional(SmartDashboard.getNumber("Cannon P", 0));
+        CannonSubsystem.getInstance().setIntegral(SmartDashboard.getNumber("Cannon I", 0));
+        CannonSubsystem.getInstance().setDerivative(SmartDashboard.getNumber("Cannon D", 0));
+        CannonSubsystem.getInstance().setKF(SmartDashboard.getNumber("Cannon kF", 0));
     }
 
     @Override
