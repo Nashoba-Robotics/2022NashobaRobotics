@@ -102,7 +102,10 @@ public class Robot extends TimedRobot {
     autoFinished = false;
     currCommandIndex = 0;
 
-    auto = Constants.DriveTrain.SIMPLE_AUTO; //Change here to switch the auto routine
+    auto = Constants.DriveTrain.AUTONOMOUS_ROUTINE; //Change here to switch the auto routine
+    
+    Command autoCommand = DriveSubsystem.getInstance().getAutonomousCommand("");
+    autoCommand.schedule();
   }
 
   /**
@@ -114,34 +117,34 @@ public class Robot extends TimedRobot {
   //Otherwise it will run the specified command
   @Override
   public void autonomousPeriodic() {
-    if(!autoFinished
-    && (currCommand == null 
-    || !CommandScheduler.getInstance().isScheduled(currCommand)
-    && currCommandIndex < auto.length)){
-      String[] parts = auto[currCommandIndex].split(" ");
-      switch(parts[0]) {  
-        case "path":
-          currCommand = DriveSubsystem.getInstance().getAutonomousCommand(parts[1]);
-          break;
-        case "shoot":
-          currCommand = new AutoShootCommand();
-          break;
-        case "intake":
-          currCommand = new AutoIntakeCommand();
-          break;
-        case "stopIntake":
-          currCommand = new AutoStopIntakeCommand();
-          break;
-        case "shoot60":
-          currCommand = new AutoShoot60Command();
-          break;
-      } 
-      currCommand.schedule();
-      currCommandIndex++;
-    } else if(currCommandIndex >= auto.length){
-      currCommandIndex = 0;
-      autoFinished = true;
-    }
+    // if(!autoFinished
+    // && (currCommand == null 
+    // || !CommandScheduler.getInstance().isScheduled(currCommand)
+    // && currCommandIndex < auto.length)){
+    //   String[] parts = auto[currCommandIndex].split(" ");
+    //   switch(parts[0]) {  
+    //     case "path":
+    //       currCommand = DriveSubsystem.getInstance().getAutonomousCommand(parts[1]);
+    //       break;
+    //     case "shoot":
+    //       currCommand = new AutoShootCommand();
+    //       break;
+    //     case "intake":
+    //       currCommand = new AutoIntakeCommand();
+    //       break;
+    //     case "stopIntake":
+    //       currCommand = new AutoStopIntakeCommand();
+    //       break;
+    //     case "shoot60":
+    //       currCommand = new AutoShoot60Command();
+    //       break;
+    //   } 
+    //   currCommand.schedule();
+    //   currCommandIndex++;
+    // } else if(currCommandIndex >= auto.length){
+    //   currCommandIndex = 0;
+    //   autoFinished = true;
+    // }
   }
   
   

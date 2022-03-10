@@ -65,8 +65,8 @@ public class JoystickDriveCommand extends CommandBase {
         //     Constants.MAX_ACCEL, Constants.MAX_DECEL, 
         //     Constants.MAX_ACCEL_TURN, Constants.MAX_DECEL_TURN);
 
-        //SmartDashboard.putNumber("distanceX", 0);
-        ///SmartDashboard.putNumber("distanceY", 0);
+        SmartDashboard.putNumber("distanceX", 0);
+        SmartDashboard.putNumber("distanceY", 0);
     }
 
     @Override
@@ -141,9 +141,11 @@ public class JoystickDriveCommand extends CommandBase {
         // SmartDashboard.putNumber("Right Motor Real Velocity", DriveSubsystem.getInstance().getRightMotorVelocity());
         // SmartDashboard.putNumber("leftCurrent", DriveSubsystem.getInstance().getLeftMotorCurrent());
         // SmartDashboard.putNumber("rightCurrent", DriveSubsystem.getInstance().getRightMotorCurrent());
-        // SmartDashboard.putNumber("distanceX", DriveSubsystem.getInstance().getTranslationX());
-        // SmartDashboard.putNumber("distanceY", DriveSubsystem.getInstance().getTranslationY());
-        // SmartDashboard.putNumber("robotAngle", DriveSubsystem.getInstance().getAngle());
+        SmartDashboard.putNumber("distanceX", DriveSubsystem.getInstance().getTranslationX());
+        SmartDashboard.putNumber("distanceY", DriveSubsystem.getInstance().getTranslationY());
+        SmartDashboard.putNumber("robotAngle", DriveSubsystem.getInstance().getAngle());
+        SmartDashboard.putNumber("leftDistance", DriveSubsystem.getInstance().getDistanceLeft());
+        SmartDashboard.putNumber("rightDistance", DriveSubsystem.getInstance().getDistanceRight());
     }
 
     // Called once the command ends or is interrupted.

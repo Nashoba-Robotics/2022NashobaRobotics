@@ -23,22 +23,6 @@ public final class Constants {
     public static final int[] LEFT_MOTOR_PORTS = {0, 1, 2}; // {12,13,14};
     public static final int[] RIGHT_MOTOR_PORTS = {3, 4, 5}; //{1,2,3};
 
-    //the ports on the CAN bus for the left and right motors respectively on 2019 robot
-    //index 0 should be master motor
-    public static final int[] LEFT_MOTOR_PORTS_2019 = {0, 1, 2};
-    public static final int[] RIGHT_MOTOR_PORTS_2019 = {12, 13, 14};
-    public static final int HDRIVEPORT = 11;
-
-    public static final int[] GRABBER_MOTOR_PORTS = {};
-    public static final int[] INTAKE_MOTOR_PORTS = {};
-    public static final int[] LOADER_MOTOR_PORTS = {};
-    
-    //port numbers for various moving parts
-    public static final int TURRET_PORT = 4;
-    public static final int WINCH_PORT = 18;
-
-    public static final int[] SOLENOID_CHANNELS = {};
-
     public static final int LEFT_JOYSTICK_PORT = 1;
     public static final int RIGHT_JOYSTICK_PORT = 0;
     public static final int LEFT_OPERATOR_JOYSTICK_PORT =  4;
@@ -58,16 +42,8 @@ public final class Constants {
     public static final int SLOT_IDX = 0;
     public static final int PID_IDX = 0;
 
-    public static final double VELOCITY_MULTIPLIER = 21136; //m/s
-    // Arbitrary feed forward
-	public static final double AFF = 0.051;
+    public static final double VELOCITY_MULTIPLIER = 22598; //m/s
 
-    // motor constants
-    public static final double KP = 0.0457;
-    //public static final double KP = 0.12;
-    public static final double KI = 0.001;
-    public static final double KD = 0.001;
-    public static final double KF = 0.0457; //0.0457
     public static final double RADIUS_DRIVE_MULTIPLIER = 1.8;   //1.3
     
     //Tip control parameters
@@ -100,11 +76,6 @@ public final class Constants {
     public static final double HYBRID_DRIVE_SENSITIVITY = 0.420;  //https://www.desmos.com/calculator/ojy5ecv8fd  (CHECK GRAPH BEFORE CHANGING CONSTANTS)
 
     public static final String PHOTONVISION_NICKNAME = "cargodetectooor"; // TODO
-
-    public static final double WHEEL_GAP = Units.inches2Meters(25.5); // distance between wheels in meters
-    public static final double WHEEL_RADIUS = Units.inches2Meters(2); // wheel radius in meters
-
-    public static final double DRIVE_GEAR_RATIO = 6.666667;
 
     public static final double FALCON_NU = 2048; // the number of native units per rotation
 
@@ -166,18 +137,35 @@ public final class Constants {
     }
 
     public static class DriveTrain {
-        public static final double KS = 0.6613;
-        public static final double KV = 1.8944;
-        public static final double KA = 0.29877;
+        public static final double KS = 0.61405;
+        public static final double KV = 2.143;
+        public static final double KA = 0.25872;
 
-        public static final double MAX_VELOCITY = 1; //max speed in meters per second
-        public static final double MAX_ACCELERATION = 0.25; //max speed in meters per second per second
+        public static final double KF_LEFT = 0.046222;
+        public static final double P_LEFT = 0.127; //0.0635;
+        public static final double I_LEFT = 0;
+        public static final double D_LEFT = 0;
+        public static final double AFF_LEFT = 0.05047;
 
-        public static final double AUTO_B = 2; // We don't know what these do but DO NOT CHANGE
-        public static final double AUTO_ZETA = 0.7;
+        public static final double KF_RIGHT = 0.046135;
+        public static final double P_RIGHT = 0.1128; //0.0564;
+        public static final double I_RIGHT = 0;
+        public static final double D_RIGHT = 0;
+        public static final double AFF_RIGHT = 0.05117;
+
+        public static final double WHEEL_GAP = Units.inches2Meters(25.5); // distance between wheels in meters
+        public static final double WHEEL_RADIUS = Units.inches2Meters(2); // wheel radius in meters
+
+        public static final double DRIVE_GEAR_RATIO = 20.0 / 3;
+
+        public static final double MAX_VELOCITY = 2; 
+        public static final double MAX_ACCELERATION = 0.7;
+
+        public static final double AUTO_B = 2; 
+        public static final double AUTO_ZETA = 1;
 
         public static final String[] AUTONOMOUS_ROUTINE = {
-            "path paths/VroomVroom.wpilib.json"
+            "path paths/Unnamed.wpilib.json"
             // "path paths/Unnamed_Forward.wpilib.json",
             // "intake",
             // "path paths/Unnamed.wpilib.json",
