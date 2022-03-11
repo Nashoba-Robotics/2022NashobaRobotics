@@ -85,10 +85,14 @@ public class ClimberSubsystem extends SubsystemBase {
 
         motorLeft1.configForwardSoftLimitEnable(true);
         motorLeft1.configForwardSoftLimitThreshold(145500);
+        motorLeft1.configReverseSoftLimitEnable(true);
+        motorLeft1.configReverseSoftLimitThreshold(3000);
         motorLeft2.configForwardSoftLimitEnable(true);
         motorLeft2.configForwardSoftLimitThreshold(170000);
         motorRight1.configForwardSoftLimitEnable(true);
         motorRight1.configForwardSoftLimitThreshold(145500);
+        motorRight1.configReverseSoftLimitEnable(true);
+        motorRight1.configReverseSoftLimitThreshold(3000);
         motorRight2.configForwardSoftLimitEnable(true);
         motorRight2.configForwardSoftLimitThreshold(170000);
 
@@ -146,6 +150,16 @@ public class ClimberSubsystem extends SubsystemBase {
         motor.configVelocityMeasurementWindow(8, 30);
 
         motor.setNeutralMode(NeutralMode.Brake);
+    }
+
+    public void enableLowerSoftLimits(){
+        motorLeft1.configReverseSoftLimitEnable(true);
+        motorRight1.configReverseSoftLimitEnable(true);
+    }
+
+    public void disableLowerSoftLimits(){
+        motorLeft1.configReverseSoftLimitEnable(false);
+        motorRight1.configReverseSoftLimitEnable(false);
     }
 
     public void setSpeed(ClimberMotor motor, double speed) {

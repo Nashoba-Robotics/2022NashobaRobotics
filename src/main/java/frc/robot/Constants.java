@@ -20,8 +20,8 @@ import frc.robot.lib.Units;
 public final class Constants {
     //the ports on the CAN bus for the left and right motors respectively on 2020 robot
     //index 0 should be master motor
-    public static final int[] LEFT_MOTOR_PORTS = {0, 1, 2}; // {12,13,14};
-    public static final int[] RIGHT_MOTOR_PORTS = {3, 4, 5}; //{1,2,3};
+    public static final int[] LEFT_MOTOR_PORTS = {3, 4, 5}; // {12,13,14};
+    public static final int[] RIGHT_MOTOR_PORTS = {0, 1, 2}; //{1,2,3};
 
     public static final int LEFT_JOYSTICK_PORT = 1;
     public static final int RIGHT_JOYSTICK_PORT = 0;
@@ -141,25 +141,25 @@ public final class Constants {
         public static final double KV = 2.143;
         public static final double KA = 0.25872;
 
-        public static final double KF_LEFT = 0.046222;
-        public static final double P_LEFT = 0.127; //0.0635;
-        public static final double I_LEFT = 0;
-        public static final double D_LEFT = 0;
-        public static final double AFF_LEFT = 0.05047;
-
-        public static final double KF_RIGHT = 0.046135;
-        public static final double P_RIGHT = 0.1128; //0.0564;
+        public static final double KF_RIGHT = 0.046222;
+        public static final double P_RIGHT = 0.127; 
         public static final double I_RIGHT = 0;
         public static final double D_RIGHT = 0;
-        public static final double AFF_RIGHT = 0.05117;
+        public static final double AFF_RIGHT = 0.05047;
+
+        public static final double KF_LEFT = 0.046135;
+        public static final double P_LEFT = 0.1128;
+        public static final double I_LEFT = 0;
+        public static final double D_LEFT = 0;
+        public static final double AFF_LEFT = 0.05117;
 
         public static final double WHEEL_GAP = Units.inches2Meters(25.5); // distance between wheels in meters
-        public static final double WHEEL_RADIUS = Units.inches2Meters(2); // wheel radius in meters
+        public static final double WHEEL_RADIUS = Units.inches2Meters(3.7584288/2); // 3.7286 wheel radius in meters
 
         public static final double DRIVE_GEAR_RATIO = 20.0 / 3;
-
-        public static final double MAX_VELOCITY = 2; 
-        public static final double MAX_ACCELERATION = 0.7;
+        //Ben will not notice the other 5 comments I have left in the Constants class
+        public static final double MAX_VELOCITY = 5; 
+        public static final double MAX_ACCELERATION = 2;
 
         public static final double AUTO_B = 2; 
         public static final double AUTO_ZETA = 1;

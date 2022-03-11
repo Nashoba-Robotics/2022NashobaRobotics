@@ -17,6 +17,7 @@ import frc.robot.commands.AutoIntakeCommand;
 import frc.robot.commands.AutoShoot60Command;
 import frc.robot.commands.AutoShootCommand;
 import frc.robot.commands.AutoStopIntakeCommand;
+import frc.robot.commands.IntakePracticeCommand;
 import frc.robot.commands.JoystickDriveCommand;
 import frc.robot.commands.ZeroClimberCommand;
 import frc.robot.subsystems.DriveSubsystem;
@@ -88,6 +89,7 @@ public class Robot extends TimedRobot {
     IntakeSubsystem.getInstance().stop();
     IntakeSubsystem.getInstance().retractIntake();  //Undeploys the intake when the robot is disabled
     DriveSubsystem.getInstance().changeNeutralMode(NeutralMode.Coast);  //Sets the robot into "coast" mode after robot is diabled -> Easier to move
+    System.out.println("TRISTAN!!!!!!!!!!!!");
   }
 
   @Override
@@ -175,6 +177,8 @@ public class Robot extends TimedRobot {
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
+    CommandScheduler.getInstance().setDefaultCommand(DriveSubsystem.getInstance(), new JoystickDriveCommand());
+    CommandScheduler.getInstance().schedule(new IntakePracticeCommand());
   }
 
   /**

@@ -28,6 +28,8 @@ public class ZeroClimberCommand extends CommandBase {
 
         leftHitMillis = Long.MAX_VALUE/2;
         rightHitMillis = Long.MAX_VALUE/2;
+
+        ClimberSubsystem.getInstance().disableLowerSoftLimits();
     }
 
     @Override
@@ -92,6 +94,7 @@ public class ZeroClimberCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
+        ClimberSubsystem.getInstance().enableLowerSoftLimits();
         ClimberSubsystem.getInstance().stop();
     }
 }

@@ -40,7 +40,7 @@ public class JoystickSubsystem extends SubsystemBase {
         return -leftJoystick.getY(); //Has to be negative when joystick inputs are reveresed
     }
     public double getRightX() {
-        return -rightJoystick.getX();
+        return rightJoystick.getX();
     }
     public double getRightY() {
         return -rightJoystick.getY(); //Has to be negative when joystick inputs are reveresed

@@ -21,7 +21,7 @@ public class RunIntakeCommand extends CommandBase {
         boolean ball1 = IntakeSubsystem.getInstance().getSensor2(); 
         boolean ball2 = ball1 && IntakeSubsystem.getInstance().getSensor1(); 
         IntakeSubsystem.getInstance()
-            .setIntake(ball2 ? 0 : 0.6)
+            .setIntake(ball2 ? 0 : 0.75)
             .setGrabber(ball2 ? 0 : 0.4)
             .setLoader(ball1 ? 0 : 0.15);
         int balls = (ball1 ? 1 : 0) + (ball2 ? 1 : 0);

@@ -15,6 +15,7 @@ import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 
+import edu.wpi.first.hal.ConstantsJNI;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -61,7 +62,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     //x-speed, y-speed, rate of rotation
     private final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(Constants.DriveTrain.WHEEL_GAP);
-    private Rotation2d gyroAngle = Rotation2d.fromDegrees(-GyroSubsystem.getInstance().getAbsoluteAngle());
+    private Rotation2d gyroAngle = Rotation2d.fromDegrees(GyroSubsystem.getInstance().getAbsoluteAngle());
     private DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(gyroAngle);
     private Pose2d pose;
 
@@ -76,13 +77,14 @@ public class DriveSubsystem extends SubsystemBase {
     private TalonFX leftMotor, leftMotor2, leftMotor3;
     private TalonFX rightMotor, rightMotor2, rightMotor3;
 
-    // @Override
     @Override
     public void periodic() {
-        if(RobotState.isAutonomous()){
-            gyroAngle = Rotation2d.fromDegrees(-GyroSubsystem.getInstance().getAbsoluteAngle());
+        //if(RobotState.isAutonomous()){
+            gyroAngle = Rotation2d.fromDegrees(GyroSubsystem.getInstance().getAbsoluteAngle());
             pose = odometry.update(gyroAngle, NU2Meters(leftMotor.getSelectedSensorPosition(Constants.PID_IDX)), NU2Meters(rightMotor.getSelectedSensorPosition()));
-        }
+        //}
+
+        SmartDashboard.putNumber("angle", odometry.getPoseMeters().getRotation().getRadians());
     }
 
     public void setMetersPerSecond(double left, double right){
@@ -90,15 +92,19 @@ public class DriveSubsystem extends SubsystemBase {
         rightMotor.set(ControlMode.Velocity, meters2NUSpeed(right));
     }
 
-    //I see everything
+    public void setVolts(double left, double right){
+        leftMotor.set(ControlMode.PercentOutput, left / 12);
+        rightMotor.set(ControlMode.PercentOutput, right / 12);
+    }
+
     public void resetOdometry(Pose2d pose){
         leftMotor.setSelectedSensorPosition(0, Constants.PID_IDX, Constants.TIMEOUT);
         rightMotor.setSelectedSensorPosition(0, Constants.PID_IDX, Constants.TIMEOUT);
-        odometry.resetPosition(pose, Rotation2d.fromDegrees(GyroSubsystem.getInstance().getAbsoluteAngle()));
+        odometry.resetPosition(pose, Rotation2d.fromDegrees(-GyroSubsystem.getInstance().getAbsoluteAngle()));
     }
 
     public DifferentialDriveWheelSpeeds getWheelSpeeds(){
-        return new DifferentialDriveWheelSpeeds(NU2Meters(getLeftMotorVelocity() / 10), NU2Meters(getRightMotorVelocity() / 10));
+        return new DifferentialDriveWheelSpeeds(NU2Meters(getLeftMotorVelocity() * 10), NU2Meters(getRightMotorVelocity() * 10));
     }
 
     public double getAngle(){
@@ -118,11 +124,12 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public double NU2Meters(double nu){
-        double rate = Constants.TAU * (Constants.DriveTrain.WHEEL_RADIUS / Constants.DriveTrain.DRIVE_GEAR_RATIO) / Constants.FALCON_NU;
+        double rate = (Constants.TAU * Constants.DriveTrain.WHEEL_RADIUS) / (Constants.DriveTrain.DRIVE_GEAR_RATIO * Constants.FALCON_NU);
         return nu * rate;
     }
 
     public double meters2NUSpeed(double metersPerSecond){
+        //return (metersPerSecond * (Constants.DriveTrain.DRIVE_GEAR_RATIO * Constants.FALCON_NU) / (Constants.TAU * Constants.DriveTrain.WHEEL_RADIUS)) / 10;
         return metersPerSecond * 3.133 * Constants.DriveTrain.DRIVE_GEAR_RATIO * Constants.FALCON_NU / 10;
     }
 
@@ -148,11 +155,11 @@ public class DriveSubsystem extends SubsystemBase {
         rightMotor3.follow(rightMotor);
         brakeMode = false;
 
-        leftMotor.setSelectedSensorPosition(0, Constants.PID_IDX, Constants.TIMEOUT);
-        rightMotor.setSelectedSensorPosition(0, Constants.PID_IDX, Constants.TIMEOUT);
-
         configureMotor(rightMotor);
         configureMotor(leftMotor);
+
+        leftMotor.setSelectedSensorPosition(0, Constants.PID_IDX, Constants.TIMEOUT);
+        rightMotor.setSelectedSensorPosition(0, Constants.PID_IDX, Constants.TIMEOUT);
 
         rightMotor.config_kF(Constants.SLOT_IDX, Constants.DriveTrain.KF_RIGHT, Constants.TIMEOUT);
 		rightMotor.config_kP(Constants.SLOT_IDX, Constants.DriveTrain.P_RIGHT, Constants.TIMEOUT);
@@ -164,12 +171,12 @@ public class DriveSubsystem extends SubsystemBase {
 		leftMotor.config_kI(Constants.SLOT_IDX, Constants.DriveTrain.I_LEFT, Constants.TIMEOUT);
         leftMotor.config_kD(Constants.SLOT_IDX, Constants.DriveTrain.D_LEFT, Constants.TIMEOUT);
         
-        rightMotor.setInverted(InvertType.InvertMotorOutput);
-        rightMotor2.setInverted(InvertType.FollowMaster);
-        rightMotor3.setInverted(InvertType.FollowMaster);
-        leftMotor.setInverted(InvertType.None);
+        leftMotor.setInverted(InvertType.InvertMotorOutput);
         leftMotor2.setInverted(InvertType.FollowMaster);
         leftMotor3.setInverted(InvertType.FollowMaster);
+        rightMotor.setInverted(InvertType.None);
+        rightMotor2.setInverted(InvertType.FollowMaster);
+        rightMotor3.setInverted(InvertType.FollowMaster);
 
         // Set the name of the subsystem in smart dashboard
         SendableRegistry.setName(this, "Drive");
@@ -212,7 +219,7 @@ public class DriveSubsystem extends SubsystemBase {
     public void changeBrakeMode(){
         brakeMode = !brakeMode;
     }
-    //I also know where you live
+
     public boolean getBrakeMode(){
         return brakeMode;
     }
@@ -262,7 +269,7 @@ public class DriveSubsystem extends SubsystemBase {
         }
         
     }
-    //Hee hee
+
     //takes input, speed, in form of percent (-1 through 1). Sets the speed of the left motor
     public void setLeftMotorSpeed(double speed){
         TalonFXControlMode controlMode = TalonFXControlMode.Velocity;
@@ -344,7 +351,7 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public double getPositionRight(){
-        return -rightMotor.getSelectedSensorPosition(Constants.PID_IDX);
+        return rightMotor.getSelectedSensorPosition(Constants.PID_IDX);
     }
 
     public double getDistanceLeft(){
@@ -353,25 +360,6 @@ public class DriveSubsystem extends SubsystemBase {
 
     public double getDistanceRight(){
         return NU2Meters(getPositionRight());
-    }
-
-    public void setDistance(double meters) {
-        double lPos = getPositionLeft() + 
-        (Constants.FALCON_NU * meters) /
-        (Constants.TAU * (Constants.DriveTrain.WHEEL_RADIUS / Constants.DriveTrain.DRIVE_GEAR_RATIO));
-        
-        double rPos = getPositionRight() +
-        (Constants.FALCON_NU * meters) /
-        (Constants.TAU * (Constants.DriveTrain.WHEEL_RADIUS / Constants.DriveTrain.DRIVE_GEAR_RATIO));
-
-        leftMotor.configMotionAcceleration(Constants.DriveTrain.MAX_ACCELERATION);
-        leftMotor.configMotionCruiseVelocity(Constants.DriveTrain.MAX_VELOCITY);
-
-        rightMotor.configMotionAcceleration(Constants.DriveTrain.MAX_ACCELERATION);
-        rightMotor.configMotionCruiseVelocity(Constants.DriveTrain.MAX_VELOCITY);
-
-        leftMotor.set(ControlMode.MotionMagic, lPos);
-        rightMotor.set(ControlMode.MotionMagic, rPos);
     }
 
     public Command getAutonomousCommand(String trajectoryJSON){
@@ -404,9 +392,13 @@ public class DriveSubsystem extends SubsystemBase {
         Trajectory trajectory =
         TrajectoryGenerator.generateTrajectory(
           new Pose2d(0, 0, new Rotation2d(0)), //starting position
-          List.of(new Translation2d(4, 0)), //nodes for robot to travel to
-          new Pose2d(4, 0, new Rotation2d(0)), //finishing position
+          List.of(), //nodes for robot to travel to
+          new Pose2d(2, 2, new Rotation2d(Constants.TAU / 4)), //finishing position
           config);
+
+        GyroSubsystem.getInstance().zeroHeading();
+
+        DriveSubsystem.getInstance().resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(GyroSubsystem.getInstance().getAbsoluteAngle())));
 
         RamseteCommand ramseteCommand =
             new RamseteCommand(

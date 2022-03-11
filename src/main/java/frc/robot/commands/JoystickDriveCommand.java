@@ -144,8 +144,8 @@ public class JoystickDriveCommand extends CommandBase {
         SmartDashboard.putNumber("distanceX", DriveSubsystem.getInstance().getTranslationX());
         SmartDashboard.putNumber("distanceY", DriveSubsystem.getInstance().getTranslationY());
         SmartDashboard.putNumber("robotAngle", DriveSubsystem.getInstance().getAngle());
-        SmartDashboard.putNumber("leftDistance", DriveSubsystem.getInstance().getDistanceLeft());
-        SmartDashboard.putNumber("rightDistance", DriveSubsystem.getInstance().getDistanceRight());
+        SmartDashboard.putNumber("rightDistance", DriveSubsystem.getInstance().getDistanceLeft());
+        SmartDashboard.putNumber("leftDistance", DriveSubsystem.getInstance().getDistanceRight());
     }
 
     // Called once the command ends or is interrupted.
