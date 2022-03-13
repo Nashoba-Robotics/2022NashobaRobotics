@@ -43,11 +43,14 @@ public class ColorSensorCommand extends CommandBase{
   private final Color kBlueTarget = new Color(0.26, 0.47, 0.27);
   private final Color kRedTarget = new Color(0.35, 0.45, 0.214);
   private final Color kNoneTarget = new Color(0.3,0.47,0.2);
+  private double red;
+  private double blue;
+  private double green;
 
     public void initialize(){
         m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
         m_chooser.addOption("My Auto", kCustomAuto);
-        SmartDashboard.putData("Auto choices", m_chooser);
+        //SmartDashboard.putData("Auto choices", m_chooser);
 
         m_colorMatcher.addColorMatch(kBlueTarget);
         m_colorMatcher.addColorMatch(kRedTarget);

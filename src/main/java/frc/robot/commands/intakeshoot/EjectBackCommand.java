@@ -1,12 +1,18 @@
 package frc.robot.commands.intakeshoot;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.CannonSubsystem;
+import frc.robot.subsystems.GrabberSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LoaderSubsystem;
 
 public class EjectBackCommand extends CommandBase {
     public EjectBackCommand() {
+        
         addRequirements(IntakeSubsystem.getInstance());
+        addRequirements(GrabberSubsystem.getInstance());
+        addRequirements(LoaderSubsystem.getInstance());
         addRequirements(CannonSubsystem.getInstance());
     }
 
@@ -16,11 +22,10 @@ public class EjectBackCommand extends CommandBase {
 
     @Override
     public void execute() { 
-        boolean sensor2 = IntakeSubsystem.getInstance().getSensor2();
-        IntakeSubsystem.getInstance()
-            .setIntake(0)
-            .setGrabber(0)
-            .setLoader(sensor2 ? 0.2 : 0);
+        boolean sensor2 = RobotContainer.getSensor2();
+        IntakeSubsystem.getInstance().set(0);
+        GrabberSubsystem.getInstance().set(0);
+        LoaderSubsystem.getInstance().set(sensor2 ? 0.2 : 0);
         CannonSubsystem.getInstance().set(0.1);
     }
 

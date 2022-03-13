@@ -7,21 +7,33 @@
 
 package frc.robot;
 
+import javax.sound.midi.SysexMessage;
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.Limelight;
 import frc.robot.commands.AutoIntakeCommand;
-import frc.robot.commands.AutoShoot60Command;
+import frc.robot.commands.AutoRoutineCommandGroup;
 import frc.robot.commands.AutoShootCommand;
 import frc.robot.commands.AutoStopIntakeCommand;
 import frc.robot.commands.IntakePracticeCommand;
 import frc.robot.commands.JoystickDriveCommand;
 import frc.robot.commands.ZeroClimberCommand;
+import frc.robot.commands.autoroutines.TwoBallAuto;
+import frc.robot.subsystems.CannonSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.GyroSubsystem;
+import frc.robot.subsystems.IntakeSolenoidSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LimelightSubsystem;
+import frc.robot.subsystems.CannonSubsystem.Angle;
 import frc.robot.subsystems.DriveSubsystem.DriveMode;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PowerDistribution;
@@ -40,11 +52,6 @@ public class Robot extends TimedRobot {
   Compressor compressor;
   PneumaticHub ph = new PneumaticHub();
 
-  private Command currCommand;
-  private int currCommandIndex = 0;
-  private boolean autoFinished = false;
-  private String[] auto;
-
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -57,11 +64,17 @@ public class Robot extends TimedRobot {
     
     pdh = new PowerDistribution();
     pdh.setSwitchableChannel(true);
+
+    LimelightSubsystem.getInstance().setShooterLed(1);
+    LimelightSubsystem.getInstance().setIntakeLed(1);
+
     // compressor = new Compressor(1, PneumaticsModuleType.REVPH);
     // compressor.enableDigital();
     ph.enableCompressorAnalog(100, 120);
     CommandScheduler.getInstance().setDefaultCommand(DriveSubsystem.getInstance(), new JoystickDriveCommand());
   }
+
+  long lastMillis = System.currentTimeMillis();
 
   /**
    * This function is called every robot packet, no matter the mode. Use this for items like
@@ -77,6 +90,12 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+
+    long millis = System.currentTimeMillis();
+    long diff = millis - lastMillis;
+    lastMillis = millis;
+
+    SmartDashboard.putNumber("Loop time", diff);
   }
 
   /**
@@ -87,9 +106,11 @@ public class Robot extends TimedRobot {
     DriveSubsystem.getInstance().setDriveMode(DriveMode.VELOCITY);
     DriveSubsystem.getInstance().setSpeed(0, 0);
     IntakeSubsystem.getInstance().stop();
-    IntakeSubsystem.getInstance().retractIntake();  //Undeploys the intake when the robot is disabled
+    IntakeSolenoidSubsystem.getInstance().retract();  //Undeploys the intake when the robot is disabled
+    CannonSubsystem.getInstance().setAngle(Angle.EIGHTY);
     DriveSubsystem.getInstance().changeNeutralMode(NeutralMode.Coast);  //Sets the robot into "coast" mode after robot is diabled -> Easier to move
-    System.out.println("TRISTAN!!!!!!!!!!!!");
+    LimelightSubsystem.getInstance().setIntakeLed(1);
+    LimelightSubsystem.getInstance().setShooterLed(1);
   }
 
   @Override
@@ -101,12 +122,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    autoFinished = false;
-    currCommandIndex = 0;
-
-    auto = Constants.DriveTrain.AUTONOMOUS_ROUTINE; //Change here to switch the auto routine
-    
-    Command autoCommand = DriveSubsystem.getInstance().getAutonomousCommand("");
+    LimelightSubsystem.getInstance().setIntakeLed(3);
+    LimelightSubsystem.getInstance().setShooterLed(3);
+    Command autoCommand = new TwoBallAuto();
     autoCommand.schedule();
   }
 
@@ -119,34 +137,7 @@ public class Robot extends TimedRobot {
   //Otherwise it will run the specified command
   @Override
   public void autonomousPeriodic() {
-    // if(!autoFinished
-    // && (currCommand == null 
-    // || !CommandScheduler.getInstance().isScheduled(currCommand)
-    // && currCommandIndex < auto.length)){
-    //   String[] parts = auto[currCommandIndex].split(" ");
-    //   switch(parts[0]) {  
-    //     case "path":
-    //       currCommand = DriveSubsystem.getInstance().getAutonomousCommand(parts[1]);
-    //       break;
-    //     case "shoot":
-    //       currCommand = new AutoShootCommand();
-    //       break;
-    //     case "intake":
-    //       currCommand = new AutoIntakeCommand();
-    //       break;
-    //     case "stopIntake":
-    //       currCommand = new AutoStopIntakeCommand();
-    //       break;
-    //     case "shoot60":
-    //       currCommand = new AutoShoot60Command();
-    //       break;
-    //   } 
-    //   currCommand.schedule();
-    //   currCommandIndex++;
-    // } else if(currCommandIndex >= auto.length){
-    //   currCommandIndex = 0;
-    //   autoFinished = true;
-    // }
+    
   }
   
   
@@ -160,8 +151,14 @@ public class Robot extends TimedRobot {
     // this line or comment it out.
     CommandScheduler.getInstance().cancelAll();
 
+    LimelightSubsystem.getInstance().setIntakeLed(3);
+    LimelightSubsystem.getInstance().setShooterLed(3);
+
+    GyroSubsystem.getInstance().zeroHeading();
+    DriveSubsystem.getInstance().resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(GyroSubsystem.getInstance().getAbsoluteAngle())));
+
     //Zeroes the climbers when teleop starts
-    CommandScheduler.getInstance().schedule(new ZeroClimberCommand());
+    //CommandScheduler.getInstance().schedule(new ZeroClimberCommand());
   }
 
   /**

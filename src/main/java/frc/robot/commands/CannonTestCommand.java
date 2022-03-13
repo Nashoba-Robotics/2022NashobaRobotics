@@ -1,5 +1,7 @@
 package frc.robot.commands;
 
+import javax.swing.plaf.basic.BasicMenuUI.ChangeHandler;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.Cannon;
@@ -25,16 +27,16 @@ public class CannonTestCommand extends CommandBase {
 
        double speed = SmartDashboard.getNumber("Cannon Speed", 0);
         CannonSubsystem.getInstance().set(speed);
-        CannonSubsystem.getInstance().setSolenoid(SmartDashboard.getNumber("Solenoid", 0) != 0);
+        CannonSubsystem.getInstance().setAngle(SmartDashboard.getNumber("Solenoid", 0) != 0 ? CannonSubsystem.Angle.SIXTY : CannonSubsystem.Angle.EIGHTY);
         
         
 
         SmartDashboard.putNumber("topCurrent", CannonSubsystem.getInstance().getCurrentTop());
         SmartDashboard.putNumber("bottomCurrent", CannonSubsystem.getInstance().getCurretBottom());
-        CannonSubsystem.getInstance().setProportional(SmartDashboard.getNumber("Cannon P", 0));
-        CannonSubsystem.getInstance().setIntegral(SmartDashboard.getNumber("Cannon I", 0));
-        CannonSubsystem.getInstance().setDerivative(SmartDashboard.getNumber("Cannon D", 0));
-        CannonSubsystem.getInstance().setKF(SmartDashboard.getNumber("Cannon kF", 0));
+        // CannonSubsystem.getInstance().setProportional(SmartDashboard.getNumber("Cannon P", 0));
+        // CannonSubsystem.getInstance().setIntegral(SmartDashboard.getNumber("Cannon I", 0));
+        // CannonSubsystem.getInstance().setDerivative(SmartDashboard.getNumber("Cannon D", 0));
+        // CannonSubsystem.getInstance().setKF(SmartDashboard.getNumber("Cannon kF", 0));
     }
 
     @Override

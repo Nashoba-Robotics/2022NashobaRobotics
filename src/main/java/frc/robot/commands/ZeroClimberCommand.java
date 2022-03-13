@@ -44,11 +44,11 @@ public class ZeroClimberCommand extends CommandBase {
         double leftPos = ClimberSubsystem.getInstance().getPosition(ClimberMotor.LEFT_1);
         double rightPos = ClimberSubsystem.getInstance().getPosition(ClimberMotor.RIGHT_1);
 
-        if(leftFinished && leftPos >= 0 && leftPos <= 800){
+        if(leftFinished && !ClimberSubsystem.getInstance().getLimitSwitch(ClimberMotor.RIGHT_1) /*leftPos >= 0 && leftPos <= 800*/){
             ClimberSubsystem.getInstance().setSpeed(ClimberMotor.LEFT_1, 0);
             leftEnd = true;
         }
-        if(rightFinished && rightPos >= 0 && rightPos <= 800){
+        if(rightFinished && !ClimberSubsystem.getInstance().getLimitSwitch(ClimberMotor.RIGHT_1) /*rightPos >= 0 && rightPos <= 800*/){
             ClimberSubsystem.getInstance().setSpeed(ClimberMotor.RIGHT_1, 0);
             rightEnd = true;
         }

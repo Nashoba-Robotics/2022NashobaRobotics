@@ -12,6 +12,7 @@ import frc.robot.lib.JoystickValues;
 import frc.robot.lib.MotorValues;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.JoystickSubsystem;
+import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.DriveSubsystem.DriveMode;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -29,9 +30,6 @@ public class JoystickDriveCommand extends CommandBase {
     private boolean lastPressedLeft;
     private boolean buttonPressedRight;
     private boolean lastPressedRight;
-
-    private boolean lastPressedbottom;
-    private boolean bottomPressed;
 
     // The left and right joystick triggers
     private JoystickButton joystickTriggerLeft;
@@ -67,6 +65,7 @@ public class JoystickDriveCommand extends CommandBase {
 
         SmartDashboard.putNumber("distanceX", 0);
         SmartDashboard.putNumber("distanceY", 0);
+        SmartDashboard.putNumber("Limelight Angle", 0);
     }
 
     @Override
@@ -88,14 +87,6 @@ public class JoystickDriveCommand extends CommandBase {
         buttonPressedRight = joystickTriggerRight.get();
         if(buttonPressedRight && lastPressedRight != buttonPressedRight) DriveSubsystem.getInstance().changeBrakeMode();
         lastPressedRight = buttonPressedRight;
-
-        bottomPressed = joystickBottomRight.get();
-        if(bottomPressed && lastPressedbottom != bottomPressed){
-            CommandScheduler.getInstance().schedule(RobotContainer.hybridDriveCommand);
-            CommandScheduler.getInstance().run();
-            CommandScheduler.getInstance().cancel(RobotContainer.joystickDriveCommand);
-        }
-        lastPressedbottom = bottomPressed;
         
         // Show whether break mode is enabled
         SmartDashboard.putBoolean("Brake Mode", DriveSubsystem.getInstance().getBrakeMode());
@@ -146,6 +137,7 @@ public class JoystickDriveCommand extends CommandBase {
         SmartDashboard.putNumber("robotAngle", DriveSubsystem.getInstance().getAngle());
         SmartDashboard.putNumber("rightDistance", DriveSubsystem.getInstance().getDistanceLeft());
         SmartDashboard.putNumber("leftDistance", DriveSubsystem.getInstance().getDistanceRight());
+        SmartDashboard.putNumber("Limelight Angle", LimelightSubsystem.getInstance().getShooterTy());
     }
 
     // Called once the command ends or is interrupted.

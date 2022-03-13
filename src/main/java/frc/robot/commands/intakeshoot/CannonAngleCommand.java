@@ -9,18 +9,19 @@ import frc.robot.subsystems.CannonSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.JoystickSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
+import frc.robot.subsystems.CannonSubsystem.Angle;
 
 public class CannonAngleCommand extends CommandBase {
-    boolean eightydeg;
+    Angle angle;
 
-    public CannonAngleCommand(boolean eightydeg) {
-        this.eightydeg = eightydeg;
+    public CannonAngleCommand(Angle angle) {
+        this.angle = angle;
     }
 
     @Override
     public void initialize() {
-        CannonSubsystem.getInstance().setSolenoid(!eightydeg);
-        SmartDashboard.putBoolean("Shooter Solenoid 80?", eightydeg);
+        CannonSubsystem.getInstance().setAngle(angle);
+        SmartDashboard.putBoolean("Shooter Solenoid 80?", angle == Angle.EIGHTY);
     }
 
     @Override

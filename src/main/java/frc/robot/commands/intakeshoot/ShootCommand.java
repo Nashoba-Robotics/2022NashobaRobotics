@@ -1,14 +1,18 @@
 package frc.robot.commands.intakeshoot;
 
+import edu.wpi.first.hal.simulation.RoboRioDataJNI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.Intake;
 import frc.robot.subsystems.CannonSubsystem;
+import frc.robot.subsystems.GrabberSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.JoystickSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
+import frc.robot.subsystems.LoaderSubsystem;
 
 public class ShootCommand extends CommandBase {
     long startMillis;
@@ -16,14 +20,19 @@ public class ShootCommand extends CommandBase {
     boolean on;
     boolean finished;
 
+    double lastValidTy = 0;
+
     Trigger shoot = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), 9).debounce(0.1);
     Trigger angle = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), 7).debounce(0.1);
 
     public ShootCommand() {
         addRequirements(IntakeSubsystem.getInstance());
+        addRequirements(GrabberSubsystem.getInstance());
+        addRequirements(LoaderSubsystem.getInstance());
         addRequirements(CannonSubsystem.getInstance());
         addRequirements(LimelightSubsystem.getInstance());
     }
+
 
     @Override
     public void initialize() {
@@ -48,9 +57,11 @@ public class ShootCommand extends CommandBase {
         double cannonSpeed;
 
         if(!eightydeg) {
-            double ty = LimelightSubsystem.getInstance().getShooterTy();
+            if(LimelightSubsystem.getInstance().shooterValidTarget()){
+                lastValidTy = LimelightSubsystem.getInstance().getShooterTy();
+            }
             // cannonSpeed = 0.445 - 0.00527 * ty; // limelight math
-            cannonSpeed = 0.47 - 0.00527 * ty; // limelight math
+            cannonSpeed = 0.47 - 0.00527 * lastValidTy; // limelight math
         } else {
             cannonSpeed = 0.5; // close up shot
         }
@@ -59,15 +70,14 @@ public class ShootCommand extends CommandBase {
 
         if(on) {
             double loaderSpeed = eightydeg ? 0.4 : 0.5;
-            IntakeSubsystem.getInstance()
-                .setIntake(0)
-                .setGrabber(0)
-                .setLoader(loaderSpeed);
+            IntakeSubsystem.getInstance().set(0);
+            GrabberSubsystem.getInstance().set(0);
+            LoaderSubsystem.getInstance().set(loaderSpeed);
         } else {
             IntakeSubsystem.getInstance().stop();
         }
 
-        if(millis < stopMillis && !IntakeSubsystem.getInstance().getSensor1() && !IntakeSubsystem.getInstance().getSensor2()) {
+        if(millis < stopMillis && !RobotContainer.getSensor1() && !RobotContainer.getSensor2()) {
             stopMillis = millis;
         }
 

@@ -18,6 +18,7 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Joystick;
@@ -28,9 +29,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.HybridDriveCommand;
 import frc.robot.commands.IntakePracticeCommand;
-import frc.robot.commands.AutoDriveCommand;
+import frc.robot.commands.AutoAimCommand;
 import frc.robot.commands.JoystickDriveCommand;
 import frc.robot.commands.LimelightCommand;
 import frc.robot.commands.LoaderCommand;
@@ -39,16 +39,16 @@ import frc.robot.commands.SensorTestCommand;
 import frc.robot.commands.StopCommand;
 import frc.robot.commands.ZeroClimberCommand;
 import frc.robot.commands.intakeshoot.CannonAngleCommand;
-import frc.robot.commands.intakeshoot.DeployIntakeCommand;
+import frc.robot.commands.intakeshoot.ActuateIntakeCommand;
 import frc.robot.commands.intakeshoot.EjectBackCommand;
 import frc.robot.commands.intakeshoot.EjectFrontCommand;
 import frc.robot.commands.intakeshoot.PukeCommand;
-import frc.robot.commands.intakeshoot.RetractIntakeCommand;
 import frc.robot.commands.intakeshoot.RunIntakeCommand;
 import frc.robot.commands.intakeshoot.ShootCommand;
 import frc.robot.commands.intakeshoot.StopIntakeCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.JoystickSubsystem;
+import frc.robot.subsystems.CannonSubsystem.Angle;
 import frc.robot.commands.CannonTestCommand;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.DeployStaticClimberCommad;
@@ -56,7 +56,6 @@ import frc.robot.commands.DeployStaticClimberCommad;
 public class RobotContainer {
 
   public static JoystickDriveCommand joystickDriveCommand = new JoystickDriveCommand();
-  public static HybridDriveCommand hybridDriveCommand = new HybridDriveCommand();
 
   //Initializes all buttons used for commands
   //Takes in a joystick and the button poer
@@ -85,6 +84,15 @@ public class RobotContainer {
   // Trigger rotatingClimbeGrabButton = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), 4).debounce(Constants.Buttons.DEBOUNCE_VALUE);
   // Trigger rotatingClimberReleaseButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 5).debounce(Constants.Buttons.DEBOUNCE_VALUE);
 
+  static DigitalInput ballSensor1 = new DigitalInput(Constants.Intake.DIO_SENSOR_1);
+  static DigitalInput ballSensor2 = new DigitalInput(Constants.Intake.DIO_SENSOR_2);
+
+  public static boolean getSensor1() {
+    return !ballSensor1.get();
+  }
+  public static boolean getSensor2() {
+    return !ballSensor2.get();
+  }
 
   public RobotContainer() {
     configureButtonBindings();
@@ -105,17 +113,17 @@ public class RobotContainer {
     // SmartDashboard.putData(new ZeroClimberCommand());
     // SmartDashboard.putData(new LoaderCommand());
     // SmartDashboard.putData(new TalonTestCommand());
-    // SmartDashboard.putData(new DeployIntakeCommand());
-    // SmartDashboard.putData(new RetractIntakeCommand());
+    SmartDashboard.putData(new ActuateIntakeCommand(true));
+    SmartDashboard.putData(new ActuateIntakeCommand(false));
     // SmartDashboard.putData(new EjectFrontCommand());
     // SmartDashboard.putData(new EjectBackCommand());
     // SmartDashboard.putData(new PukeCommand());
     // SmartDashboard.putData(new RunIntakeCommand());
     // SmartDashboard.putData(new ShootCommand());
-    // SmartDashboard.putData(new LoaderCommand());
-    // SmartDashboard.putData(new CannonTestCommand());
+    SmartDashboard.putData(new LoaderCommand());
+    SmartDashboard.putData(new CannonTestCommand());
     SmartDashboard.putData(new IntakePracticeCommand());
-    
+    SmartDashboard.putData(new AutoAimCommand());
   }
   /**
    * Use this method to define your button->command mappings.  Buttons can be created by
@@ -124,15 +132,15 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    deployIntakeSwitch.whenInactive(new DeployIntakeCommand());
-    deployIntakeSwitch.whenActive(new RetractIntakeCommand());
+    deployIntakeSwitch.whenInactive(new ActuateIntakeCommand(true));
+    deployIntakeSwitch.whenActive(new ActuateIntakeCommand(false));
 
 
     runIntakeButton.whenActive(new RunIntakeCommand());
     stopIntakeButton.whenActive(new StopIntakeCommand());
 
-    shooterAngleSwitch.whenActive(new CannonAngleCommand(true));
-    shooterAngleSwitch.whenInactive(new CannonAngleCommand(false));
+    shooterAngleSwitch.whenActive(new CannonAngleCommand(Angle.EIGHTY));
+    shooterAngleSwitch.whenInactive(new CannonAngleCommand(Angle.SIXTY));
 
     ejectFrontButton.whenActive(new EjectFrontCommand());
     ejectBackButton.whenActive(new EjectBackCommand());

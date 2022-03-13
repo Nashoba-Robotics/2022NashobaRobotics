@@ -81,10 +81,14 @@ public class DriveSubsystem extends SubsystemBase {
     public void periodic() {
         //if(RobotState.isAutonomous()){
             gyroAngle = Rotation2d.fromDegrees(GyroSubsystem.getInstance().getAbsoluteAngle());
-            pose = odometry.update(gyroAngle, NU2Meters(leftMotor.getSelectedSensorPosition(Constants.PID_IDX)), NU2Meters(rightMotor.getSelectedSensorPosition()));
+            pose = odometry.update(gyroAngle,
+            NU2Meters(leftMotor.getSelectedSensorPosition()),
+            NU2Meters(rightMotor.getSelectedSensorPosition()));
         //}
 
         SmartDashboard.putNumber("angle", odometry.getPoseMeters().getRotation().getRadians());
+        SmartDashboard.putNumber("l NU", getPositionLeft());
+        SmartDashboard.putNumber("r NU", getPositionRight());
     }
 
     public void setMetersPerSecond(double left, double right){
@@ -129,8 +133,8 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public double meters2NUSpeed(double metersPerSecond){
-        //return (metersPerSecond * (Constants.DriveTrain.DRIVE_GEAR_RATIO * Constants.FALCON_NU) / (Constants.TAU * Constants.DriveTrain.WHEEL_RADIUS)) / 10;
-        return metersPerSecond * 3.133 * Constants.DriveTrain.DRIVE_GEAR_RATIO * Constants.FALCON_NU / 10;
+        return (metersPerSecond * (Constants.DriveTrain.DRIVE_GEAR_RATIO * Constants.FALCON_NU) / (Constants.TAU * Constants.DriveTrain.WHEEL_RADIUS)) / 10;
+        //return metersPerSecond * 3.133 * Constants.DriveTrain.DRIVE_GEAR_RATIO * Constants.FALCON_NU / 10;
     }
 
     private Rotation2d toRotation2d(double angle){
@@ -214,6 +218,7 @@ public class DriveSubsystem extends SubsystemBase {
         motor.setNeutralMode(NeutralMode.Coast);
 
         motor.setSelectedSensorPosition(0, Constants.PID_IDX, Constants.TIMEOUT);
+        motor.clearStickyFaults();
     }
 
     public void changeBrakeMode(){
@@ -371,7 +376,7 @@ public class DriveSubsystem extends SubsystemBase {
           DriveSubsystem.getInstance().getKinematics(),
           10);
     
-        //uncomment if setting points manually
+        // uncomment if setting points manually
         TrajectoryConfig config =
         new TrajectoryConfig(
           Constants.DriveTrain.MAX_VELOCITY,
@@ -379,22 +384,22 @@ public class DriveSubsystem extends SubsystemBase {
           .setKinematics(DriveSubsystem.getInstance().getKinematics())
           .addConstraint(autoVoltageConstraint);
     
-    //     Trajectory trajectory = new Trajectory();
+        Trajectory trajectory = new Trajectory();
     
-    //     try {
-    //       Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-    //       trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-    //    } catch (IOException e) {
-    //       DriverStation.reportError("Unable to open trajectory: \n \n \n \n", e.getStackTrace());
-    //    }
+        try {
+          Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+          trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+       } catch (IOException e) {
+          DriverStation.reportError("Unable to open trajectory: \n \n \n \n", e.getStackTrace());
+       }
     
         //uncomment if adding points manually
-        Trajectory trajectory =
-        TrajectoryGenerator.generateTrajectory(
-          new Pose2d(0, 0, new Rotation2d(0)), //starting position
-          List.of(), //nodes for robot to travel to
-          new Pose2d(2, 2, new Rotation2d(Constants.TAU / 4)), //finishing position
-          config);
+        // Trajectory trajectory =
+        // TrajectoryGenerator.generateTrajectory(
+        //   new Pose2d(0, 0, new Rotation2d(0)), //starting position
+        //   List.of(), //nodes for robot to travel to
+        //   new Pose2d(5, 0, new Rotation2d(0)), //finishing position
+        //   config);
 
         GyroSubsystem.getInstance().zeroHeading();
 

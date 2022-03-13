@@ -26,6 +26,10 @@ public class CannonSubsystem extends SubsystemBase{
 
     private Solenoid solenoid;
 
+    public enum Angle {
+        SIXTY, EIGHTY
+    }
+
     public static CannonSubsystem getInstance(){
         if(singleton == null){
             singleton = new CannonSubsystem();
@@ -111,8 +115,9 @@ public class CannonSubsystem extends SubsystemBase{
         bottomCannonMotor.config_kF(Constants.SLOT_IDX, kF, Constants.TIMEOUT);
     }
 
-    public void setSolenoid(boolean on) {
-        solenoid.set(on);
+    public void setAngle(Angle angle) {
+        boolean on = angle == Angle.SIXTY;
+        if(solenoid.get() != on) solenoid.set(on);
     }
 }
 

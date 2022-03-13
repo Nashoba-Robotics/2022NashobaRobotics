@@ -33,8 +33,8 @@ public final class Constants {
     public static final double MOVEMENT_SENSITIVITY = 3;   //Shaping sensitivity for the forward/backwards Joystick
     public static final double ARCADE_TURNING_SENSITIVITY = 2;   //Shaping sensitivity for the arcade drive turning movement
     public static final double RADIUS_TURNING_SENSITIVITY = 2;
-    public static final double MOVEMENT_DEADZONE = 0.08; // Range of joystick values that are treated like zero
-    public static final double TURNING_DEADZONE = 0.05; // Range of joystick values that are treated like zero
+    public static final double MOVEMENT_DEADZONE = 0.15; // Range of joystick values that are treated like zero
+    public static final double TURNING_DEADZONE = 0.08; // Range of joystick values that are treated like zero (was at 0.05)
     public static final double DECELERATION_DEADZONE = 0.00;
 
     // timeout in ms
@@ -65,20 +65,13 @@ public final class Constants {
 
     //Use this as the superior circle constant
     public static final double TAU = 2 * Math.PI;
-    
-    //Change the autonomous settings
-    public static final double MIN_DISTANCE_AUTO = 1; //Tells at what distance from the target where the robot will stop
-    public static final double SPEED_THRESHOLD_AUTO = 2.5; //The distance from the targget at which the robot will not go at moveSpeedAuto; past threshold, speed will be proportional to distance of target
-    public static final double MOVE_SPEED_AUTO = 0.2; //The max move speed during autonomous
 
     //HybridDrive constants
-    public static final double HYBRID_DRIVE_DEADZONE = 3.0/27;  //Hybrid Drive Graph:
-    public static final double HYBRID_DRIVE_SENSITIVITY = 0.420;  //https://www.desmos.com/calculator/ojy5ecv8fd  (CHECK GRAPH BEFORE CHANGING CONSTANTS)
-
-    public static final String PHOTONVISION_NICKNAME = "cargodetectooor"; // TODO
+    public static final double AUTO_AIM_DEADZONE = 3.0/27;  //Hybrid Drive Graph:
+    public static final double AUTO_AIM_SENSITIVITY = 0.420;  //https://www.desmos.com/calculator/mzhsaym2ef  (CHECK GRAPH BEFORE CHANGING CONSTANTS)
 
     public static final double FALCON_NU = 2048; // the number of native units per rotation
-
+// deez nutz
     public static class Cannon {
         public static final int PORT_TOP = 9;
         public static final int PORT_BOTTOM = 10;
@@ -116,22 +109,22 @@ public final class Constants {
         public static final int RETRACT_POS = 4000; // TODO change
 
         public static final double KF = 0.051; 
-
+        //To be or not to be that is the question
         public static final double KP_1 = 0.025;
         public static final double KI_1 = 0;
         public static final double KD_1 = 0;
-        
+        //Whether tis nobler in the mind to suffer the slings and arrows of outrageous fortunes
         public static final double KP_2 = 0.025;
         public static final double KI_2 = 0;
         public static final double KD_2 = 0;
-
+        //Or to take arms against a sea of sorrows and by opposing end them
         public static final double KP_ROTATE = 0;
         public static final double KI_ROTATE = 0;
         public static final double KD_ROTATE = 0;
-
+        //To die to sleep no more and by a sleep to say we end the thousand natural shocks that flesh is heir to
         public static final double DEPLOY_ACCELERATION = 100000;
         public static final double DEPLOY_CRUISE_VELOCITY = 17500;
-
+        //Tis a consummation devoutly to be wished
         public static final double RETRACT_ACCELERATION = 200000;
         public static final double RETRACT_CRUISE_VELOCITY = 10000;
     }
@@ -140,7 +133,7 @@ public final class Constants {
         public static final double KS = 0.61405;
         public static final double KV = 2.143;
         public static final double KA = 0.25872;
-
+        //To die to sleep to sleep perchance to dream Aye there's the rub
         public static final double KF_RIGHT = 0.046222;
         public static final double P_RIGHT = 0.127; 
         public static final double I_RIGHT = 0;
@@ -151,53 +144,18 @@ public final class Constants {
         public static final double P_LEFT = 0.1128;
         public static final double I_LEFT = 0;
         public static final double D_LEFT = 0;
-        public static final double AFF_LEFT = 0.05117;
+        public static final double AFF_LEFT = 0.05117;  //Benjamin Edward Alex Jones Shapiro Brooder estaba aqui
 
-        public static final double WHEEL_GAP = Units.inches2Meters(25.5); // distance between wheels in meters
-        public static final double WHEEL_RADIUS = Units.inches2Meters(3.7584288/2); // 3.7286 wheel radius in meters
+        public static final double WHEEL_GAP = 0.85162; // distance between wheels in meters
+        public static final double WHEEL_RADIUS = Units.inches2Meters(1.86270739); // wheel radius in meters
 
         public static final double DRIVE_GEAR_RATIO = 20.0 / 3;
         //Ben will not notice the other 5 comments I have left in the Constants class
-        public static final double MAX_VELOCITY = 5; 
-        public static final double MAX_ACCELERATION = 2;
+        public static final double MAX_VELOCITY = 2; 
+        public static final double MAX_ACCELERATION = 0.75;
 
         public static final double AUTO_B = 2; 
         public static final double AUTO_ZETA = 1;
-
-        public static final String[] AUTONOMOUS_ROUTINE = {
-            "path paths/Unnamed.wpilib.json"
-            // "path paths/Unnamed_Forward.wpilib.json",
-            // "intake",
-            // "path paths/Unnamed.wpilib.json",
-            // "stopIntake"
-        };
-
-        public static final String[] RIGHT_RIGHT_TARMAC_TO_RIGHT_BALL_BLUE = {
-            "path paths/RightRightTarmacToRightBall-Blue.wpilib.json",
-            "intake",
-            "path paths/RightRightTarmacToRightBall-Blue-Return.wpilib.json",
-            "stopIntake"
-        };
-
-        public static final String[] SIMPLE_AUTO = {
-            "shoot",
-           "path paths/UniversalShootGoBack.wpilib.json"
-        };
-
-        public static final String[] SIMPLE_TWO_BALL_AUTO = {
-            "shoot",
-            "intake",
-            "path paths/TwoBallToBall.wpilib.json",
-            "stopIntake",
-            "path paths/TwoBallFromBallToShoot.wpilib.json",
-            "shoot60"
-        };
-
-        public static final String[] SHOOT_ONLY_AUTO = {
-            "shoot"
-        };
-
-        public static final double MAX_AUTO_TURN = 0.25;
     }
 
     public static class Intake {
@@ -210,9 +168,15 @@ public final class Constants {
 
         public static final int INTAKE_SOLENOID_PORT = 8;
         public static final int INTAKE_SOLENOID_PORT2 = 15;
+
+        public static final double INTAKE_SPEED = 0.75;
+        public static final double GRABBER_SPEED = 0.4;
+        public static final double LOADER_SPEED = 0.15;
     }
 
     public static class Limelight {
+        public static final int REFLECTIVE_TAPE_PIPELINE = 0;
+
         public static final double SHOOTER_HEIGHT = 0;
         public static final double SHOOTER_ANGLE = 44 * TAU/360;
         public static final double HUB_HEIGHT = 0;
@@ -224,7 +188,7 @@ public final class Constants {
 
     //Declares the Button Ports    IMPORTANT: Buttons start at index 1
     public static class Buttons{
-        public static final double DEBOUNCE_VALUE = 0.1;
+        public static final double DEBOUNCE_VALUE = 0;
 
         //Ports for Intake
         public static final int DEPLOY_INTAKE = 10;
