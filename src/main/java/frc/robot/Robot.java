@@ -15,17 +15,18 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.Limelight;
 import frc.robot.commands.AutoIntakeCommand;
-import frc.robot.commands.AutoRoutineCommandGroup;
 import frc.robot.commands.AutoShootCommand;
 import frc.robot.commands.AutoStopIntakeCommand;
 import frc.robot.commands.IntakePracticeCommand;
 import frc.robot.commands.JoystickDriveCommand;
 import frc.robot.commands.ZeroClimberCommand;
+import frc.robot.commands.autoroutines.ThreeBallAuto;
 import frc.robot.commands.autoroutines.TwoBallAuto;
 import frc.robot.subsystems.CannonSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -51,6 +52,7 @@ public class Robot extends TimedRobot {
   private PowerDistribution pdh;
   Compressor compressor;
   PneumaticHub ph = new PneumaticHub();
+  SendableChooser<Command> autoChooser;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -72,6 +74,11 @@ public class Robot extends TimedRobot {
     // compressor.enableDigital();
     ph.enableCompressorAnalog(100, 120);
     CommandScheduler.getInstance().setDefaultCommand(DriveSubsystem.getInstance(), new JoystickDriveCommand());
+
+    autoChooser = new SendableChooser<>();
+    autoChooser.setDefaultOption("Two Ball Auto", new TwoBallAuto());
+    autoChooser.addOption("Three Ball Auto", new ThreeBallAuto());
+    SmartDashboard.putData("Auto", autoChooser);
   }
 
   long lastMillis = System.currentTimeMillis();
@@ -124,8 +131,8 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     LimelightSubsystem.getInstance().setIntakeLed(3);
     LimelightSubsystem.getInstance().setShooterLed(3);
-    Command autoCommand = new TwoBallAuto();
-    autoCommand.schedule();
+    Command autoCommand = new ThreeBallAuto();
+    autoChooser.getSelected().schedule();
   }
 
   /**
@@ -153,9 +160,6 @@ public class Robot extends TimedRobot {
 
     LimelightSubsystem.getInstance().setIntakeLed(3);
     LimelightSubsystem.getInstance().setShooterLed(3);
-
-    GyroSubsystem.getInstance().zeroHeading();
-    DriveSubsystem.getInstance().resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(GyroSubsystem.getInstance().getAbsoluteAngle())));
 
     //Zeroes the climbers when teleop starts
     //CommandScheduler.getInstance().schedule(new ZeroClimberCommand());

@@ -34,6 +34,10 @@ public class GyroSubsystem extends SubsystemBase{
         pigeon.setYaw(0);
     }
 
+    public void setAngle(double angle){
+        pigeon.setYaw(angle);
+    }
+
     public double getAbsoluteAngle(){
         return getYawPitchRole()[0] % 360;
     }

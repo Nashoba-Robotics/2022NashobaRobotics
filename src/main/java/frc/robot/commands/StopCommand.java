@@ -9,12 +9,17 @@ public class StopCommand extends CommandBase {
     public StopCommand() {
         addRequirements(DriveSubsystem.getInstance());
     }
+    @Override
+    public void initialize() {
+        DriveSubsystem.getInstance().setDriveMode(DriveMode.PERCENT);
+        DriveSubsystem.getInstance().setSpeed(0);
+    }
     public void execute(){
         DriveSubsystem.getInstance().setDriveMode(DriveMode.PERCENT);
         DriveSubsystem.getInstance().setSpeed(0);
     }
     @Override
     public boolean isFinished() {
-        return false;
+        return true;
     } 
 }

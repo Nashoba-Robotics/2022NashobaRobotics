@@ -1,5 +1,7 @@
 package frc.robot.commands.autoroutines;
 
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.AutoShootCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -13,20 +15,24 @@ import frc.robot.commands.intakeshoot.RunIntakeCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.CannonSubsystem.Angle;
 
-public class TwoBallAuto extends SequentialCommandGroup {
-    public TwoBallAuto(){
-        addRequirements(DriveSubsystem.getInstance());
-        
+public class ThreeBallAuto extends SequentialCommandGroup{
+    public ThreeBallAuto(){
         addCommands(
             new AutoShootCommand(Angle.EIGHTY),
             new ActuateIntakeCommand(true),
             new WaitCommand(0.5),
             new ParallelCommandGroup(
-                new RunIntakeCommand().until(RobotContainer::getSensor2).withTimeout(3),
-                new PathFollowCommand("paths/TwoBallToBall.wpilib.json")
+                new RunIntakeCommand().until(() -> {
+                    return RobotContainer.getSensor1() && RobotContainer.getSensor2();
+                }
+                ).withTimeout(5),
+                new SequentialCommandGroup(
+                    new PathFollowCommand("paths/ThreeBallToBall.wpilib.json"),
+                    new PathFollowCommand("paths/ThreeBallToSecondBall.wpilib.json")  
+                )
             ),
             new ActuateIntakeCommand(false),
-            new PathFollowCommand("paths/TwoBallFromBallToShoot.wpilib.json"),
+            new PathFollowCommand("paths/ThreeBallToShoot.wpilib.json"),
             new AutoAimCommand(),
             new AutoShootCommand(Angle.SIXTY)
         );

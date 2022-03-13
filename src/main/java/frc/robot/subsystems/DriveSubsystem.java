@@ -89,6 +89,8 @@ public class DriveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("angle", odometry.getPoseMeters().getRotation().getRadians());
         SmartDashboard.putNumber("l NU", getPositionLeft());
         SmartDashboard.putNumber("r NU", getPositionRight());
+        SmartDashboard.putNumber("Odometry X", getPose().getX());
+        SmartDashboard.putNumber("Odometry Y", getPose().getY());
     }
 
     public void setMetersPerSecond(double left, double right){
@@ -102,9 +104,11 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public void resetOdometry(Pose2d pose){
+        GyroSubsystem.getInstance().zeroHeading();
         leftMotor.setSelectedSensorPosition(0, Constants.PID_IDX, Constants.TIMEOUT);
         rightMotor.setSelectedSensorPosition(0, Constants.PID_IDX, Constants.TIMEOUT);
-        odometry.resetPosition(pose, Rotation2d.fromDegrees(-GyroSubsystem.getInstance().getAbsoluteAngle()));
+        odometry.resetPosition(pose, Rotation2d.fromDegrees(GyroSubsystem.getInstance().getAbsoluteAngle()));
+        SmartDashboard.putNumber("Reset Angle", odometry.getPoseMeters().getRotation().getRadians());
     }
 
     public DifferentialDriveWheelSpeeds getWheelSpeeds(){
@@ -367,56 +371,57 @@ public class DriveSubsystem extends SubsystemBase {
         return NU2Meters(getPositionRight());
     }
 
-    public Command getAutonomousCommand(String trajectoryJSON){
+    // public Command getAutonomousCommand(String trajectoryJSON){
 
-        //uncomment if setting points manually
-        DifferentialDriveVoltageConstraint autoVoltageConstraint = 
-        new DifferentialDriveVoltageConstraint(
-          new SimpleMotorFeedforward(Constants.DriveTrain.KS, Constants.DriveTrain.KV, Constants.DriveTrain.KA),
-          DriveSubsystem.getInstance().getKinematics(),
-          10);
+    //     //uncomment if setting points manually
+    //     DifferentialDriveVoltageConstraint autoVoltageConstraint = 
+    //     new DifferentialDriveVoltageConstraint(
+    //       new SimpleMotorFeedforward(Constants.DriveTrain.KS, Constants.DriveTrain.KV, Constants.DriveTrain.KA),
+    //       DriveSubsystem.getInstance().getKinematics(),
+    //       10);
     
-        // uncomment if setting points manually
-        TrajectoryConfig config =
-        new TrajectoryConfig(
-          Constants.DriveTrain.MAX_VELOCITY,
-          Constants.DriveTrain.MAX_ACCELERATION)
-          .setKinematics(DriveSubsystem.getInstance().getKinematics())
-          .addConstraint(autoVoltageConstraint);
+    //     // uncomment if setting points manually
+    //     TrajectoryConfig config =
+    //     new TrajectoryConfig(
+    //       Constants.DriveTrain.MAX_VELOCITY,
+    //       Constants.DriveTrain.MAX_ACCELERATION)
+    //       .setKinematics(DriveSubsystem.getInstance().getKinematics())
+    //       .addConstraint(autoVoltageConstraint);
     
-        Trajectory trajectory = new Trajectory();
+    //     Trajectory trajectory = new Trajectory();
     
-        try {
-          Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-          trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-       } catch (IOException e) {
-          DriverStation.reportError("Unable to open trajectory: \n \n \n \n", e.getStackTrace());
-       }
+    //     try {
+    //       Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+    //       trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+    //    } catch (IOException e) {
+    //       DriverStation.reportError("Unable to open trajectory: \n \n \n \n", e.getStackTrace());
+    //    }
     
-        //uncomment if adding points manually
-        // Trajectory trajectory =
-        // TrajectoryGenerator.generateTrajectory(
-        //   new Pose2d(0, 0, new Rotation2d(0)), //starting position
-        //   List.of(), //nodes for robot to travel to
-        //   new Pose2d(5, 0, new Rotation2d(0)), //finishing position
-        //   config);
+    //     //uncomment if adding points manually
+    //     // Trajectory trajectory =
+    //     // TrajectoryGenerator.generateTrajectory(
+    //     //   new Pose2d(0, 0, new Rotation2d(0)), //starting position
+    //     //   List.of(), //nodes for robot to travel to
+    //     //   new Pose2d(5, 0, new Rotation2d(0)), //finishing position
+    //     //   config);
 
-        GyroSubsystem.getInstance().zeroHeading();
+    //     //GyroSubsystem.getInstance().zeroHeading();
 
-        DriveSubsystem.getInstance().resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(GyroSubsystem.getInstance().getAbsoluteAngle())));
+    //     //DriveSubsystem.getInstance().resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(GyroSubsystem.getInstance().getAbsoluteAngle())));
 
-        RamseteCommand ramseteCommand =
-            new RamseteCommand(
-                trajectory,
-                DriveSubsystem.getInstance()::getPose,
-                new RamseteController(Constants.DriveTrain.AUTO_B, Constants.DriveTrain.AUTO_ZETA),
-                DriveSubsystem.getInstance().getKinematics(),
-                DriveSubsystem.getInstance()::setMetersPerSecond,
-                DriveSubsystem.getInstance());
+    //     RamseteCommand ramseteCommand =
+    //         new RamseteCommand(
+    //             trajectory,
+    //             DriveSubsystem.getInstance()::getPose,
+    //             new RamseteController(Constants.DriveTrain.AUTO_B, Constants.DriveTrain.AUTO_ZETA),
+    //             DriveSubsystem.getInstance().getKinematics(),
+    //             DriveSubsystem.getInstance()::setMetersPerSecond,
+    //             DriveSubsystem.getInstance());
     
-          DriveSubsystem.getInstance().resetOdometry(trajectory.getInitialPose());
+    //       //DriveSubsystem.getInstance().resetOdometry(trajectory.getInitialPose());
+            
+    //       return ramseteCommand
+    //         .andThen(() -> DriveSubsystem.getInstance().setMetersPerSecond(0, 0));
     
-          return ramseteCommand.andThen(() -> DriveSubsystem.getInstance().setMetersPerSecond(0, 0));
-    
-      }
+    //   }
 }
