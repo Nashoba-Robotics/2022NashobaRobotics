@@ -39,6 +39,10 @@ public class GyroSubsystem extends SubsystemBase{
     }
 
     public double getAbsoluteAngle(){
+        double yaw = getYawPitchRole()[0];
+        if(yaw < 0){
+            return 360 - (Math.abs(yaw) % 360);
+        }
         return getYawPitchRole()[0] % 360;
     }
 

@@ -31,10 +31,10 @@ public class ThreeBallAuto extends SequentialCommandGroup{
                     new PathFollowCommand("paths/ThreeBallToSecondBall.wpilib.json")  
                 )
             ),
-            new ActuateIntakeCommand(false),
-            new PathFollowCommand("paths/ThreeBallToShoot.wpilib.json"),
-            new AutoAimCommand(),
-            new AutoShootCommand(Angle.SIXTY)
+            new ActuateIntakeCommand(false)
+            // new PathFollowCommand("paths/ThreeBallToShoot.wpilib.json"),
+            // new AutoAimCommand(),
+            // new AutoShootCommand(Angle.SIXTY)
         );
     }
 }

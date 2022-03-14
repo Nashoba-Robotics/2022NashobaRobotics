@@ -21,4 +21,8 @@ public class Units {
     public static double inches2Meters(double num){
         return num * 0.0254;
     }
+
+    public static double degrees2Radians(double degrees){
+        return degrees * (Constants.TAU / 360);
+    }
 }

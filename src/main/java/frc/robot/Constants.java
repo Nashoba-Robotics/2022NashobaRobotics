@@ -71,7 +71,10 @@ public final class Constants {
     public static final double AUTO_AIM_SENSITIVITY = 0.420;  //https://www.desmos.com/calculator/mzhsaym2ef  (CHECK GRAPH BEFORE CHANGING CONSTANTS)
 
     public static final double FALCON_NU = 2048; // the number of native units per rotation
-// deez nutz
+
+    public static final double K_CARPET = 0.05;
+    public static final double K_CARPET_BACK = -0.05;
+
     public static class Cannon {
         public static final int PORT_TOP = 9;
         public static final int PORT_BOTTOM = 10;
@@ -147,7 +150,7 @@ public final class Constants {
         public static final double AFF_LEFT = 0.05117;  //Benjamin Edward Alex Jones Shapiro Brooder estaba aqui
 
         public static final double WHEEL_GAP = 0.85162; // distance between wheels in meters
-        public static final double WHEEL_RADIUS = Units.inches2Meters(1.86270739); // wheel radius in meters
+        public static final double WHEEL_RADIUS = Units.inches2Meters(1.97775696); // wheel radius in meters
 
         public static final double DRIVE_GEAR_RATIO = 20.0 / 3;
         //Ben will not notice the other 5 comments I have left in the Constants class

@@ -161,6 +161,9 @@ public class Robot extends TimedRobot {
     LimelightSubsystem.getInstance().setIntakeLed(3);
     LimelightSubsystem.getInstance().setShooterLed(3);
 
+    DriveSubsystem.getInstance().resetOdometryTrue();
+    DriveSubsystem.getInstance().resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
+
     //Zeroes the climbers when teleop starts
     //CommandScheduler.getInstance().schedule(new ZeroClimberCommand());
   }
