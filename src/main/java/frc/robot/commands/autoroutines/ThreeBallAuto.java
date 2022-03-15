@@ -18,20 +18,20 @@ import frc.robot.subsystems.CannonSubsystem.Angle;
 public class ThreeBallAuto extends SequentialCommandGroup{
     public ThreeBallAuto(){
         addCommands(
-            new AutoShootCommand(Angle.EIGHTY),
-            new ActuateIntakeCommand(true),
-            new WaitCommand(0.5),
+            //new AutoShootCommand(Angle.EIGHTY),
+            //new ActuateIntakeCommand(true),
+            //new WaitCommand(0.5),
             new ParallelCommandGroup(
-                new RunIntakeCommand().until(() -> {
-                    return RobotContainer.getSensor1() && RobotContainer.getSensor2();
-                }
+                // new RunIntakeCommand().until(() -> {
+                //     return RobotContainer.getSensor1() && RobotContainer.getSensor2();
+                // }
                 ).withTimeout(5),
                 new SequentialCommandGroup(
                     new PathFollowCommand("paths/ThreeBallToBall.wpilib.json"),
                     new PathFollowCommand("paths/ThreeBallToSecondBall.wpilib.json")  
                 )
-            ),
-            new ActuateIntakeCommand(false)
+            //)
+            //new ActuateIntakeCommand(false)
             // new PathFollowCommand("paths/ThreeBallToShoot.wpilib.json"),
             // new AutoAimCommand(),
             // new AutoShootCommand(Angle.SIXTY)

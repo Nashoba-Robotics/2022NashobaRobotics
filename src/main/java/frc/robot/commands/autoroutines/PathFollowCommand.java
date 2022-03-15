@@ -43,4 +43,22 @@ public class PathFollowCommand extends SequentialCommandGroup{
         new StopCommand()
        );
     }
+
+    public PathFollowCommand(Trajectory trajectory){
+        RamseteCommand ramseteCommand =
+       new RamseteCommand(
+           trajectory,
+           DriveSubsystem.getInstance()::getPose,
+           new RamseteController(Constants.DriveTrain.AUTO_B, Constants.DriveTrain.AUTO_ZETA),
+           DriveSubsystem.getInstance().getKinematics(),
+           DriveSubsystem.getInstance()::setMetersPerSecond,
+           DriveSubsystem.getInstance());
+
+
+       addCommands(
+        new ResetOdometryCommand(trajectory),
+        ramseteCommand,
+        new StopCommand()
+       );
+    }
 }

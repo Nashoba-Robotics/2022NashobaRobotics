@@ -72,8 +72,7 @@ public final class Constants {
 
     public static final double FALCON_NU = 2048; // the number of native units per rotation
 
-    public static final double K_CARPET = 0.05;
-    public static final double K_CARPET_BACK = -0.05;
+    public static final double K_CARPET = 0.055;
 
     public static class Cannon {
         public static final int PORT_TOP = 9;

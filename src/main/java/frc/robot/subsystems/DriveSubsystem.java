@@ -64,7 +64,7 @@ public class DriveSubsystem extends SubsystemBase {
     //x-speed, y-speed, rate of rotation
     private final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(Constants.DriveTrain.WHEEL_GAP);
     private Rotation2d gyroAngle = Rotation2d.fromDegrees(0);
-    private OdometryCarpetCompensator odometry = new OdometryCarpetCompensator(-Constants.TAU / 4, gyroAngle);
+    private OdometryCarpetCompensator odometry = new OdometryCarpetCompensator(6.033, gyroAngle);
     private Pose2d pose;
 
     public static final int VOLTAGE_COMPENSATION_LEVEL = 12;
@@ -96,11 +96,13 @@ public class DriveSubsystem extends SubsystemBase {
                 deltaLeft,
                 deltaRight);
 
-            lastLeftNU = leftMotor.getSelectedSensorPosition();
+            if(true) lastLeftNU = leftMotor.getSelectedSensorPosition();
             lastRightNU = rightMotor.getSelectedSensorPosition();
 
-            SmartDashboard.putNumber("angle", GyroSubsystem.getInstance().getAbsoluteAngle());
-
+            SmartDashboard.putNumber("angle odometry", odometry.getAngle());
+            SmartDashboard.putNumber("angle gyro", GyroSubsystem.getInstance().getAbsoluteAngle());
+            SmartDashboard.putNumber("l meters", odometry.getLeftMeters());
+            SmartDashboard.putNumber("r meters", odometry.getRightMeters());
         }
 
         SmartDashboard.putNumber("l NU", getPositionLeft());
@@ -125,11 +127,11 @@ public class DriveSubsystem extends SubsystemBase {
 
     public void resetOdometry(Pose2d pose){
         GyroSubsystem.getInstance().zeroHeading();
+        lastLeftNU = 0;
+        lastRightNU = 0;
         leftMotor.setSelectedSensorPosition(0, Constants.PID_IDX, Constants.TIMEOUT);
         rightMotor.setSelectedSensorPosition(0, Constants.PID_IDX, Constants.TIMEOUT);
-        lastLeftNU = leftMotor.getSelectedSensorPosition();
-        lastRightNU = rightMotor.getSelectedSensorPosition();
-        odometry.resetPosition(pose, Rotation2d.fromDegrees(GyroSubsystem.getInstance().getAbsoluteAngle()));
+        odometry.resetPos(pose, Rotation2d.fromDegrees(0));
         SmartDashboard.putNumber("Reset Angle", odometry.getPoseMeters().getRotation().getRadians());
         odometryResetFinished = true;
     }

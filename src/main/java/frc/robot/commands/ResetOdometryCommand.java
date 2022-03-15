@@ -12,9 +12,10 @@ public class ResetOdometryCommand extends CommandBase{
     public ResetOdometryCommand(Trajectory trajectory){
         this.trajectory = trajectory;
     }
+    
     @Override
     public void execute() {
-        GyroSubsystem.getInstance();
+        DriveSubsystem.getInstance().resetOdometryTrue();   //Ben's code is *insert bad word here
         DriveSubsystem.getInstance().resetOdometry(trajectory.getInitialPose());
     }
 

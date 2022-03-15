@@ -34,6 +34,8 @@ import frc.robot.commands.AutoAimCommand;
 import frc.robot.commands.JoystickDriveCommand;
 import frc.robot.commands.LimelightCommand;
 import frc.robot.commands.LoaderCommand;
+import frc.robot.commands.ManualZeroOdometryCommand;
+import frc.robot.commands.ResetOdometryCommand;
 import frc.robot.commands.RetractStaticClimberCommand;
 import frc.robot.commands.SensorTestCommand;
 import frc.robot.commands.StopCommand;
@@ -124,6 +126,7 @@ public class RobotContainer {
     SmartDashboard.putData(new CannonTestCommand());
     SmartDashboard.putData(new IntakePracticeCommand());
     SmartDashboard.putData(new AutoAimCommand());
+    SmartDashboard.putData(new ManualZeroOdometryCommand());
   }
   /**
    * Use this method to define your button->command mappings.  Buttons can be created by

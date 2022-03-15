@@ -26,6 +26,7 @@ import frc.robot.commands.AutoStopIntakeCommand;
 import frc.robot.commands.IntakePracticeCommand;
 import frc.robot.commands.JoystickDriveCommand;
 import frc.robot.commands.ZeroClimberCommand;
+import frc.robot.commands.autoroutines.TestPathCommand;
 import frc.robot.commands.autoroutines.ThreeBallAuto;
 import frc.robot.commands.autoroutines.TwoBallAuto;
 import frc.robot.subsystems.CannonSubsystem;
@@ -78,6 +79,7 @@ public class Robot extends TimedRobot {
     autoChooser = new SendableChooser<>();
     autoChooser.setDefaultOption("Two Ball Auto", new TwoBallAuto());
     autoChooser.addOption("Three Ball Auto", new ThreeBallAuto());
+    autoChooser.addOption("Test Auto", new TestPathCommand());
     SmartDashboard.putData("Auto", autoChooser);
   }
 
@@ -131,7 +133,10 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     LimelightSubsystem.getInstance().setIntakeLed(3);
     LimelightSubsystem.getInstance().setShooterLed(3);
-    Command autoCommand = new ThreeBallAuto();
+    DriveSubsystem.getInstance().resetOdometryTrue();
+    DriveSubsystem.getInstance().resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(0)));DriveSubsystem.getInstance().resetOdometryTrue();
+    DriveSubsystem.getInstance().resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(0)));DriveSubsystem.getInstance().resetOdometryTrue();
+    DriveSubsystem.getInstance().resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
     autoChooser.getSelected().schedule();
   }
 
