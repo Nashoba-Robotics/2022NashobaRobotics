@@ -32,14 +32,20 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.IntakePracticeCommand;
 import frc.robot.commands.AutoAimCommand;
 import frc.robot.commands.JoystickDriveCommand;
+import frc.robot.commands.LedTestCommand;
 import frc.robot.commands.LimelightCommand;
 import frc.robot.commands.LoaderCommand;
 import frc.robot.commands.ManualZeroOdometryCommand;
 import frc.robot.commands.ResetOdometryCommand;
-import frc.robot.commands.RetractStaticClimberCommand;
 import frc.robot.commands.SensorTestCommand;
 import frc.robot.commands.StopCommand;
-import frc.robot.commands.ZeroClimberCommand;
+import frc.robot.commands.climber.ClimberCommand;
+import frc.robot.commands.climber.DeployPusher;
+import frc.robot.commands.climber.DeployStaticClimberCommad;
+import frc.robot.commands.climber.ManualPusherCommand;
+import frc.robot.commands.climber.RetractStaticClimberCommand;
+import frc.robot.commands.climber.TraversalClimbCommand;
+import frc.robot.commands.climber.ZeroClimberSensorsCommand;
 import frc.robot.commands.intakeshoot.CannonAngleCommand;
 import frc.robot.commands.intakeshoot.ActuateIntakeCommand;
 import frc.robot.commands.intakeshoot.EjectBackCommand;
@@ -52,8 +58,7 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.JoystickSubsystem;
 import frc.robot.subsystems.CannonSubsystem.Angle;
 import frc.robot.commands.CannonTestCommand;
-import frc.robot.commands.ClimberCommand;
-import frc.robot.commands.DeployStaticClimberCommad;
+import frc.robot.commands.ColorSensorTestCommand;
 
 public class RobotContainer {
 
@@ -110,23 +115,28 @@ public class RobotContainer {
     // SmartDashboard.putData(new LimelightCommand());
     // SmartDashboard.putData(new CannonTestCommand());
     SmartDashboard.putData(new ClimberCommand());
-    // SmartDashboard.putData(new DeployStaticClimberCommad());
-    // SmartDashboard.putData(new RetractStaticClimberCommand());
+    SmartDashboard.putData(new ZeroClimberSensorsCommand());
+    SmartDashboard.putData(new DeployStaticClimberCommad());
+    SmartDashboard.putData(new RetractStaticClimberCommand());
+    SmartDashboard.putData(new ManualPusherCommand());
+    SmartDashboard.putData(new DeployPusher());
+    SmartDashboard.putData(new TraversalClimbCommand());
     // SmartDashboard.putData(new ZeroClimberCommand());
     // SmartDashboard.putData(new LoaderCommand());
     // SmartDashboard.putData(new TalonTestCommand());
-    SmartDashboard.putData(new ActuateIntakeCommand(true));
-    SmartDashboard.putData(new ActuateIntakeCommand(false));
+    // SmartDashboard.putData(new ActuateIntakeCommand(true));
+    // SmartDashboard.putData(new ActuateIntakeCommand(false));
     // SmartDashboard.putData(new EjectFrontCommand());
     // SmartDashboard.putData(new EjectBackCommand());
     // SmartDashboard.putData(new PukeCommand());
     // SmartDashboard.putData(new RunIntakeCommand());
     // SmartDashboard.putData(new ShootCommand());
-    SmartDashboard.putData(new LoaderCommand());
-    SmartDashboard.putData(new CannonTestCommand());
-    SmartDashboard.putData(new IntakePracticeCommand());
+    // SmartDashboard.putData(new LoaderCommand());
+    // SmartDashboard.putData(new CannonTestCommand());
+    // SmartDashboard.putData(new IntakePracticeCommand());
     SmartDashboard.putData(new AutoAimCommand());
-    SmartDashboard.putData(new ManualZeroOdometryCommand());
+    // SmartDashboard.putData(new ManualZeroOdometryCommand());
+    // SmartDashboard.putData(new LedTestCommand());
   }
   /**
    * Use this method to define your button->command mappings.  Buttons can be created by

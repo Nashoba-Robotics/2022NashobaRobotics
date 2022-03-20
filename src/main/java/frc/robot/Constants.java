@@ -86,12 +86,11 @@ public final class Constants {
         public static final int SOLENOID_PORT = 7;
     }
     public static class Climber {
-        public static final int PORT_LEFT_1 = 11;
-        public static final int PORT_LEFT_2 = 12;
-        public static final int PORT_LEFT_ROTATE = 13;
-        public static final int PORT_RIGHT_1 = 14;
-        public static final int PORT_RIGHT_2 = 15;
-        public static final int PORT_RIGHT_ROTATE = 16;
+        public static final int LEFT_PUSHER_PORT = 15; 
+        public static final int RIGHT_PUSHER_PORT = 12; //Inverted
+
+        public static final int LEFT_CLIMBER_PORT = 13;
+        public static final int RIGHT_CLIMBER_PORT = 16; //Inverted
 
         public static final int FIXED_MANUAL_CLIMB_JOYSTICK_PORT = 5;   //Y axis
         public static final double FIXED_MANUAL_CLIMB_JOYSTICK_DEADZONE = 0.12;
@@ -100,42 +99,42 @@ public final class Constants {
         public static final int ROTATING_ANGLE_JOYSTICK_PORT = 4;   //X axis
         public static final double ROTATING_ANGLE_JOYSTICK_DEADZONE = 0.12;
 
-        public static final int DIO_LS_LEFT_1 = 0; // TODO change
-        public static final int DIO_LS_LEFT_2 = 1; // TODO change
-        public static final int DIO_LS_RIGHT_1 = 2; // TODO change
-        public static final int DIO_LS_RIGHT_2 = 3; // TODO change
+        public static final int DEPLOY_LEFT_POS = 182_000;
+        public static final int DEPLOY_RIGHT_POS = 179_000;
+        public static final int DEPLOY_LEFT_PUSHER_POS = -103_000;
+        public static final int DEPLOY_RIGHT_PUSHER_POS = -103_000;
 
-        public static final int DEPLOY_RIGHT_POS = 143000; //140000;
-        public static final int DEPLOY_LEFT_POS = 145000;
+        public static final int RETRACT_LEFT_POS = 15_000;
+        public static final int RETRACT_RIGHT_POS = 15_000;
 
-        public static final int RETRACT_POS = 4000; // TODO change
+        public static final double KF_CLIMBER = 0.047;
+        public static final double KP_CLIMBER = 0.025;
+        public static final double KI_CLIMBER = 0;
+        public static final double KD_CLIMBER = 0;
 
-        public static final double KF = 0.051; 
-        //To be or not to be that is the question
-        public static final double KP_1 = 0.025;
-        public static final double KI_1 = 0;
-        public static final double KD_1 = 0;
-        //Whether tis nobler in the mind to suffer the slings and arrows of outrageous fortunes
-        public static final double KP_2 = 0.025;
-        public static final double KI_2 = 0;
-        public static final double KD_2 = 0;
-        //Or to take arms against a sea of sorrows and by opposing end them
-        public static final double KP_ROTATE = 0;
-        public static final double KI_ROTATE = 0;
-        public static final double KD_ROTATE = 0;
-        //To die to sleep no more and by a sleep to say we end the thousand natural shocks that flesh is heir to
-        public static final double DEPLOY_ACCELERATION = 100000;
-        public static final double DEPLOY_CRUISE_VELOCITY = 17500;
-        //Tis a consummation devoutly to be wished
-        public static final double RETRACT_ACCELERATION = 200000;
-        public static final double RETRACT_CRUISE_VELOCITY = 10000;
+        public static final double KF_PUSHER = 0.047;
+        public static final double KP_PUSHER = 0.025;
+        public static final double KI_PUSHER = 0;
+        public static final double KD_PUSHER = 0;
+
+        // public static final double DEPLOY_ACCELERATION = 100000;
+        // public static final double DEPLOY_CRUISE_VELOCITY = 17500;
+        public static final double DEPLOY_ACCELERATION = 20_000;
+        public static final double DEPLOY_CRUISE_VELOCITY = 10_000;
+        public static final double DEPLOY_RIGHT_CRUISE_VELOCITY = 10_500;
+        public static final double DEPLOY_PUSH_ACCELERATION = 20_000;
+        public static final double DEPLOY_PUSH_CRUISE_VELOCITY = 7_000;
+        
+        public static final double RETRACT_ACCELERATION = 20_000;
+        public static final double RETRACT_CRUISE_VELOCITY = 10_000;
+        public static final double RETRACT_RIGHT_CRUISE_VELOCITY = 10_500;
     }
 
     public static class DriveTrain {
         public static final double KS = 0.61405;
         public static final double KV = 2.143;
         public static final double KA = 0.25872;
-        //To die to sleep to sleep perchance to dream Aye there's the rub
+
         public static final double KF_RIGHT = 0.046222;
         public static final double P_RIGHT = 0.127; 
         public static final double I_RIGHT = 0;
@@ -146,13 +145,13 @@ public final class Constants {
         public static final double P_LEFT = 0.1128;
         public static final double I_LEFT = 0;
         public static final double D_LEFT = 0;
-        public static final double AFF_LEFT = 0.05117;  //Benjamin Edward Alex Jones Shapiro Brooder estaba aqui
+        public static final double AFF_LEFT = 0.05117;
 
         public static final double WHEEL_GAP = 0.85162; // distance between wheels in meters
         public static final double WHEEL_RADIUS = Units.inches2Meters(1.97775696); // wheel radius in meters
 
         public static final double DRIVE_GEAR_RATIO = 20.0 / 3;
-        //Ben will not notice the other 5 comments I have left in the Constants class
+
         public static final double MAX_VELOCITY = 2; 
         public static final double MAX_ACCELERATION = 0.75;
 
@@ -174,6 +173,11 @@ public final class Constants {
         public static final double INTAKE_SPEED = 0.75;
         public static final double GRABBER_SPEED = 0.4;
         public static final double LOADER_SPEED = 0.15;
+    }
+
+    public static class ColorSensor{
+        public static final double BLUE_CONSTANT = 0;
+        public static final double RED_CONSTANT = 0;
     }
 
     public static class Limelight {

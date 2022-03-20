@@ -8,7 +8,7 @@ import frc.robot.Constants;
 public class OdometryCarpetCompensator extends DifferentialDriveOdometry{
     
     private double startAngle; // starting angle relative to direction on rug where there is no affect on odometry
-    private double absAngleAvg; // consistantly updated angle compared to starting angle
+    private double absAngle; // consistantly updated angle compared to starting angle
 
     private double lastLeftPos = 0;
     private double lastRightPos = 0;
@@ -18,7 +18,7 @@ public class OdometryCarpetCompensator extends DifferentialDriveOdometry{
     public OdometryCarpetCompensator(double startAngle, Rotation2d currAngle){
         super(currAngle);
         this.startAngle = Units.getAbsAngle(startAngle);
-        absAngleAvg = (this.startAngle + Units.getAbsAngle(currAngle.getRadians())) % Constants.TAU;
+        absAngle = (this.startAngle + Units.getAbsAngle(currAngle.getRadians())) % Constants.TAU;
     }
 
     public Pose2d updatePose2d(Rotation2d angle, double deltaLeftMeters, double deltaRightMeters){
@@ -48,28 +48,31 @@ public class OdometryCarpetCompensator extends DifferentialDriveOdometry{
     //radians
     public void updateAngle(double angle){
         // double nextAng = Units.getAbsAngle(startAngle + angle);
-        absAngleAvg = Units.getAbsAngle(startAngle + angle);
+        absAngle = Units.getAbsAngle(startAngle + angle);
     }
 
     public double getAngle(){
-        return absAngleAvg;
+        return absAngle;
     }
 
     private double compensateRug(double deltaMeters){
-        if(absAngleAvg >= 0 && absAngleAvg < Constants.TAU / 2){
+        if(absAngle >= 0 && absAngle < Constants.TAU / 2){
             return deltaMeters > 0 ? 
-            deltaMeters * (1 + Math.sin(absAngleAvg) * Constants.K_CARPET * -1):
-            deltaMeters * (1 + Math.sin(absAngleAvg) * Constants.K_CARPET);
+            deltaMeters * (1 + Math.sin(absAngle) * Constants.K_CARPET * -1):
+            deltaMeters * (1 + Math.sin(absAngle) * Constants.K_CARPET);
         }
 
         return deltaMeters > 0 ? 
-            deltaMeters * (1 + Math.sin(absAngleAvg) * Constants.K_CARPET):
-            deltaMeters * (1 + Math.sin(absAngleAvg) * Constants.K_CARPET * -1);
+            deltaMeters * (1 + Math.sin(absAngle) * Constants.K_CARPET):
+            deltaMeters * (1 + Math.sin(absAngle) * Constants.K_CARPET * -1);
         
     }
 
+    // call to reset the odometry position
+    // zero heading AFTER calling function
     public void resetPos(Pose2d pos, Rotation2d rotation){
-        absAngleAvg = Units.getAbsAngle(startAngle + rotation.getRadians());
+        startAngle = Units.getAbsAngle(absAngle + startAngle);
+        absAngle = Units.getAbsAngle(startAngle + rotation.getRadians());
         lastLeftPos = 0;
         lastRightPos = 0;
         super.resetPosition(pos, rotation);

@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import java.util.Currency;
+
 import javax.sound.midi.SysexMessage;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -14,9 +16,12 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.Limelight;
@@ -25,11 +30,14 @@ import frc.robot.commands.AutoShootCommand;
 import frc.robot.commands.AutoStopIntakeCommand;
 import frc.robot.commands.IntakePracticeCommand;
 import frc.robot.commands.JoystickDriveCommand;
-import frc.robot.commands.ZeroClimberCommand;
 import frc.robot.commands.autoroutines.TestPathCommand;
 import frc.robot.commands.autoroutines.ThreeBallAuto;
 import frc.robot.commands.autoroutines.TwoBallAuto;
+import frc.robot.lib.PicoColorSensor;
+import frc.robot.lib.PicoColorSensor.RawColor;
 import frc.robot.subsystems.CannonSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.ColorSensorSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.GyroSubsystem;
 import frc.robot.subsystems.IntakeSolenoidSubsystem;
@@ -73,14 +81,15 @@ public class Robot extends TimedRobot {
 
     // compressor = new Compressor(1, PneumaticsModuleType.REVPH);
     // compressor.enableDigital();
-    ph.enableCompressorAnalog(100, 120);
+    //ph.enableCompressorAnalog(100, 120);
+    ph.disableCompressor();
     CommandScheduler.getInstance().setDefaultCommand(DriveSubsystem.getInstance(), new JoystickDriveCommand());
 
     autoChooser = new SendableChooser<>();
     autoChooser.setDefaultOption("Two Ball Auto", new TwoBallAuto());
     autoChooser.addOption("Three Ball Auto", new ThreeBallAuto());
     autoChooser.addOption("Test Auto", new TestPathCommand());
-    SmartDashboard.putData("Auto", autoChooser);
+    SmartDashboard.putData("Auto", autoChooser);    
   }
 
   long lastMillis = System.currentTimeMillis();
@@ -120,6 +129,9 @@ public class Robot extends TimedRobot {
     DriveSubsystem.getInstance().changeNeutralMode(NeutralMode.Coast);  //Sets the robot into "coast" mode after robot is diabled -> Easier to move
     LimelightSubsystem.getInstance().setIntakeLed(1);
     LimelightSubsystem.getInstance().setShooterLed(1);
+    ClimberSubsystem.getInstance().stop();
+    //Cancels everything that's running
+    CommandScheduler.getInstance().cancelAll();
   }
 
   @Override
@@ -179,7 +191,14 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    
+    // RawColor c1 = ColorSensorSubsystem.getInstance().getSensor1();
+    // SmartDashboard.putNumber("red1", 1.*c1.red/c1.ir);
+    // SmartDashboard.putNumber("green1", 1.*c1.green/c1.ir);
+    // SmartDashboard.putNumber("blue1", 1.*c1.blue/c1.ir);
+    // RawColor c2 = ColorSensorSubsystem.getInstance().getSensor2();
+    // SmartDashboard.putNumber("red2", 1.*c2.red/c2.ir);
+    // SmartDashboard.putNumber("green2", 1.*c2.green/c2.ir);
+    // SmartDashboard.putNumber("blue2", 1.*c2.blue/c2.ir);
   }
 
   @Override

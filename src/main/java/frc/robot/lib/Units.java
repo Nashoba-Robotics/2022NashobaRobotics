@@ -1,6 +1,8 @@
 package frc.robot.lib;
 
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.Constants;
+import frc.robot.lib.ColorDetection.BallColor;
 
 public class Units {
     // Convert from percent output to velocity (motor units / 100ms)
@@ -32,5 +34,23 @@ public class Units {
         // return ang > 0 ?
         // ang % Constants.TAU:
         // Constants.TAU - (Math.abs(ang) % Constants.TAU);
+    }
+
+    public static BallColor alliance2BallColor(Alliance alliance){
+        if(alliance == Alliance.Blue){
+            return BallColor.BLUE;
+        } else if(alliance == Alliance.Red){
+            return BallColor.RED;
+        }
+        return BallColor.NONE;
+    }
+
+    public static BallColor oppositeBallColor(BallColor color){
+        if(color == BallColor.BLUE){
+            return BallColor.RED;
+        } else if(color == BallColor.RED){
+            return BallColor.BLUE;
+        }
+        return BallColor.NONE;
     }
 }
