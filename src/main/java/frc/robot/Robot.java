@@ -11,6 +11,7 @@ import java.util.Currency;
 
 import javax.sound.midi.SysexMessage;
 
+import com.ctre.phoenix.CANifier.LEDChannel;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -42,6 +43,7 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.GyroSubsystem;
 import frc.robot.subsystems.IntakeSolenoidSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.CannonSubsystem.Angle;
 import frc.robot.subsystems.DriveSubsystem.DriveMode;
@@ -199,6 +201,14 @@ public class Robot extends TimedRobot {
     // SmartDashboard.putNumber("red2", 1.*c2.red/c2.ir);
     // SmartDashboard.putNumber("green2", 1.*c2.green/c2.ir);
     // SmartDashboard.putNumber("blue2", 1.*c2.blue/c2.ir);
+
+    if(RobotContainer.getSensor1() && RobotContainer.getSensor2()){
+      LedSubsystem.getInstance().setColor(255, 0, 0);
+    } else if(RobotContainer.getSensor1() || RobotContainer.getSensor2()){
+      LedSubsystem.getInstance().setColor(0, 0, 255);
+    } else{
+      LedSubsystem.getInstance().setColor(255, 255, 255);
+    }
   }
 
   @Override

@@ -148,6 +148,14 @@ public class ClimberSubsystem extends SubsystemBase {
         }
     }
 
+    public void zeroLeftClimber(){
+        leftClimber.setSelectedSensorPosition(0);
+    }
+
+    public void zeroRightClimber(){
+        rightClimber.setSelectedSensorPosition(0);
+    }
+
     public void checkLimitSwitches() {
         // Zero on exit from limit switch
         for(int i = 0; i < motors.length; i++) {
@@ -255,11 +263,11 @@ public class ClimberSubsystem extends SubsystemBase {
         leftClimber = getMotor(ClimberMotor.LEFT_CLIMBER);
         rightClimber = getMotor(ClimberMotor.RIGHT_CLIMBER);
 
-        leftClimber.configMotionCruiseVelocity(Constants.Climber.RETRACT_CRUISE_VELOCITY);
-        leftClimber.configMotionAcceleration(Constants.Climber.RETRACT_ACCELERATION);
+        leftClimber.configMotionCruiseVelocity(Constants.Climber.RETRACT_LEFT_CRUISE_VELOCITY);
+        leftClimber.configMotionAcceleration(Constants.Climber.RETRACT_LEFT_ACCELERATION);
 
         rightClimber.configMotionCruiseVelocity(Constants.Climber.RETRACT_RIGHT_CRUISE_VELOCITY);
-        rightClimber.configMotionAcceleration(Constants.Climber.RETRACT_ACCELERATION);
+        rightClimber.configMotionAcceleration(Constants.Climber.RETRACT_RIGHT_ACCELERATION);
 
         leftClimber.set(ControlMode.MotionMagic, Constants.Climber.RETRACT_LEFT_POS);
         rightClimber.set(ControlMode.MotionMagic, Constants.Climber.RETRACT_RIGHT_POS);        
@@ -269,11 +277,11 @@ public class ClimberSubsystem extends SubsystemBase {
         leftClimber = getMotor(ClimberMotor.LEFT_CLIMBER);
         rightClimber = getMotor(ClimberMotor.RIGHT_CLIMBER);
 
-        leftClimber.configMotionCruiseVelocity(Constants.Climber.DEPLOY_CRUISE_VELOCITY);
-        leftClimber.configMotionAcceleration(Constants.Climber.DEPLOY_ACCELERATION);
+        leftClimber.configMotionCruiseVelocity(Constants.Climber.DEPLOY_LEFT_CRUISE_VELOCITY);
+        leftClimber.configMotionAcceleration(Constants.Climber.DEPLOY_LEFT_ACCELERATION);
 
-        rightClimber.configMotionCruiseVelocity(Constants.Climber.DEPLOY_CRUISE_VELOCITY);
-        rightClimber.configMotionAcceleration(Constants.Climber.DEPLOY_ACCELERATION);
+        rightClimber.configMotionCruiseVelocity(Constants.Climber.DEPLOY_RIGHT_CRUISE_VELOCITY);
+        rightClimber.configMotionAcceleration(Constants.Climber.DEPLOY_RIGHT_ACCELERATION);
 
         leftClimber.set(ControlMode.MotionMagic, Constants.Climber.DEPLOY_LEFT_POS);
         rightClimber.set(ControlMode.MotionMagic, Constants.Climber.DEPLOY_RIGHT_POS);

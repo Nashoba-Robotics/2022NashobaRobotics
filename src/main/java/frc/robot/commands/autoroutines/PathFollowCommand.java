@@ -40,7 +40,8 @@ public class PathFollowCommand extends SequentialCommandGroup{
        addCommands(
         new ResetOdometryCommand(trajectory),
         ramseteCommand,
-        new StopCommand()
+        new StopCommand(),
+        new ResetOdometryCommand(trajectory)
        );
     }
 
@@ -58,7 +59,8 @@ public class PathFollowCommand extends SequentialCommandGroup{
        addCommands(
         new ResetOdometryCommand(trajectory),
         ramseteCommand,
-        new StopCommand()
+        new StopCommand(),
+        new ResetOdometryCommand(trajectory)
        );
     }
 }

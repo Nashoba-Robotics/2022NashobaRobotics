@@ -20,7 +20,7 @@ public class ThreeBallAuto extends SequentialCommandGroup{
         addCommands(
             //new AutoShootCommand(Angle.EIGHTY),
             //new ActuateIntakeCommand(true),
-            //new WaitCommand(0.5),
+            //new WaitCommand(0.25),
             new ParallelCommandGroup(
                 // new RunIntakeCommand().until(() -> {
                 //     return RobotContainer.getSensor1() && RobotContainer.getSensor2();

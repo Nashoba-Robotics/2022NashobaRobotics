@@ -119,14 +119,17 @@ public final class Constants {
 
         // public static final double DEPLOY_ACCELERATION = 100000;
         // public static final double DEPLOY_CRUISE_VELOCITY = 17500;
-        public static final double DEPLOY_ACCELERATION = 20_000;
-        public static final double DEPLOY_CRUISE_VELOCITY = 10_000;
+        public static final double DEPLOY_LEFT_ACCELERATION = 20_000;
+        public static final double DEPLOY_RIGHT_ACCELERATION = 20_000;
+        public static final double DEPLOY_LEFT_CRUISE_VELOCITY = 10_000;
         public static final double DEPLOY_RIGHT_CRUISE_VELOCITY = 10_500;
+
         public static final double DEPLOY_PUSH_ACCELERATION = 20_000;
         public static final double DEPLOY_PUSH_CRUISE_VELOCITY = 7_000;
         
-        public static final double RETRACT_ACCELERATION = 20_000;
-        public static final double RETRACT_CRUISE_VELOCITY = 10_000;
+        public static final double RETRACT_LEFT_ACCELERATION = 20_000;
+        public static final double RETRACT_RIGHT_ACCELERATION = 20_000;
+        public static final double RETRACT_LEFT_CRUISE_VELOCITY = 10_000;
         public static final double RETRACT_RIGHT_CRUISE_VELOCITY = 10_500;
     }
 

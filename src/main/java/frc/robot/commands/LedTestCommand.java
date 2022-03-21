@@ -20,6 +20,5 @@ public class LedTestCommand extends CommandBase {
         int g = (int)SmartDashboard.getNumber("G", 0);
         int b = (int)SmartDashboard.getNumber("B", 0);
         LedSubsystem.getInstance().blinkColor(r, g, b);
-
     }
 }

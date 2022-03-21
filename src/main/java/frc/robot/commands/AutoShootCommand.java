@@ -47,7 +47,7 @@ public class AutoShootCommand extends CommandBase{
 
     @Override
     public boolean isFinished() {
-        return System.currentTimeMillis() > startMillis + 2350;
+        return System.currentTimeMillis() > startMillis + 500;
     }
 
     @Override

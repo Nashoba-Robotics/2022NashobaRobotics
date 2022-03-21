@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.led.Animation;
 import com.ctre.phoenix.led.CANdle;
 import com.ctre.phoenix.led.CANdleConfiguration;
+import com.ctre.phoenix.led.RainbowAnimation;
 import com.ctre.phoenix.led.StrobeAnimation;
 import com.ctre.phoenix.led.CANdle.LEDStripType;
 
@@ -10,7 +11,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LedSubsystem extends SubsystemBase {
     private static final int LIGHT_COUNT = 100;
-    private static final double BLINK_RATE = 2;
+    private static final double BLINK_RATE = 1;
+    private static final double RAINBOW_SPEED = 1;
 
     private static LedSubsystem instance;
     public static LedSubsystem getInstance() {
@@ -34,7 +36,7 @@ public class LedSubsystem extends SubsystemBase {
         candle.configStatusLedState(true);
     }
 
-    public void setColor(int r, int g, int b) {
+    public void setColor(int r, int g, int b) { //Much appreciation
         if(lastR != r || lastG != g || lastB != b || lastMode != 0) {
             candle.setLEDs(r, g, b, 0, 8, LIGHT_COUNT);
             lastR = r;
@@ -53,6 +55,14 @@ public class LedSubsystem extends SubsystemBase {
             lastG = g;
             lastB = b;
             lastMode = 1;
+        }
+    }
+
+    public void rainbow() {
+        if(lastMode != 2) {
+            Animation a = new RainbowAnimation(1, RAINBOW_SPEED, LIGHT_COUNT);
+            candle.animate(a);
+            lastMode = 2;
         }
     }
     

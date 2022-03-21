@@ -6,10 +6,10 @@ import frc.robot.Constants;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ClimberSubsystem.ClimberMotor;
 
-public class DeployStaticClimberCommad extends CommandBase{
+public class DeployClimberCommad extends CommandBase{
 
 
-    public DeployStaticClimberCommad(){
+    public DeployClimberCommad(){
         addRequirements(ClimberSubsystem.getInstance());
     }
 

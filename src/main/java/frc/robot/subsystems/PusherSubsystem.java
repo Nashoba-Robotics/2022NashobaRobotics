@@ -134,4 +134,17 @@ public class PusherSubsystem extends SubsystemBase{
         leftPusher.set(ControlMode.MotionMagic, Constants.Climber.DEPLOY_LEFT_PUSHER_POS);
         rightPusher.set(ControlMode.MotionMagic, Constants.Climber.DEPLOY_RIGHT_PUSHER_POS);
     }
+
+    public void zeroLeftPusher(){
+        leftPusher.setSelectedSensorPosition(0);
+    }
+
+    public void zeroRightPusher(){
+        rightPusher.setSelectedSensorPosition(0);
+    }
+
+    public void zeroPushers(){
+        zeroLeftPusher();
+        zeroRightPusher();
+    }
 }

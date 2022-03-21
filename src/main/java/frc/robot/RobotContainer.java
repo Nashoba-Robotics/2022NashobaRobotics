@@ -41,9 +41,9 @@ import frc.robot.commands.SensorTestCommand;
 import frc.robot.commands.StopCommand;
 import frc.robot.commands.climber.ClimberCommand;
 import frc.robot.commands.climber.DeployPusher;
-import frc.robot.commands.climber.DeployStaticClimberCommad;
+import frc.robot.commands.climber.DeployClimberCommad;
 import frc.robot.commands.climber.ManualPusherCommand;
-import frc.robot.commands.climber.RetractStaticClimberCommand;
+import frc.robot.commands.climber.RetractClimberCommand;
 import frc.robot.commands.climber.TraversalClimbCommand;
 import frc.robot.commands.climber.ZeroClimberSensorsCommand;
 import frc.robot.commands.intakeshoot.CannonAngleCommand;
@@ -116,8 +116,8 @@ public class RobotContainer {
     // SmartDashboard.putData(new CannonTestCommand());
     SmartDashboard.putData(new ClimberCommand());
     SmartDashboard.putData(new ZeroClimberSensorsCommand());
-    SmartDashboard.putData(new DeployStaticClimberCommad());
-    SmartDashboard.putData(new RetractStaticClimberCommand());
+    SmartDashboard.putData(new DeployClimberCommad());
+    SmartDashboard.putData(new RetractClimberCommand());
     SmartDashboard.putData(new ManualPusherCommand());
     SmartDashboard.putData(new DeployPusher());
     SmartDashboard.putData(new TraversalClimbCommand());
@@ -164,8 +164,8 @@ public class RobotContainer {
     stopShooterButton.cancelWhenActive(shootCommand);
     // runShooterButton.whenActive(new StopCommand()); //TODO: Change to actual Run Shooter Command
 
-    fixedClimbDeployButton.whenActive(new DeployStaticClimberCommad());
-    fixedClimbButton.whenActive(new RetractStaticClimberCommand());
+    fixedClimbDeployButton.whenActive(new DeployClimberCommad());
+    fixedClimbButton.whenActive(new RetractClimberCommand());
     // fixedClimbeGrabButton.whenActive(new StopCommand());  //TODO: Change to actual Grab Command
     // fixedClimberReleaseButton.whenActive();
 
