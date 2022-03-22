@@ -11,6 +11,7 @@ import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.motorcontrol.Talon;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -145,6 +146,15 @@ public class ClimberSubsystem extends SubsystemBase {
             talon.set(ControlMode.PercentOutput, speed);
         } else {
             talon.set(ControlMode.PercentOutput, 0);
+        }
+    }
+
+    public void setDiagnosticSpeed(ClimberMotor motor, double speed, ControlMode controlMode){
+        TalonFX talon = getMotor(motor);
+        if(Math.abs(speed) <= 1) {
+            talon.set(controlMode, speed);
+        } else {
+            talon.set(controlMode, 0);
         }
     }
 
@@ -291,5 +301,34 @@ public class ClimberSubsystem extends SubsystemBase {
         for(TalonFX motor : motors){
             motor.setSelectedSensorPosition(0);
         }
+    }
+
+
+    public void setF(double kP){
+        getMotor(ClimberMotor.LEFT_CLIMBER).config_kF(0, kP);
+        getMotor(ClimberMotor.RIGHT_CLIMBER).config_kF(0, kP);
+    }
+
+    public void setP(double kI){
+        getMotor(ClimberMotor.LEFT_CLIMBER).config_kP(0, kI);
+        getMotor(ClimberMotor.RIGHT_CLIMBER).config_kP(0, kI);
+    }
+
+    public void setI(double kD){
+        getMotor(ClimberMotor.LEFT_CLIMBER).config_kI(0, kD);
+        getMotor(ClimberMotor.RIGHT_CLIMBER).config_kI(0, kD);
+    }
+
+    public void setD(double kF){
+        getMotor(ClimberMotor.LEFT_CLIMBER).config_kD(0, kF);
+        getMotor(ClimberMotor.RIGHT_CLIMBER).config_kD(0, kF);
+    }
+
+    public void setCruiseVelocity(ClimberMotor motor, double velocity){
+        getMotor(motor).configMotionCruiseVelocity(velocity);
+    }
+
+    public void setAcceleration(ClimberMotor motor, double acceleration){
+        getMotor(motor).configMotionAcceleration(acceleration);
     }
 }

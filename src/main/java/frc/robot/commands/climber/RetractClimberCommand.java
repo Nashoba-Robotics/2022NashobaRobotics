@@ -6,9 +6,9 @@ import frc.robot.Constants;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ClimberSubsystem.ClimberMotor;
 
-public class RetractStaticClimberCommand extends CommandBase {
+public class RetractClimberCommand extends CommandBase {
 
-    public RetractStaticClimberCommand(){
+    public RetractClimberCommand(){
         addRequirements(ClimberSubsystem.getInstance());
     }
 

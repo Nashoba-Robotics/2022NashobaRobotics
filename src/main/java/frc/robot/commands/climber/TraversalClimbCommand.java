@@ -7,8 +7,8 @@ public class TraversalClimbCommand extends SequentialCommandGroup{
     public TraversalClimbCommand(){
         addCommands(
             new ParallelCommandGroup(
-                new RetractStaticClimberCommand(),
-            new DeployPusher()
+                new RetractClimberCommand(),
+                new DeployPusher()
             )
         );
     }

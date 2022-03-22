@@ -145,6 +145,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    LedSubsystem.getInstance().rainbow();
     LimelightSubsystem.getInstance().setIntakeLed(3);
     LimelightSubsystem.getInstance().setShooterLed(3);
     DriveSubsystem.getInstance().resetOdometryTrue();

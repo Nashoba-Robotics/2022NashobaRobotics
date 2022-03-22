@@ -97,6 +97,15 @@ public class PusherSubsystem extends SubsystemBase{
         }
     }
 
+    public void setDiagnosticSpeed(PusherMotor motor, double speed, ControlMode controlMode){
+        TalonFX talon = getMotor(motor);
+        if(Math.abs(speed) <= 1) {
+            talon.set(controlMode, speed);
+        } else {
+            talon.set(controlMode, 0);
+        }
+    }
+
     public double getFixedValue(){
         double rawY = fixedClimbJoystick.getY();
         double value = rawY;
@@ -146,5 +155,33 @@ public class PusherSubsystem extends SubsystemBase{
     public void zeroPushers(){
         zeroLeftPusher();
         zeroRightPusher();
+    }
+
+    public void setF(double kP){
+        getMotor(PusherMotor.LEFT_PUSHER).config_kF(0, kP);
+        getMotor(PusherMotor.RIGHT_PUSHER).config_kF(0, kP);
+    }
+
+    public void setP(double kI){
+        getMotor(PusherMotor.LEFT_PUSHER).config_kP(0, kI);
+        getMotor(PusherMotor.RIGHT_PUSHER).config_kP(0, kI);
+    }
+
+    public void setI(double kD){
+        getMotor(PusherMotor.LEFT_PUSHER).config_kI(0, kD);
+        getMotor(PusherMotor.RIGHT_PUSHER).config_kI(0, kD);
+    }
+
+    public void setD(double kF){
+        getMotor(PusherMotor.LEFT_PUSHER).config_kD(0, kF);
+        getMotor(PusherMotor.RIGHT_PUSHER).config_kD(0, kF);
+    }
+
+    public void setCruiseVelocity(PusherMotor motor, double velocity){
+        getMotor(motor).configMotionCruiseVelocity(velocity);
+    }
+
+    public void setAcceleration(PusherMotor motor, double acceleration){
+        getMotor(motor).configMotionAcceleration(acceleration);
     }
 }

@@ -59,6 +59,7 @@ import frc.robot.subsystems.JoystickSubsystem;
 import frc.robot.subsystems.CannonSubsystem.Angle;
 import frc.robot.commands.CannonTestCommand;
 import frc.robot.commands.ColorSensorTestCommand;
+import frc.robot.commands.DiagnosticClimberCommand;
 
 public class RobotContainer {
 
@@ -121,6 +122,7 @@ public class RobotContainer {
     SmartDashboard.putData(new ManualPusherCommand());
     SmartDashboard.putData(new DeployPusher());
     SmartDashboard.putData(new TraversalClimbCommand());
+    //SmartDashboard.putData(new DiagnosticClimberCommand());
     // SmartDashboard.putData(new ZeroClimberCommand());
     // SmartDashboard.putData(new LoaderCommand());
     // SmartDashboard.putData(new TalonTestCommand());
@@ -134,7 +136,7 @@ public class RobotContainer {
     // SmartDashboard.putData(new LoaderCommand());
     // SmartDashboard.putData(new CannonTestCommand());
     // SmartDashboard.putData(new IntakePracticeCommand());
-    SmartDashboard.putData(new AutoAimCommand());
+    //SmartDashboard.putData(new AutoAimCommand());
     // SmartDashboard.putData(new ManualZeroOdometryCommand());
     // SmartDashboard.putData(new LedTestCommand());
   }
