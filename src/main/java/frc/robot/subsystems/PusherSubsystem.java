@@ -9,6 +9,7 @@ import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.lib.Units;
 
 public class PusherSubsystem extends SubsystemBase{
     private TalonFX leftPusher;
@@ -99,16 +100,29 @@ public class PusherSubsystem extends SubsystemBase{
 
     public void setDiagnosticSpeed(PusherMotor motor, double speed, ControlMode controlMode){
         TalonFX talon = getMotor(motor);
-        if(Math.abs(speed) <= 1) {
+        if(controlMode.equals(ControlMode.PercentOutput)){
+            if(Math.abs(speed) <= 1) {
+                talon.set(controlMode, speed);
+            } else {
+                talon.set(ControlMode.PercentOutput, 0);
+            }
+        }
+        if(controlMode.equals(ControlMode.Velocity)){
+            if(Math.abs(speed) <= 1) {
+                talon.set(controlMode, Units.percent2Velocity(speed));
+            } else {
+                talon.set(ControlMode.PercentOutput, 0);
+            }
+            
+        }
+        else{
             talon.set(controlMode, speed);
-        } else {
-            talon.set(controlMode, 0);
         }
     }
 
     public double getFixedValue(){
         double rawY = fixedClimbJoystick.getY();
-        double value = rawY;
+        double value = rawY*0.25;
         return value;
     }
 
@@ -142,6 +156,48 @@ public class PusherSubsystem extends SubsystemBase{
 
         leftPusher.set(ControlMode.MotionMagic, Constants.Climber.DEPLOY_LEFT_PUSHER_POS);
         rightPusher.set(ControlMode.MotionMagic, Constants.Climber.DEPLOY_RIGHT_PUSHER_POS);
+    }
+
+    public void push(){
+        leftPusher = getMotor(PusherMotor.LEFT_PUSHER);
+        rightPusher = getMotor(PusherMotor.RIGHT_PUSHER);
+
+        leftPusher.configMotionCruiseVelocity(Constants.Climber.PUSH_LEFT_CRUISE_VELOCITY);
+        leftPusher.configMotionAcceleration(Constants.Climber.PUSH_LEFT_ACCELERATION);
+
+        rightPusher.configMotionCruiseVelocity(Constants.Climber.PUSH_RIGHT_CRUISE_VELOCITY);
+        rightPusher.configMotionAcceleration(Constants.Climber.PUSH_RIGHT_ACCELERATION);
+
+        leftPusher.set(ControlMode.MotionMagic, Constants.Climber.PUSH_LEFT_POS);
+        rightPusher.set(ControlMode.MotionMagic, Constants.Climber.PUSH_RIGHT_POS);
+    }
+
+    public void releasePusherSlow(){
+        leftPusher = getMotor(PusherMotor.LEFT_PUSHER);
+        rightPusher = getMotor(PusherMotor.RIGHT_PUSHER);
+
+        leftPusher.configMotionCruiseVelocity(Constants.Climber.RELEASE_LEFT_PUSHER_CRUISE_VELOCITY_SLOW);
+        leftPusher.configMotionAcceleration(Constants.Climber.RELEASE_LEFT_PUSHER_ACCELERATION_SLOW);
+        
+        rightPusher.configMotionCruiseVelocity(Constants.Climber.RELEASE_RIGHT_PUSHER_CRUISE_VELOCITY_SLOW);
+        rightPusher.configMotionAcceleration(Constants.Climber.RELEASE_RIGHT_PUSHER_ACCELERATION_SLOW);
+
+        leftPusher.set(ControlMode.MotionMagic, Constants.Climber.RELEASE_LEFT_PUSHER_SLOW_POS);
+        rightPusher.set(ControlMode.MotionMagic, Constants.Climber.RELEASE_RIGHT_PUSHER_SLOW_POS);
+    }
+
+    public void releasePusherFast(){
+        leftPusher = getMotor(PusherMotor.LEFT_PUSHER);
+        rightPusher = getMotor(PusherMotor.RIGHT_PUSHER);
+
+        leftPusher.configMotionCruiseVelocity(Constants.Climber.RELEASE_LEFT_PUSHER_CRUISE_VELOCITY_FAST);
+        leftPusher.configMotionAcceleration(Constants.Climber.RELEASE_LEFT_PUSHER_ACCELERATION_FAST);
+        
+        rightPusher.configMotionCruiseVelocity(Constants.Climber.RELEASE_RIGHT_PUSHER_CRUISE_VELOCITY_FAST);
+        rightPusher.configMotionAcceleration(Constants.Climber.RELEASE_RIGHT_PUSHER_ACCELERATION_FAST);
+
+        leftPusher.set(ControlMode.MotionMagic, Constants.Climber.RELEASE_LEFT_PUSHER_FAST_POS);
+        rightPusher.set(ControlMode.MotionMagic, Constants.Climber.RELEASE_RIGHT_PUSHER_FAST_POS);
     }
 
     public void zeroLeftPusher(){

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.zip.ZipOutputStream;
 
 import com.fasterxml.jackson.core.JsonParser;
 
@@ -41,11 +42,13 @@ import frc.robot.commands.SensorTestCommand;
 import frc.robot.commands.StopCommand;
 import frc.robot.commands.climber.ClimberCommand;
 import frc.robot.commands.climber.DeployPusher;
+import frc.robot.commands.climber.ManualClimberCommand;
 import frc.robot.commands.climber.DeployClimberCommad;
 import frc.robot.commands.climber.ManualPusherCommand;
 import frc.robot.commands.climber.RetractClimberCommand;
 import frc.robot.commands.climber.TraversalClimbCommand;
 import frc.robot.commands.climber.ZeroClimberSensorsCommand;
+import frc.robot.commands.climber.ZeroPusherCommand;
 import frc.robot.commands.intakeshoot.CannonAngleCommand;
 import frc.robot.commands.intakeshoot.ActuateIntakeCommand;
 import frc.robot.commands.intakeshoot.EjectBackCommand;
@@ -120,9 +123,11 @@ public class RobotContainer {
     SmartDashboard.putData(new DeployClimberCommad());
     SmartDashboard.putData(new RetractClimberCommand());
     SmartDashboard.putData(new ManualPusherCommand());
+    SmartDashboard.putData(new ManualClimberCommand());
     SmartDashboard.putData(new DeployPusher());
     SmartDashboard.putData(new TraversalClimbCommand());
-    //SmartDashboard.putData(new DiagnosticClimberCommand());
+    SmartDashboard.putData(new DiagnosticClimberCommand());
+    SmartDashboard.putData(new ZeroPusherCommand());
     // SmartDashboard.putData(new ZeroClimberCommand());
     // SmartDashboard.putData(new LoaderCommand());
     // SmartDashboard.putData(new TalonTestCommand());

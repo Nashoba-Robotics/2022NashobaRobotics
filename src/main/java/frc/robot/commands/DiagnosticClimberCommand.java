@@ -23,21 +23,6 @@ public class DiagnosticClimberCommand extends CommandBase {
         climberControlMode.addOption("Velocity", ControlMode.Velocity);
         climberControlMode.addOption("Motion Magic", ControlMode.MotionMagic);
         SmartDashboard.putData("Climber Control Mode", climberControlMode);
-        
-        SmartDashboard.putNumber("L Climber Coeff", 1);
-        SmartDashboard.putNumber("R Climber Coeff", 1);
-        SmartDashboard.putNumber("Climber speed", 0);
-
-        SmartDashboard.putNumber("Climber F", Constants.Climber.KF_CLIMBER);
-        SmartDashboard.putNumber("Climber P", Constants.Climber.KP_CLIMBER);
-        SmartDashboard.putNumber("Climber I", Constants.Climber.KI_CLIMBER);
-        SmartDashboard.putNumber("Climber D", Constants.Climber.KD_CLIMBER);
-
-        SmartDashboard.putNumber("L Climber Cruise Velocity", Constants.Climber.DEPLOY_LEFT_CRUISE_VELOCITY);
-        SmartDashboard.putNumber("L Climber Acceleration", Constants.Climber.DEPLOY_LEFT_ACCELERATION);
-
-        SmartDashboard.putNumber("R Climber Cruise Velocity", Constants.Climber.DEPLOY_RIGHT_CRUISE_VELOCITY);
-        SmartDashboard.putNumber("R Climber Acceleration", Constants.Climber.DEPLOY_RIGHT_ACCELERATION);
 
         pusherControlMode = new SendableChooser<>();
         pusherControlMode.setDefaultOption("Percent", ControlMode.PercentOutput);
@@ -59,7 +44,59 @@ public class DiagnosticClimberCommand extends CommandBase {
 
         SmartDashboard.putNumber("R Pusher Cruise Velocity", Constants.Climber.DEPLOY_PUSH_CRUISE_VELOCITY);
         SmartDashboard.putNumber("R Pusher Acceleration", Constants.Climber.DEPLOY_PUSH_ACCELERATION);
+
+        SmartDashboard.putNumber("L Pusher Pos", PusherSubsystem.getInstance().getPosition(PusherMotor.LEFT_PUSHER));
+        SmartDashboard.putNumber("R Pusher Pos", PusherSubsystem.getInstance().getPosition(PusherMotor.RIGHT_PUSHER));
+
+        SmartDashboard.putNumber("L Pusher Curr", PusherSubsystem.getInstance().getStatorCurrent(PusherMotor.LEFT_PUSHER));
+        SmartDashboard.putNumber("R Pusher Curr", PusherSubsystem.getInstance().getStatorCurrent(PusherMotor.RIGHT_PUSHER));
         
+    }
+
+    @Override
+    public void initialize() {
+        SmartDashboard.putNumber("L Climber Coeff", 1);
+        SmartDashboard.putNumber("R Climber Coeff", 1);
+        SmartDashboard.putNumber("Climber speed", 0);
+
+        SmartDashboard.putNumber("Climber F", Constants.Climber.KF_CLIMBER);
+        SmartDashboard.putNumber("Climber P", Constants.Climber.KP_CLIMBER);
+        SmartDashboard.putNumber("Climber I", Constants.Climber.KI_CLIMBER);
+        SmartDashboard.putNumber("Climber D", Constants.Climber.KD_CLIMBER);
+
+        SmartDashboard.putNumber("L Climber Cruise Velocity", Constants.Climber.DEPLOY_LEFT_CRUISE_VELOCITY);
+        SmartDashboard.putNumber("L Climber Acceleration", Constants.Climber.DEPLOY_LEFT_ACCELERATION);
+
+        SmartDashboard.putNumber("R Climber Cruise Velocity", Constants.Climber.DEPLOY_RIGHT_CRUISE_VELOCITY);
+        SmartDashboard.putNumber("R Climber Acceleration", Constants.Climber.DEPLOY_RIGHT_ACCELERATION);
+
+        SmartDashboard.putNumber("L Climber Pos", ClimberSubsystem.getInstance().getPosition(ClimberMotor.LEFT_CLIMBER));
+        SmartDashboard.putNumber("R Climber Pos", ClimberSubsystem.getInstance().getPosition(ClimberMotor.RIGHT_CLIMBER));
+
+        SmartDashboard.putNumber("L Climber Curr", ClimberSubsystem.getInstance().getStatorCurrent(ClimberMotor.LEFT_CLIMBER));
+        SmartDashboard.putNumber("R Climber Curr", ClimberSubsystem.getInstance().getStatorCurrent(ClimberMotor.RIGHT_CLIMBER));
+
+        
+        SmartDashboard.putNumber("L Pusher Coeff", 1);
+        SmartDashboard.putNumber("R Pusher Coeff", 1);
+        SmartDashboard.putNumber("Pusher speed", 0);
+
+        SmartDashboard.putNumber("Pusher F", Constants.Climber.KF_PUSHER);
+        SmartDashboard.putNumber("Pusher P", Constants.Climber.KP_PUSHER);
+        SmartDashboard.putNumber("Pusher I", Constants.Climber.KI_PUSHER);
+        SmartDashboard.putNumber("Pusher D", Constants.Climber.KD_PUSHER);
+
+        SmartDashboard.putNumber("L Pusher Cruise Velocity", Constants.Climber.DEPLOY_PUSH_CRUISE_VELOCITY);
+        SmartDashboard.putNumber("L Pusher Acceleration", Constants.Climber.DEPLOY_PUSH_ACCELERATION);
+
+        SmartDashboard.putNumber("R Pusher Cruise Velocity", Constants.Climber.DEPLOY_PUSH_CRUISE_VELOCITY);
+        SmartDashboard.putNumber("R Pusher Acceleration", Constants.Climber.DEPLOY_PUSH_ACCELERATION);
+
+        SmartDashboard.putNumber("L Pusher Pos", PusherSubsystem.getInstance().getPosition(PusherMotor.LEFT_PUSHER));
+        SmartDashboard.putNumber("R Pusher Pos", PusherSubsystem.getInstance().getPosition(PusherMotor.RIGHT_PUSHER));
+
+        SmartDashboard.putNumber("L Pusher Curr", PusherSubsystem.getInstance().getStatorCurrent(PusherMotor.LEFT_PUSHER));
+        SmartDashboard.putNumber("R Pusher Curr", PusherSubsystem.getInstance().getStatorCurrent(PusherMotor.RIGHT_PUSHER));
     }
 
     public void execute() {

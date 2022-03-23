@@ -39,6 +39,12 @@ public class ManualPusherCommand extends CommandBase{
     }
 
     @Override
+    public void end(boolean interrupted) {
+        PusherSubsystem.getInstance().setSpeed(PusherMotor.LEFT_PUSHER, 0);
+        PusherSubsystem.getInstance().setSpeed(PusherMotor.RIGHT_PUSHER, 0);
+    }
+
+    @Override
     public boolean isFinished() {
         return false;
     }

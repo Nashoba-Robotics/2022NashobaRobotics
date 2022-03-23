@@ -151,11 +151,25 @@ public class ClimberSubsystem extends SubsystemBase {
 
     public void setDiagnosticSpeed(ClimberMotor motor, double speed, ControlMode controlMode){
         TalonFX talon = getMotor(motor);
-        if(Math.abs(speed) <= 1) {
-            talon.set(controlMode, speed);
-        } else {
-            talon.set(controlMode, 0);
+        if(controlMode.equals(ControlMode.PercentOutput)){
+            if(Math.abs(speed) <= 1) {
+                talon.set(controlMode, speed);
+            } else {
+                talon.set(ControlMode.PercentOutput, 0);
+            }
         }
+        if(controlMode.equals(ControlMode.Velocity)){
+            if(Math.abs(speed) <= 1) {
+                talon.set(controlMode, Units.percent2Velocity(speed));
+            } else {
+                talon.set(ControlMode.PercentOutput, 0);
+            }
+            
+        }
+        else{
+            talon.set(controlMode, speed);
+        }
+
     }
 
     public void zeroLeftClimber(){
@@ -256,9 +270,9 @@ public class ClimberSubsystem extends SubsystemBase {
         // getMotor(ClimberMotor.RIGHT_1).set(ControlMode.PercentOutput, getFixedValue());
     }
 
-    public double getPusherValue(){
+    public double getClimberJoystickValue(){
         double rawX = rotatingClimbJoystick.getX();
-        double value = rawX * 0.15;
+        double value = rawX;
         return value;
     }
 
@@ -295,6 +309,21 @@ public class ClimberSubsystem extends SubsystemBase {
 
         leftClimber.set(ControlMode.MotionMagic, Constants.Climber.DEPLOY_LEFT_POS);
         rightClimber.set(ControlMode.MotionMagic, Constants.Climber.DEPLOY_RIGHT_POS);
+    }
+
+    //After the robot has been pushed up, the climbers release, allowing it to fall - DIFFERENT FROM UNDEPLOY
+    public void releaseClimber(){
+        leftClimber = getMotor(ClimberMotor.LEFT_CLIMBER);
+        rightClimber = getMotor(ClimberMotor.RIGHT_CLIMBER);
+
+        leftClimber.configMotionCruiseVelocity(Constants.Climber.RELEASE_LEFT_CRUISE_VELOCITY);
+        leftClimber.configMotionAcceleration(Constants.Climber.RELEASE_LEFT_ACCELERATION);
+
+        rightClimber.configMotionCruiseVelocity(Constants.Climber.RELEASE_RIGHT_CRUISE_VELOCITY);
+        rightClimber.configMotionAcceleration(Constants.Climber.RELEASE_RIGHT_ACCELERATION);
+
+        leftClimber.set(ControlMode.MotionMagic, Constants.Climber.RELEASE_LEFT_POS);
+        rightClimber.set(ControlMode.MotionMagic, Constants.Climber.RELEASE_RIGHT_POS);
     }
 
     public void zeroSensors(){

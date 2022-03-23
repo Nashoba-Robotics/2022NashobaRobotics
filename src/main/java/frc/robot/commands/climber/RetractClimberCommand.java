@@ -6,8 +6,10 @@ import frc.robot.Constants;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ClimberSubsystem.ClimberMotor;
 
+//Climbing Command
 public class RetractClimberCommand extends CommandBase {
-
+    private double lPos;
+    private double rPos;
     public RetractClimberCommand(){
         addRequirements(ClimberSubsystem.getInstance());
     }
@@ -20,8 +22,15 @@ public class RetractClimberCommand extends CommandBase {
     }
 
     @Override
+    public void execute() {
+        lPos = ClimberSubsystem.getInstance().getPosition(ClimberMotor.LEFT_CLIMBER);
+        rPos = ClimberSubsystem.getInstance().getPosition(ClimberMotor.RIGHT_CLIMBER);
+    }
+
+    @Override
     public boolean isFinished() {
-        return true;
+        return Math.abs(lPos - Constants.Climber.CLIMB_DEADZONE) >= Constants.Climber.DEPLOY_LEFT_POS ||
+               Math.abs(rPos - Constants.Climber.CLIMB_DEADZONE) >= Constants.Climber.DEPLOY_RIGHT_POS;
     }
 
     @Override
