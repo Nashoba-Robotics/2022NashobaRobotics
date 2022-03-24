@@ -21,6 +21,10 @@ public class OdometryCarpetCompensator extends DifferentialDriveOdometry{
         absAngle = (this.startAngle + Units.getAbsAngle(currAngle.getRadians())) % Constants.TAU;
     }
 
+    public void setStartAngle(double startAngle){
+        this.startAngle = Units.getAbsAngle(startAngle);
+    }
+
     public Pose2d updatePose2d(Rotation2d angle, double deltaLeftMeters, double deltaRightMeters){
 
         double leftPos = lastLeftPos + compensateRug(deltaLeftMeters);

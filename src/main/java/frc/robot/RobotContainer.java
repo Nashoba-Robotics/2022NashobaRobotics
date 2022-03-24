@@ -107,7 +107,7 @@ public class RobotContainer {
 
   public RobotContainer() {
     configureButtonBindings();
-    SmartDashboard.putData(joystickDriveCommand);
+    // SmartDashboard.putData(joystickDriveCommand);
     // SmartDashboard.putData(new VelocityTestCommand());
     // SmartDashboard.putData(new StopCommand());
     // SmartDashboard.putData(new SensorTestCommand());
@@ -118,16 +118,22 @@ public class RobotContainer {
     // SmartDashboard.putData(new GyroTestCommand());
     // SmartDashboard.putData(new LimelightCommand());
     // SmartDashboard.putData(new CannonTestCommand());
-    SmartDashboard.putData(new ClimberCommand());
-    SmartDashboard.putData(new ZeroClimberSensorsCommand());
-    SmartDashboard.putData(new DeployClimberCommad());
-    SmartDashboard.putData(new RetractClimberCommand());
-    SmartDashboard.putData(new ManualPusherCommand());
-    SmartDashboard.putData(new ManualClimberCommand());
-    SmartDashboard.putData(new DeployPusher());
-    SmartDashboard.putData(new TraversalClimbCommand());
-    SmartDashboard.putData(new DiagnosticClimberCommand());
-    SmartDashboard.putData(new ZeroPusherCommand());
+
+    // Climber testing
+    // SmartDashboard.putData(new ClimberCommand());
+    // SmartDashboard.putData(new ZeroClimberSensorsCommand());
+    // SmartDashboard.putData(new DeployClimberCommad());
+    // SmartDashboard.putData(new RetractClimberCommand());
+    // SmartDashboard.putData(new ManualPusherCommand());
+    // SmartDashboard.putData(new ManualClimberCommand());
+    // SmartDashboard.putData(new DeployPusher());
+    // SmartDashboard.putData(new TraversalClimbCommand());
+    // SmartDashboard.putData(new DiagnosticClimberCommand());
+    // SmartDashboard.putData(new ZeroPusherCommand());
+
+    SmartDashboard.putData(new CannonTestCommand());
+    SmartDashboard.putData(new LimelightCommand());
+
     // SmartDashboard.putData(new ZeroClimberCommand());
     // SmartDashboard.putData(new LoaderCommand());
     // SmartDashboard.putData(new TalonTestCommand());

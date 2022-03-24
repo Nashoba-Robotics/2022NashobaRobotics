@@ -61,7 +61,8 @@ public class ShootCommand extends CommandBase {
                 lastValidTy = LimelightSubsystem.getInstance().getShooterTy();
             }
             // cannonSpeed = 0.445 - 0.00527 * ty; // limelight math
-            cannonSpeed = 0.47 - 0.00527 * lastValidTy; // limelight math
+            //cannonSpeed = 0.47 - 0.00527 * lastValidTy; // limelight math
+            cannonSpeed = 0.53 - 0.00825 * lastValidTy;
         } else {
             cannonSpeed = 0.5; // close up shot
         }

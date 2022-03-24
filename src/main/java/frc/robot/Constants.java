@@ -202,6 +202,9 @@ public final class Constants {
 
         public static final double AUTO_B = 2; 
         public static final double AUTO_ZETA = 1;
+
+        public static final double FAR_LEFT_AUTO_START_ANGLE = -2.268928028;
+        public static final double CLOSE_LEFT_AUTO_START_ANGLE = 6.033;
     }
 
     public static class Intake {

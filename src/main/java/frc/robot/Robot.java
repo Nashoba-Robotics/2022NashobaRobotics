@@ -33,7 +33,7 @@ import frc.robot.commands.IntakePracticeCommand;
 import frc.robot.commands.JoystickDriveCommand;
 import frc.robot.commands.autoroutines.TestPathCommand;
 import frc.robot.commands.autoroutines.ThreeBallAuto;
-import frc.robot.commands.autoroutines.TwoBallAuto;
+import frc.robot.commands.autoroutines.TwoBallAuto_Far;
 import frc.robot.lib.PicoColorSensor;
 import frc.robot.lib.PicoColorSensor.RawColor;
 import frc.robot.subsystems.CannonSubsystem;
@@ -83,14 +83,15 @@ public class Robot extends TimedRobot {
 
     // compressor = new Compressor(1, PneumaticsModuleType.REVPH);
     // compressor.enableDigital();
-    //ph.enableCompressorAnalog(100, 120);
-    ph.disableCompressor();
+    ph.enableCompressorAnalog(100, 120);
+    //ph.disableCompressor();
     CommandScheduler.getInstance().setDefaultCommand(DriveSubsystem.getInstance(), new JoystickDriveCommand());
 
     autoChooser = new SendableChooser<>();
-    autoChooser.setDefaultOption("Two Ball Auto", new TwoBallAuto());
+    autoChooser.setDefaultOption("Two Ball Auto", new TwoBallAuto_Far());
     autoChooser.addOption("Three Ball Auto", new ThreeBallAuto());
     autoChooser.addOption("Test Auto", new TestPathCommand());
+    autoChooser.addOption("Two Ball Far", new TwoBallAuto_Far());
     SmartDashboard.putData("Auto", autoChooser);    
   }
 

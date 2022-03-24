@@ -6,8 +6,8 @@ import frc.robot.subsystems.PusherSubsystem;
 import frc.robot.subsystems.PusherSubsystem.PusherMotor;
 
 public class PushCommand extends CommandBase{
-    double lPos;
-    double rPos;
+    private double lPos;
+    private double rPos;
     
     public PushCommand(){
         addRequirements(PusherSubsystem.getInstance());
