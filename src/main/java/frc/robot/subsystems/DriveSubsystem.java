@@ -1,53 +1,22 @@
 package frc.robot.subsystems;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.List;
-
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
-import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
-
-import edu.wpi.first.hal.ConstantsJNI;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.RamseteController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
-import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryUtil;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.math.trajectory.TrajectoryUtil;
-import edu.wpi.first.math.trajectory.Trajectory.State;
-import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.util.sendable.SendableRegistry;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.RobotState;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Robot;
-import frc.robot.RobotContainer;
 import frc.robot.lib.OdometryCarpetCompensator;
 import frc.robot.lib.Units;
 
@@ -85,97 +54,31 @@ public class DriveSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        //if(RobotState.isAutonomous()){
-        if(odometryResetFinished){
-            odometry.updateAngle(Units.degrees2Radians(GyroSubsystem.getInstance().getAbsoluteAngle()));
-            gyroAngle = Rotation2d.fromDegrees(GyroSubsystem.getInstance().getAbsoluteAngle());
-            double deltaLeft = NU2Meters(leftMotor.getSelectedSensorPosition() - lastLeftNU);
-            double deltaRight = NU2Meters(rightMotor.getSelectedSensorPosition() - lastRightNU);
-            pose = odometry.updatePose2d(
-                gyroAngle,
-                deltaLeft,
-                deltaRight);
+        if(RobotState.isAutonomous()){
+            if(odometryResetFinished){
+                odometry.updateAngle(Units.degrees2Radians(GyroSubsystem.getInstance().getAbsoluteAngle()));
+                gyroAngle = Rotation2d.fromDegrees(GyroSubsystem.getInstance().getAbsoluteAngle());
+                double deltaLeft = Units.NU2Meters(leftMotor.getSelectedSensorPosition() - lastLeftNU);
+                double deltaRight = Units.NU2Meters(rightMotor.getSelectedSensorPosition() - lastRightNU);
+                pose = odometry.updatePose2d(
+                    gyroAngle,
+                    deltaLeft,
+                    deltaRight);
 
-            if(true) lastLeftNU = leftMotor.getSelectedSensorPosition();
-            lastRightNU = rightMotor.getSelectedSensorPosition();
+                if(true) lastLeftNU = leftMotor.getSelectedSensorPosition();
+                lastRightNU = rightMotor.getSelectedSensorPosition();
 
-            SmartDashboard.putNumber("angle odometry", odometry.getAngle());
-            SmartDashboard.putNumber("angle gyro", GyroSubsystem.getInstance().getAbsoluteAngle());
-            SmartDashboard.putNumber("l meters", odometry.getLeftMeters());
-            SmartDashboard.putNumber("r meters", odometry.getRightMeters());
+                SmartDashboard.putNumber("angle odometry", odometry.getAngle());
+                SmartDashboard.putNumber("angle gyro", GyroSubsystem.getInstance().getAbsoluteAngle());
+                SmartDashboard.putNumber("l meters", odometry.getLeftMeters());
+                SmartDashboard.putNumber("r meters", odometry.getRightMeters());
+            }
+
+            SmartDashboard.putNumber("l NU", getPositionLeft());
+            SmartDashboard.putNumber("r NU", getPositionRight());
+            SmartDashboard.putNumber("Odometry X", getPose().getX());
+            SmartDashboard.putNumber("Odometry Y", getPose().getY());
         }
-
-        SmartDashboard.putNumber("l NU", getPositionLeft());
-        SmartDashboard.putNumber("r NU", getPositionRight());
-        SmartDashboard.putNumber("Odometry X", getPose().getX());
-        SmartDashboard.putNumber("Odometry Y", getPose().getY());
-    }
-
-    public void resetOdometryTrue(){
-        odometryResetFinished = false;
-    }
-
-    public void setMetersPerSecond(double left, double right){
-        leftMotor.set(ControlMode.Velocity, meters2NUSpeed(left));
-        rightMotor.set(ControlMode.Velocity, meters2NUSpeed(right));
-    }
-
-    public void setVolts(double left, double right){
-        leftMotor.set(ControlMode.PercentOutput, left / 12);
-        rightMotor.set(ControlMode.PercentOutput, right / 12);
-    }
-
-    public void resetOdometry(Pose2d pose){
-        lastLeftNU = 0;
-        lastRightNU = 0;
-        leftMotor.setSelectedSensorPosition(0, Constants.PID_IDX, Constants.TIMEOUT);
-        rightMotor.setSelectedSensorPosition(0, Constants.PID_IDX, Constants.TIMEOUT);
-        odometry.resetPos(pose, Rotation2d.fromDegrees(0));
-        GyroSubsystem.getInstance().zeroHeading();
-        SmartDashboard.putNumber("Reset Angle", odometry.getPoseMeters().getRotation().getRadians());
-        odometryResetFinished = true;
-    }
-
-    public void setStartAngle(double startAngle){
-        odometry.setStartAngle(startAngle);
-    }
-
-    public DifferentialDriveWheelSpeeds getWheelSpeeds(){
-        return new DifferentialDriveWheelSpeeds(NU2Meters(getLeftMotorVelocity() * 10), NU2Meters(getRightMotorVelocity() * 10));
-    }
-
-    public double getAngle(){
-        return getPose().getRotation().getRadians();
-    }
-
-    public Pose2d getPose(){
-        return odometry.getPoseMeters();
-    }
-
-    public double getTranslationX(){
-        return getPose().getTranslation().getX();
-    }
-
-    public double getTranslationY(){
-        return getPose().getTranslation().getY();
-    }
-
-    public double NU2Meters(double nu){
-        double rate = (Constants.TAU * Constants.DriveTrain.WHEEL_RADIUS) / (Constants.DriveTrain.DRIVE_GEAR_RATIO * Constants.FALCON_NU);
-        return nu * rate;
-    }
-
-    public double meters2NUSpeed(double metersPerSecond){
-        return (metersPerSecond * (Constants.DriveTrain.DRIVE_GEAR_RATIO * Constants.FALCON_NU) / (Constants.TAU * Constants.DriveTrain.WHEEL_RADIUS)) / 10;
-        //return metersPerSecond * 3.133 * Constants.DriveTrain.DRIVE_GEAR_RATIO * Constants.FALCON_NU / 10;
-    }
-
-    private Rotation2d toRotation2d(double angle){
-        return Rotation2d.fromDegrees(angle);
-    }
-
-    public DifferentialDriveKinematics getKinematics(){
-        return kinematics;
     }
     
     public DriveSubsystem() {
@@ -226,6 +129,59 @@ public class DriveSubsystem extends SubsystemBase {
             instance = new DriveSubsystem();
         }
         return instance;
+    }
+
+    public void resetOdometryTrue(){
+        odometryResetFinished = false;
+    }
+
+    public void setMetersPerSecond(double left, double right){
+        leftMotor.set(ControlMode.Velocity, Units.meters2NUSpeed(left));
+        rightMotor.set(ControlMode.Velocity, Units.meters2NUSpeed(right));
+    }
+
+    public void setVolts(double left, double right){
+        leftMotor.set(ControlMode.PercentOutput, left / 12);
+        rightMotor.set(ControlMode.PercentOutput, right / 12);
+    }
+
+    public void resetOdometry(Pose2d pose){
+        lastLeftNU = 0;
+        lastRightNU = 0;
+        leftMotor.setSelectedSensorPosition(0, Constants.PID_IDX, Constants.TIMEOUT);
+        rightMotor.setSelectedSensorPosition(0, Constants.PID_IDX, Constants.TIMEOUT);
+        odometry.resetPos(pose, Rotation2d.fromDegrees(0));
+        GyroSubsystem.getInstance().zeroHeading();
+        SmartDashboard.putNumber("Reset Angle", odometry.getPoseMeters().getRotation().getRadians());
+        odometryResetFinished = true;
+    }
+
+    public void setStartAngle(double startAngle){
+        odometry.setStartAngle(startAngle);
+    }
+
+    public DifferentialDriveWheelSpeeds getWheelSpeeds(){
+        return new DifferentialDriveWheelSpeeds(Units.NU2Meters(getLeftMotorVelocity() * 10), Units.NU2Meters(getRightMotorVelocity() * 10));
+    }
+
+    public double getAngle(){
+        return getPose().getRotation().getRadians();
+    }
+
+    public Pose2d getPose(){
+        return odometry.getPoseMeters();
+    }
+
+    public double getTranslationX(){
+        return getPose().getTranslation().getX();
+    }
+
+    public double getTranslationY(){
+        return getPose().getTranslation().getY();
+    }
+
+    public DifferentialDriveKinematics getKinematics(){
+        return kinematics;
     }
 
     private void configureMotor(TalonFX motor) {
@@ -395,64 +351,10 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public double getDistanceLeft(){
-        return NU2Meters(getPositionLeft());
+        return Units.NU2Meters(getPositionLeft());
     }
 
     public double getDistanceRight(){
-        return NU2Meters(getPositionRight());
+        return Units.NU2Meters(getPositionRight());
     }
-
-    // public Command getAutonomousCommand(String trajectoryJSON){
-
-    //     //uncomment if setting points manually
-    //     DifferentialDriveVoltageConstraint autoVoltageConstraint = 
-    //     new DifferentialDriveVoltageConstraint(
-    //       new SimpleMotorFeedforward(Constants.DriveTrain.KS, Constants.DriveTrain.KV, Constants.DriveTrain.KA),
-    //       DriveSubsystem.getInstance().getKinematics(),
-    //       10);
-    
-    //     // uncomment if setting points manually
-    //     TrajectoryConfig config =
-    //     new TrajectoryConfig(
-    //       Constants.DriveTrain.MAX_VELOCITY,
-    //       Constants.DriveTrain.MAX_ACCELERATION)
-    //       .setKinematics(DriveSubsystem.getInstance().getKinematics())
-    //       .addConstraint(autoVoltageConstraint);
-    
-    //     Trajectory trajectory = new Trajectory();
-    
-    //     try {
-    //       Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-    //       trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-    //    } catch (IOException e) {
-    //       DriverStation.reportError("Unable to open trajectory: \n \n \n \n", e.getStackTrace());
-    //    }
-    
-    //     //uncomment if adding points manually
-    //     // Trajectory trajectory =
-    //     // TrajectoryGenerator.generateTrajectory(
-    //     //   new Pose2d(0, 0, new Rotation2d(0)), //starting position
-    //     //   List.of(), //nodes for robot to travel to
-    //     //   new Pose2d(5, 0, new Rotation2d(0)), //finishing position
-    //     //   config);
-
-    //     //GyroSubsystem.getInstance().zeroHeading();
-
-    //     //DriveSubsystem.getInstance().resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(GyroSubsystem.getInstance().getAbsoluteAngle())));
-
-    //     RamseteCommand ramseteCommand =
-    //         new RamseteCommand(
-    //             trajectory,
-    //             DriveSubsystem.getInstance()::getPose,
-    //             new RamseteController(Constants.DriveTrain.AUTO_B, Constants.DriveTrain.AUTO_ZETA),
-    //             DriveSubsystem.getInstance().getKinematics(),
-    //             DriveSubsystem.getInstance()::setMetersPerSecond,
-    //             DriveSubsystem.getInstance());
-    
-    //       //DriveSubsystem.getInstance().resetOdometry(trajectory.getInitialPose());
-            
-    //       return ramseteCommand
-    //         .andThen(() -> DriveSubsystem.getInstance().setMetersPerSecond(0, 0));
-    
-    //   }
 }

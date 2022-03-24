@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.lib.Units;
@@ -22,6 +23,8 @@ public class RunIntakeCommand extends CommandBase {
 
     private boolean finishedPuking;
     private boolean finishedShooting;
+
+    private static boolean colorRejection = true;
 
     public RunIntakeCommand() {
         addRequirements(IntakeSubsystem.getInstance());
@@ -46,31 +49,37 @@ public class RunIntakeCommand extends CommandBase {
 
         finishedPuking = finishedPuking ?
         true :
-        System.currentTimeMillis() - pukeMillis >= 500;
+        System.currentTimeMillis() - pukeMillis >= Constants.Intake.COLOR_REJECTION_PUKE_TIME;
 
         finishedShooting = finishedShooting ?
         true :
-        System.currentTimeMillis() - shootMillis >= 500;
+        System.currentTimeMillis() - shootMillis >= Constants.Intake.COLOR_REJECTION_SHOOT_TIME;
 
-        if(ColorSensorSubsystem.getInstance().getBall() != Units.oppositeBallColor(allianceColor)
-        && finishedPuking
-        && finishedShooting){
+        if(colorRejection){
+            if(ColorSensorSubsystem.getInstance().getBall() != Units.oppositeBallColor(allianceColor)
+            && finishedPuking
+            && finishedShooting){
+                IntakeSubsystem.getInstance().set(ball2 ? -0.2 : Constants.Intake.INTAKE_SPEED);
+                GrabberSubsystem.getInstance().set(ball2 ? 0 : Constants.Intake.GRABBER_SPEED);
+                LoaderSubsystem.getInstance().set(ball1 ? 0 : Constants.Intake.LOADER_SPEED);
+            } else if(ball1 && finishedShooting){
+                IntakeSubsystem.getInstance().set(-0.3);
+                GrabberSubsystem.getInstance().set(-0.3);
+                LoaderSubsystem.getInstance().set(ball1 ? 0 : Constants.Intake.LOADER_SPEED);
+                finishedPuking = false;
+                pukeMillis = System.currentTimeMillis();
+            } else {
+                IntakeSubsystem.getInstance().set(Constants.Intake.INTAKE_SPEED);
+                GrabberSubsystem.getInstance().set(Constants.Intake.GRABBER_SPEED);
+                LoaderSubsystem.getInstance().set(Constants.Intake.LOADER_SPEED);
+                CommandScheduler.getInstance().schedule(new ShootSpeedCommand(0.1, Constants.Intake.COLOR_REJECTION_SHOOT_TIME));
+                finishedShooting = false;
+                shootMillis = System.currentTimeMillis(); 
+            }
+        } else {
             IntakeSubsystem.getInstance().set(ball2 ? -0.2 : Constants.Intake.INTAKE_SPEED);
             GrabberSubsystem.getInstance().set(ball2 ? 0 : Constants.Intake.GRABBER_SPEED);
             LoaderSubsystem.getInstance().set(ball1 ? 0 : Constants.Intake.LOADER_SPEED);
-        } else if(ball1 && finishedShooting){
-            IntakeSubsystem.getInstance().set(-0.3);
-            GrabberSubsystem.getInstance().set(-0.3);
-            LoaderSubsystem.getInstance().set(ball1 ? 0 : Constants.Intake.LOADER_SPEED);
-            finishedPuking = false;
-            pukeMillis = System.currentTimeMillis();
-        } else {
-            IntakeSubsystem.getInstance().set(Constants.Intake.INTAKE_SPEED);
-            GrabberSubsystem.getInstance().set(Constants.Intake.GRABBER_SPEED);
-            LoaderSubsystem.getInstance().set(Constants.Intake.LOADER_SPEED);
-            CommandScheduler.getInstance().schedule(new ShootSpeedCommand(0.1, 500));
-            finishedShooting = false;
-            shootMillis = System.currentTimeMillis(); 
         }
 
         int balls = (ball1 ? 1 : 0) + (ball2 ? 1 : 0);
@@ -88,5 +97,13 @@ public class RunIntakeCommand extends CommandBase {
     @Override
     public boolean isFinished() {
        return false;
+    }
+
+    public static void setColorRejection(boolean bool){
+        colorRejection = bool;
+    }
+
+    public static boolean getColorRejection(){
+        return colorRejection;
     }
 }  

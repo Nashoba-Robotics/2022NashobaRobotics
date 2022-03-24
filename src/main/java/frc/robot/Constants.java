@@ -173,6 +173,9 @@ public final class Constants {
         public static final double RETRACT_RIGHT_ACCELERATION = 20_000;
         public static final double RETRACT_LEFT_CRUISE_VELOCITY = 10_000;
         public static final double RETRACT_RIGHT_CRUISE_VELOCITY = 10_500;
+
+        public static final int FORWARD_SOFT_LIMIT = 190000;
+        public static final int REVERSE_SOFT_LIMIT = 1000;
     }
 
     public static class DriveTrain {
@@ -221,11 +224,19 @@ public final class Constants {
         public static final double INTAKE_SPEED = 0.75;
         public static final double GRABBER_SPEED = 0.4;
         public static final double LOADER_SPEED = 0.15;
+
+        public static final int COLOR_REJECTION_SWITCH_PORT = 12;
+
+        public static final int COLOR_REJECTION_PUKE_TIME = 2000; // in millis
+        public static final int COLOR_REJECTION_SHOOT_TIME = 2000; // in millis
     }
 
     public static class ColorSensor{
-        public static final double BLUE_CONSTANT = 0;
-        public static final double RED_CONSTANT = 0;
+        public static final double D_RED_MAX = 0.13;
+        public static final double D_BLUE_MAX = 0.115;
+
+        public static final double[] RED = {0.185, 0.556, 0.013, 0.246};
+        public static final double[] BLUE = {0.462, 0.374, 0.008, 0.156};
     }
 
     public static class Limelight {

@@ -53,4 +53,14 @@ public class Units {
         }
         return BallColor.NONE;
     }
+
+    public static double NU2Meters(double nu){
+        double rate = (Constants.TAU * Constants.DriveTrain.WHEEL_RADIUS) / (Constants.DriveTrain.DRIVE_GEAR_RATIO * Constants.FALCON_NU);
+        return nu * rate;
+    }
+
+    public static double meters2NUSpeed(double metersPerSecond){
+        return (metersPerSecond * (Constants.DriveTrain.DRIVE_GEAR_RATIO * Constants.FALCON_NU) / (Constants.TAU * Constants.DriveTrain.WHEEL_RADIUS)) / 10;
+    }
+
 }

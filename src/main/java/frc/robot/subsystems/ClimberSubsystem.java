@@ -76,6 +76,19 @@ public class ClimberSubsystem extends SubsystemBase {
         leftClimber.setInverted(false);
         //leftPusher.setInverted(false);
 
+        
+        leftClimber.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed);
+        rightClimber.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed);
+
+        leftClimber.configForwardSoftLimitEnable(true);
+        leftClimber.configForwardSoftLimitThreshold(Constants.Climber.FORWARD_SOFT_LIMIT);
+        rightClimber.configForwardSoftLimitEnable(true);
+        rightClimber.configForwardSoftLimitThreshold(Constants.Climber.FORWARD_SOFT_LIMIT);
+        leftClimber.configReverseSoftLimitEnable(true);
+        leftClimber.configReverseSoftLimitThreshold(Constants.Climber.REVERSE_SOFT_LIMIT);
+        rightClimber.configReverseSoftLimitEnable(true);
+        rightClimber.configReverseSoftLimitThreshold(Constants.Climber.REVERSE_SOFT_LIMIT);
+
         // motorLeft1.configForwardSoftLimitEnable(true);
         // motorLeft1.configForwardSoftLimitThreshold(145500);
         // motorLeft1.configReverseSoftLimitEnable(true);
@@ -193,6 +206,13 @@ public class ClimberSubsystem extends SubsystemBase {
             
             lastLSState[i] = ls;
         }
+    }
+
+    public void setLimitSwitchEnable(boolean tRue){
+        leftClimber.configForwardSoftLimitEnable(tRue);
+        rightClimber.configForwardSoftLimitEnable(tRue);
+        leftClimber.configReverseSoftLimitEnable(tRue);
+        rightClimber.configReverseSoftLimitEnable(tRue);
     }
 
     // public void deployClimb(){

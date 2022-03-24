@@ -55,6 +55,7 @@ import frc.robot.commands.intakeshoot.EjectBackCommand;
 import frc.robot.commands.intakeshoot.EjectFrontCommand;
 import frc.robot.commands.intakeshoot.PukeCommand;
 import frc.robot.commands.intakeshoot.RunIntakeCommand;
+import frc.robot.commands.intakeshoot.SetColorRejectionCommand;
 import frc.robot.commands.intakeshoot.ShootCommand;
 import frc.robot.commands.intakeshoot.StopIntakeCommand;
 import frc.robot.subsystems.DriveSubsystem;
@@ -89,6 +90,8 @@ public class RobotContainer {
   Trigger fixedClimbButton = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), Constants.Buttons.FIXED_CLIMB).debounce(Constants.Buttons.DEBOUNCE_VALUE);
   Trigger fixedClimbeGrabButton = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), Constants.Buttons.FIXED_CLIMB_GRAB).debounce(Constants.Buttons.DEBOUNCE_VALUE);
   Trigger fixedClimberReleaseButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), Constants.Buttons.FIXED_CLIMB_RELEASE).debounce(Constants.Buttons.DEBOUNCE_VALUE);
+
+  Trigger colorRejectionSwitch = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), Constants.Intake.COLOR_REJECTION_SWITCH_PORT);
 
   // Trigger rotatingClimbDeployButton = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), 6).debounce(Constants.Buttons.DEBOUNCE_VALUE);
   // Trigger rotatingClimbUndeployButton = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), 5).debounce(Constants.Buttons.DEBOUNCE_VALUE);
@@ -179,6 +182,10 @@ public class RobotContainer {
 
     fixedClimbDeployButton.whenActive(new DeployClimberCommad());
     fixedClimbButton.whenActive(new RetractClimberCommand());
+
+    
+    colorRejectionSwitch.whenActive(new SetColorRejectionCommand(true));
+    colorRejectionSwitch.whenInactive(new SetColorRejectionCommand(false));
     // fixedClimbeGrabButton.whenActive(new StopCommand());  //TODO: Change to actual Grab Command
     // fixedClimberReleaseButton.whenActive();
 
