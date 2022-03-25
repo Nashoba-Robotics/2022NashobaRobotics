@@ -34,6 +34,7 @@ public class LedSubsystem extends SubsystemBase {
         candle.configFactoryDefault();
         candle.configLOSBehavior(true);
         candle.configStatusLedState(true);
+        candle.configBrightnessScalar(0.7);
     }
 
     public void setColor(int r, int g, int b) { //Much appreciation

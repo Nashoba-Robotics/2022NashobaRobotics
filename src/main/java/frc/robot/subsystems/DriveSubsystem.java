@@ -33,7 +33,7 @@ public class DriveSubsystem extends SubsystemBase {
     //x-speed, y-speed, rate of rotation
     private final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(Constants.DriveTrain.WHEEL_GAP);
     private Rotation2d gyroAngle = Rotation2d.fromDegrees(0);
-    private OdometryCarpetCompensator odometry = new OdometryCarpetCompensator(Constants.DriveTrain.FAR_LEFT_AUTO_START_ANGLE, gyroAngle);   //6.033
+    private OdometryCarpetCompensator odometry = new OdometryCarpetCompensator(0, gyroAngle);   //6.033
     private Pose2d pose;
 
     public static final int VOLTAGE_COMPENSATION_LEVEL = 12;
@@ -84,12 +84,19 @@ public class DriveSubsystem extends SubsystemBase {
     public DriveSubsystem() {
         odometryResetFinished = false;
 
-        leftMotor = new TalonFX(Constants.LEFT_MOTOR_PORTS[0]);//, "Drive");
-        leftMotor2 = new TalonFX(Constants.LEFT_MOTOR_PORTS[1]);//, "Drive");
-        leftMotor3 = new TalonFX(Constants.LEFT_MOTOR_PORTS[2]);//, "Drive");
-        rightMotor = new TalonFX(Constants.RIGHT_MOTOR_PORTS[0]);//, "Drive");
-        rightMotor2 = new TalonFX(Constants.RIGHT_MOTOR_PORTS[1]);//, "Drive");
-        rightMotor3 = new TalonFX(Constants.RIGHT_MOTOR_PORTS[2]);//, "Drive");
+        // leftMotor = new TalonFX(Constants.LEFT_MOTOR_PORTS[0], "Drive");
+        // leftMotor2 = new TalonFX(Constants.LEFT_MOTOR_PORTS[1], "Drive");
+        // leftMotor3 = new TalonFX(Constants.LEFT_MOTOR_PORTS[2], "Drive");
+        // rightMotor = new TalonFX(Constants.RIGHT_MOTOR_PORTS[0], "Drive");
+        // rightMotor2 = new TalonFX(Constants.RIGHT_MOTOR_PORTS[1], "Drive");
+        // rightMotor3 = new TalonFX(Constants.RIGHT_MOTOR_PORTS[2], "Drive");
+
+        leftMotor = new TalonFX(Constants.LEFT_MOTOR_PORTS[0]);
+        leftMotor2 = new TalonFX(Constants.LEFT_MOTOR_PORTS[1]);
+        leftMotor3 = new TalonFX(Constants.LEFT_MOTOR_PORTS[2]);
+        rightMotor = new TalonFX(Constants.RIGHT_MOTOR_PORTS[0]);
+        rightMotor2 = new TalonFX(Constants.RIGHT_MOTOR_PORTS[1]);
+        rightMotor3 = new TalonFX(Constants.RIGHT_MOTOR_PORTS[2]);
 
         leftMotor2.follow(leftMotor);
         leftMotor3.follow(leftMotor);
@@ -158,6 +165,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     public void setStartAngle(double startAngle){
         odometry.setStartAngle(startAngle);
+        GyroSubsystem.getInstance().zeroHeading();
     }
 
     public DifferentialDriveWheelSpeeds getWheelSpeeds(){

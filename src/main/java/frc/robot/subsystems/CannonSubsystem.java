@@ -43,7 +43,6 @@ public class CannonSubsystem extends SubsystemBase{
         solenoid = new Solenoid(PneumaticsModuleType.REVPH, Constants.Cannon.SOLENOID_PORT);
         topCannonMotor.setInverted(true);
         bottomCannonMotor.setInverted(true);
-        //bottomCannonMotor.setInverted(true);
         configureMotor(topCannonMotor);
         configureMotor(bottomCannonMotor);
     }

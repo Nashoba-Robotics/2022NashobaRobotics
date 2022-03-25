@@ -82,6 +82,7 @@ public class ShootCommand extends CommandBase {
             stopMillis = millis;
         }
 
+        // TODO uncomment
         // if(millis > stopMillis + 500) {
         //     finished = true;
         //     SmartDashboard.putString("Logging", "finished");

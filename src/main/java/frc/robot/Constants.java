@@ -104,8 +104,8 @@ public final class Constants {
         public static final int DEPLOY_LEFT_PUSHER_POS = -109_000;
         public static final int DEPLOY_RIGHT_PUSHER_POS = -109_000;
 
-        public static final int PUSH_LEFT_POS = 35_000;
-        public static final int PUSH_RIGHT_POS = 35_000;
+        public static final int PUSH_LEFT_POS = 19_000;
+        public static final int PUSH_RIGHT_POS = 19_000;
 
         public static final int PUSH_LEFT_CRUISE_VELOCITY = 15_000;
         public static final int PUSH_RIGHT_CRUISE_VELOCITY = 15_000;
@@ -118,8 +118,10 @@ public final class Constants {
         public static final int RETRACT_LEFT_POS = 13_750;
         public static final int RETRACT_RIGHT_POS = 13_750;
 
-        public static final int RELEASE_LEFT_POS = 170_000;
-        public static final int RELEASE_RIGHT_POS = 170_000;
+        // public static final int RELEASE_LEFT_POS = 70_000;
+        // public static final int RELEASE_RIGHT_POS = 70_000;
+        public static final int RELEASE_LEFT_POS = 26_000;
+        public static final int RELEASE_RIGHT_POS = 26_000;
 
         public static final int RELEASE_LEFT_CRUISE_VELOCITY = 15_000;
         public static final int RELEASE_RIGHT_CRUISE_VELOCITY = 15_000;
@@ -127,25 +129,28 @@ public final class Constants {
         public static final int RELEASE_LEFT_ACCELERATION = 20_000;
         public static final int RELEASE_RIGHT_ACCELERATION = 20_000;
 
-        public static final int RELEASE_DEADZONE = 200;
+        public static final int RELEASE_DEADZONE = 700;
 
-        public static final int RELEASE_LEFT_PUSHER_SLOW_POS = 0;
-        public static final int RELEASE_RIGHT_PUSHER_SLOW_POS = 0;
+        // public static final int RELEASE_LEFT_PUSHER_SLOW_POS = -10_000;
+        // public static final int RELEASE_RIGHT_PUSHER_SLOW_POS = -10_000;
 
-        public static final int RELEASE_LEFT_PUSHER_CRUISE_VELOCITY_SLOW = 0;
-        public static final int RELEASE_RIGHT_PUSHER_CRUISE_VELOCITY_SLOW = 0;
+        public static final int RELEASE_LEFT_PUSHER_SLOW_POS = -90_000;
+        public static final int RELEASE_RIGHT_PUSHER_SLOW_POS = -90_000;
 
-        public static final int RELEASE_LEFT_PUSHER_ACCELERATION_SLOW = 0;
-        public static final int RELEASE_RIGHT_PUSHER_ACCELERATION_SLOW = 0;
+        public static final int RELEASE_LEFT_PUSHER_CRUISE_VELOCITY_SLOW = 500;
+        public static final int RELEASE_RIGHT_PUSHER_CRUISE_VELOCITY_SLOW = 500;
 
-        public static final int RELEASE_LEFT_PUSHER_FAST_POS = 0;
-        public static final int RELEASE_RIGHT_PUSHER_FAST_POS = 0;
+        public static final int RELEASE_LEFT_PUSHER_ACCELERATION_SLOW = 2000;
+        public static final int RELEASE_RIGHT_PUSHER_ACCELERATION_SLOW = 2000;
 
-        public static final int RELEASE_LEFT_PUSHER_CRUISE_VELOCITY_FAST = 0;
-        public static final int RELEASE_RIGHT_PUSHER_CRUISE_VELOCITY_FAST = 0;
+        public static final int RELEASE_LEFT_PUSHER_FAST_POS = -90_000;
+        public static final int RELEASE_RIGHT_PUSHER_FAST_POS = -90_000;
 
-        public static final int RELEASE_LEFT_PUSHER_ACCELERATION_FAST = 0;
-        public static final int RELEASE_RIGHT_PUSHER_ACCELERATION_FAST = 0;
+        public static final int RELEASE_LEFT_PUSHER_CRUISE_VELOCITY_FAST = 20_000;
+        public static final int RELEASE_RIGHT_PUSHER_CRUISE_VELOCITY_FAST = 20_000;
+
+        public static final int RELEASE_LEFT_PUSHER_ACCELERATION_FAST = 40_000;
+        public static final int RELEASE_RIGHT_PUSHER_ACCELERATION_FAST = 40_000;
 
         public static final double KF_CLIMBER = 0.047;
         public static final double KP_CLIMBER = 0.025;
@@ -206,8 +211,10 @@ public final class Constants {
         public static final double AUTO_B = 2; 
         public static final double AUTO_ZETA = 1;
 
-        public static final double FAR_LEFT_AUTO_START_ANGLE = -2.268928028;
-        public static final double CLOSE_LEFT_AUTO_START_ANGLE = 6.033;
+        public static final double FAR_LEFT_START_ANGLE = -2.268928028;
+        public static final double CLOSE_LEFT_START_ANGLE = 6.033;
+        public static final double CLOSE_RIGHT_START_ANGLE = 0;
+        public static final double FAR_RIGHT_START_ANGLE = 0;
     }
 
     public static class Intake {
@@ -222,21 +229,23 @@ public final class Constants {
         public static final int INTAKE_SOLENOID_PORT2 = 15;
 
         public static final double INTAKE_SPEED = 0.75;
-        public static final double GRABBER_SPEED = 0.4;
+        public static final double GRABBER_SPEED = 0.5;
         public static final double LOADER_SPEED = 0.15;
 
         public static final int COLOR_REJECTION_SWITCH_PORT = 12;
 
-        public static final int COLOR_REJECTION_PUKE_TIME = 2000; // in millis
-        public static final int COLOR_REJECTION_SHOOT_TIME = 2000; // in millis
+        public static final int COLOR_REJECTION_PUKE_TIME = 3000; // in millis
+        public static final int COLOR_REJECTION_SHOOT_TIME = 3000; // in millis
     }
 
     public static class ColorSensor{
-        public static final double D_RED_MAX = 0.13;
+        public static final double D_RED_MAX = 0.06;
         public static final double D_BLUE_MAX = 0.115;
 
-        public static final double[] RED = {0.185, 0.556, 0.013, 0.246};
-        public static final double[] BLUE = {0.462, 0.374, 0.008, 0.156};
+        public static final double[] RED1 = {0.1869, 0.5761, 0.0144, 0.2226};
+        public static final double[] RED2 = {0.1672, 0.4643, 0.0093, 0.3592};
+        public static final double[] BLUE1 = {0.4749, 0.3935, 0.0009, 0.1225};
+        public static final double[] BLUE2 = {0.4138, 0.3661, 0.0077, 0.2123};
     }
 
     public static class Limelight {

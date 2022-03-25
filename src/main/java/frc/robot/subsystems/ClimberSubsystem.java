@@ -77,8 +77,8 @@ public class ClimberSubsystem extends SubsystemBase {
         //leftPusher.setInverted(false);
 
         
-        leftClimber.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed);
-        rightClimber.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed);
+        //leftClimber.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed);
+        //rightClimber.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed);
 
         leftClimber.configForwardSoftLimitEnable(true);
         leftClimber.configForwardSoftLimitThreshold(Constants.Climber.FORWARD_SOFT_LIMIT);

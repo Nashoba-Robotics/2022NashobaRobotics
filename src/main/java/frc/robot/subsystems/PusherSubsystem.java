@@ -98,6 +98,24 @@ public class PusherSubsystem extends SubsystemBase{
         }
     }
 
+    public void seLefttMotionMagic(double pos){
+        leftPusher = getMotor(PusherMotor.LEFT_PUSHER);
+
+        leftPusher.configMotionCruiseVelocity(Constants.Climber.RELEASE_LEFT_PUSHER_CRUISE_VELOCITY_SLOW);
+        leftPusher.configMotionAcceleration(Constants.Climber.RELEASE_LEFT_PUSHER_ACCELERATION_SLOW);
+
+        leftPusher.set(ControlMode.MotionMagic, pos);
+    }
+
+    public void setRighttMotionMagic(double pos){
+        rightPusher = getMotor(PusherMotor.RIGHT_PUSHER);
+        
+        rightPusher.configMotionCruiseVelocity(Constants.Climber.RELEASE_RIGHT_PUSHER_CRUISE_VELOCITY_SLOW);
+        rightPusher.configMotionAcceleration(Constants.Climber.RELEASE_RIGHT_PUSHER_ACCELERATION_SLOW);
+
+        rightPusher.set(ControlMode.MotionMagic, pos);
+    }
+
     public void setDiagnosticSpeed(PusherMotor motor, double speed, ControlMode controlMode){
         TalonFX talon = getMotor(motor);
         if(controlMode.equals(ControlMode.PercentOutput)){
@@ -119,6 +137,7 @@ public class PusherSubsystem extends SubsystemBase{
             talon.set(controlMode, speed);
         }
     }
+
 
     public double getFixedValue(){
         double rawY = fixedClimbJoystick.getY();
@@ -198,6 +217,20 @@ public class PusherSubsystem extends SubsystemBase{
 
         leftPusher.set(ControlMode.MotionMagic, Constants.Climber.RELEASE_LEFT_PUSHER_FAST_POS);
         rightPusher.set(ControlMode.MotionMagic, Constants.Climber.RELEASE_RIGHT_PUSHER_FAST_POS);
+    }
+
+    public void resetPusher(){
+        leftPusher = getMotor(PusherMotor.LEFT_PUSHER);
+        rightPusher = getMotor(PusherMotor.RIGHT_PUSHER);
+
+        leftPusher.configMotionCruiseVelocity(Constants.Climber.DEPLOY_PUSH_CRUISE_VELOCITY);
+        leftPusher.configMotionAcceleration(Constants.Climber.DEPLOY_PUSH_ACCELERATION);
+
+        rightPusher.configMotionCruiseVelocity(Constants.Climber.DEPLOY_PUSH_CRUISE_VELOCITY);
+        rightPusher.configMotionAcceleration(Constants.Climber.DEPLOY_PUSH_ACCELERATION);
+
+        leftPusher.set(ControlMode.MotionMagic, 0);
+        rightPusher.set(ControlMode.MotionMagic, 0);
     }
 
     public void zeroLeftPusher(){

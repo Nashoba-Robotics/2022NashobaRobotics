@@ -29,8 +29,8 @@ public class RetractClimberCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return Math.abs(lPos - Constants.Climber.CLIMB_DEADZONE) >= Constants.Climber.DEPLOY_LEFT_POS ||
-               Math.abs(rPos - Constants.Climber.CLIMB_DEADZONE) >= Constants.Climber.DEPLOY_RIGHT_POS;
+        return Math.abs(lPos - Constants.Climber.RETRACT_LEFT_POS) <= Constants.Climber.CLIMB_DEADZONE||
+               Math.abs(rPos - Constants.Climber.RETRACT_RIGHT_POS) <= Constants.Climber.CLIMB_DEADZONE;
     }
 
     @Override

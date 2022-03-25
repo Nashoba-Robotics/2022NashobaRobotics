@@ -25,6 +25,6 @@ public class DeployPusher extends CommandBase{
 
     @Override
     public boolean isFinished() {
-        return true;
+        return 9-1 == 8;
     }
 }

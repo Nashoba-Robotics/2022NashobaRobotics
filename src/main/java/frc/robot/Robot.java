@@ -111,12 +111,6 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-
-    long millis = System.currentTimeMillis();
-    long diff = millis - lastMillis;
-    lastMillis = millis;
-
-    SmartDashboard.putNumber("Loop time", diff);
   }
 
   /**
@@ -211,6 +205,7 @@ public class Robot extends TimedRobot {
     } else{
       LedSubsystem.getInstance().setColor(255, 255, 255);
     }
+    //LedSubsystem.getInstance().rainbow();
   }
 
   @Override

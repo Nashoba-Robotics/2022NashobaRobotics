@@ -45,7 +45,13 @@ import frc.robot.commands.climber.DeployPusher;
 import frc.robot.commands.climber.ManualClimberCommand;
 import frc.robot.commands.climber.DeployClimberCommad;
 import frc.robot.commands.climber.ManualPusherCommand;
+import frc.robot.commands.climber.PushCommand;
+import frc.robot.commands.climber.ReleaseClimberCommand;
+import frc.robot.commands.climber.ReleasePusherCommand;
+import frc.robot.commands.climber.ResetPusherCommand;
 import frc.robot.commands.climber.RetractClimberCommand;
+import frc.robot.commands.climber.StopClimbCommand;
+import frc.robot.commands.climber.TemporaryReleaseCommand;
 import frc.robot.commands.climber.TraversalClimbCommand;
 import frc.robot.commands.climber.ZeroClimberSensorsCommand;
 import frc.robot.commands.climber.ZeroPusherCommand;
@@ -124,18 +130,32 @@ public class RobotContainer {
 
     // Climber testing
     // SmartDashboard.putData(new ClimberCommand());
-    // SmartDashboard.putData(new ZeroClimberSensorsCommand());
+    SmartDashboard.putData(new ZeroClimberSensorsCommand());
     // SmartDashboard.putData(new DeployClimberCommad());
     // SmartDashboard.putData(new RetractClimberCommand());
-    // SmartDashboard.putData(new ManualPusherCommand());
-    // SmartDashboard.putData(new ManualClimberCommand());
+    SmartDashboard.putData(new ManualPusherCommand());
+    SmartDashboard.putData(new ManualClimberCommand());
     // SmartDashboard.putData(new DeployPusher());
-    // SmartDashboard.putData(new TraversalClimbCommand());
-    // SmartDashboard.putData(new DiagnosticClimberCommand());
-    // SmartDashboard.putData(new ZeroPusherCommand());
+    SmartDashboard.putData(new TraversalClimbCommand());
+
+    SmartDashboard.putData(new PushCommand());
+
+    SmartDashboard.putData(new ReleaseClimberCommand());
+    SmartDashboard.putData(new ReleasePusherCommand());
+    SmartDashboard.putData(new TemporaryReleaseCommand());
+
+    SmartDashboard.putData(new ResetPusherCommand());
+
+    SmartDashboard.putData(new DiagnosticClimberCommand());
+    SmartDashboard.putData(new ZeroPusherCommand());
+
+    SmartDashboard.putData(new StopClimbCommand());
 
     SmartDashboard.putData(new CannonTestCommand());
     SmartDashboard.putData(new LimelightCommand());
+
+    SmartDashboard.putData(new ColorSensorTestCommand());
+    SmartDashboard.putData(new LedTestCommand());
 
     // SmartDashboard.putData(new ZeroClimberCommand());
     // SmartDashboard.putData(new LoaderCommand());

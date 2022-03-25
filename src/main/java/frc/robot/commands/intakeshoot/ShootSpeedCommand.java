@@ -13,13 +13,10 @@ public class ShootSpeedCommand extends CommandBase{
     public ShootSpeedCommand(double shootSpeed, double finishTimeMillis){
         this.shootSpeed = shootSpeed;
         this.finishTimeMilllis = finishTimeMilllis;
-    }
+        startMillis = System.currentTimeMillis();
 
-    @Override
-    public void initialize() {
         addRequirements(CannonSubsystem.getInstance());
 
-        startMillis = System.currentTimeMillis();
     }
 
     @Override

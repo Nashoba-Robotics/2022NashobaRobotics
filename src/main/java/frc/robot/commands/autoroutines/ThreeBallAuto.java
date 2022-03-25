@@ -20,7 +20,7 @@ import frc.robot.subsystems.CannonSubsystem.Angle;
 public class ThreeBallAuto extends SequentialCommandGroup{
     public ThreeBallAuto(){
         addCommands(
-            new SetStartAngleCommand(Constants.DriveTrain.CLOSE_LEFT_AUTO_START_ANGLE),
+            new SetStartAngleCommand(Constants.DriveTrain.CLOSE_LEFT_START_ANGLE),
             //new AutoShootCommand(Angle.EIGHTY),
             //new ActuateIntakeCommand(true),
             //new WaitCommand(0.25),

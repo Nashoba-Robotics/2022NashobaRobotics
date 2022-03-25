@@ -19,7 +19,7 @@ public class TwoBallAuto_Far extends SequentialCommandGroup {
     public TwoBallAuto_Far(){
         addRequirements(DriveSubsystem.getInstance());
         addCommands(
-            new SetStartAngleCommand(Constants.DriveTrain.FAR_LEFT_AUTO_START_ANGLE),
+            new SetStartAngleCommand(Constants.DriveTrain.FAR_LEFT_START_ANGLE),
             // new AutoShootCommand(Angle.EIGHTY),
             // new ActuateIntakeCommand(true),
             new WaitCommand(0.5),

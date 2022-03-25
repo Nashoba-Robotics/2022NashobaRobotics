@@ -1,5 +1,6 @@
 package frc.robot.lib;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 
 public class ColorDetection {
@@ -21,9 +22,16 @@ public class ColorDetection {
         return new double[]{arr[0]/total, arr[1]/total, arr[2]/total, arr[3]/total};
     }
 
-    public static BallColor detect(double[] c) {
-        double dRed = distance(c, Constants.ColorSensor.RED);
-        double dBlue = distance(c, Constants.ColorSensor.BLUE);
+    public static BallColor detect(double[] color) {
+        double[] c = normalize(color);
+        double dRed1 = distance(c, Constants.ColorSensor.RED1);
+        double dRed2 = distance(c, Constants.ColorSensor.RED2);
+        double dRed = Math.min(dRed1, dRed2);
+        double dBlue1 = distance(c, Constants.ColorSensor.BLUE1);
+        double dBlue2 = distance(c, Constants.ColorSensor.BLUE2);
+        double dBlue = Math.min(dBlue1, dBlue2);
+        SmartDashboard.putNumber("dRed", dRed);
+        SmartDashboard.putNumber("dBlue", dBlue);
         if(dRed < Constants.ColorSensor.D_RED_MAX && dBlue < Constants.ColorSensor.D_BLUE_MAX) return (dRed < dBlue) ? BallColor.RED : BallColor.BLUE;
         else if(dRed < Constants.ColorSensor.D_RED_MAX) return BallColor.RED;
         else if(dBlue < Constants.ColorSensor.D_BLUE_MAX) return BallColor.BLUE;

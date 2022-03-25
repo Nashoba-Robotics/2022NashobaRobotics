@@ -7,7 +7,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.lib.RenameThisLater;
 import frc.robot.lib.Units;
+import frc.robot.subsystems.CannonSubsystem;
 import frc.robot.subsystems.ColorSensorSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -24,7 +26,13 @@ public class RunIntakeCommand extends CommandBase {
     private boolean finishedPuking;
     private boolean finishedShooting;
 
-    private static boolean colorRejection = true;
+    private RenameThisLater thing;
+
+    private static boolean colorRejection = false;
+
+    private boolean grabberChange;
+
+    private boolean lastStateBall2;
 
     public RunIntakeCommand() {
         addRequirements(IntakeSubsystem.getInstance());
@@ -40,6 +48,11 @@ public class RunIntakeCommand extends CommandBase {
         allianceColor = Units.alliance2BallColor(DriverStation.getAlliance());
         finishedPuking = true;
         finishedShooting = true;
+
+        grabberChange = false;
+        lastStateBall2 = false;
+
+        thing = new RenameThisLater(0, 0, 0.3);
     }
 
     @Override
@@ -55,35 +68,52 @@ public class RunIntakeCommand extends CommandBase {
         true :
         System.currentTimeMillis() - shootMillis >= Constants.Intake.COLOR_REJECTION_SHOOT_TIME;
 
+        if(finishedShooting) CannonSubsystem.getInstance().set(0);
+
         if(colorRejection){
-            if(ColorSensorSubsystem.getInstance().getBall() != Units.oppositeBallColor(allianceColor)
+            if(ColorSensorSubsystem.getInstance().getBall() != Units.oppositeBallColor(allianceColor)   //Normal intake
             && finishedPuking
             && finishedShooting){
                 IntakeSubsystem.getInstance().set(ball2 ? -0.2 : Constants.Intake.INTAKE_SPEED);
-                GrabberSubsystem.getInstance().set(ball2 ? 0 : Constants.Intake.GRABBER_SPEED);
+                GrabberSubsystem.getInstance().set(ball2 ? thing.get() : Constants.Intake.GRABBER_SPEED);
                 LoaderSubsystem.getInstance().set(ball1 ? 0 : Constants.Intake.LOADER_SPEED);
-            } else if(ball1 && finishedShooting){
+            } else if(ball1 && finishedShooting){   //Puking out back
+                thing.setStopValue(-0.2);
                 IntakeSubsystem.getInstance().set(-0.3);
-                GrabberSubsystem.getInstance().set(-0.3);
+                GrabberSubsystem.getInstance().set(thing.get());
                 LoaderSubsystem.getInstance().set(ball1 ? 0 : Constants.Intake.LOADER_SPEED);
+                if(finishedPuking) pukeMillis = System.currentTimeMillis();
                 finishedPuking = false;
-                pukeMillis = System.currentTimeMillis();
-            } else {
+            } else {    //Puking out front
                 IntakeSubsystem.getInstance().set(Constants.Intake.INTAKE_SPEED);
                 GrabberSubsystem.getInstance().set(Constants.Intake.GRABBER_SPEED);
                 LoaderSubsystem.getInstance().set(Constants.Intake.LOADER_SPEED);
-                CommandScheduler.getInstance().schedule(new ShootSpeedCommand(0.1, Constants.Intake.COLOR_REJECTION_SHOOT_TIME));
+                CannonSubsystem.getInstance().set(0.25);
+                if(finishedShooting || ColorSensorSubsystem.getInstance().getBall() == Units.oppositeBallColor(allianceColor)) shootMillis = System.currentTimeMillis();
                 finishedShooting = false;
-                shootMillis = System.currentTimeMillis(); 
             }
         } else {
             IntakeSubsystem.getInstance().set(ball2 ? -0.2 : Constants.Intake.INTAKE_SPEED);
-            GrabberSubsystem.getInstance().set(ball2 ? 0 : Constants.Intake.GRABBER_SPEED);
+            GrabberSubsystem.getInstance().set(ball2 ? thing.get() : Constants.Intake.GRABBER_SPEED);
             LoaderSubsystem.getInstance().set(ball1 ? 0 : Constants.Intake.LOADER_SPEED);
+        }
+
+        if(ball2 && !lastStateBall2){
+            grabberChange = true;
+            lastStateBall2 = true;
+        }
+        if(grabberChange){
+            thing.restart(0, 0.3);
+            grabberChange = false;
+        }
+
+        if(!ball2){
+            lastStateBall2 = false;
         }
 
         int balls = (ball1 ? 1 : 0) + (ball2 ? 1 : 0);
         SmartDashboard.putNumber("Balls", balls);
+        SmartDashboard.putString("Ball Color", ColorSensorSubsystem.getInstance().getBall().toString());
     }
 
     @Override
@@ -91,6 +121,7 @@ public class RunIntakeCommand extends CommandBase {
         IntakeSubsystem.getInstance().stop();
         GrabberSubsystem.getInstance().stop();
         LoaderSubsystem.getInstance().stop();
+        CannonSubsystem.getInstance().set(0);
         SmartDashboard.putBoolean("Intake On?", false);
     }
 

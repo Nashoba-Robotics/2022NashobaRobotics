@@ -3,9 +3,11 @@ package frc.robot.commands.autoroutines;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.commands.AutoAimCommand;
 import frc.robot.commands.AutoShootCommand;
+import frc.robot.commands.SetStartAngleCommand;
 import frc.robot.commands.intakeshoot.ActuateIntakeCommand;
 import frc.robot.commands.intakeshoot.RunIntakeCommand;
 import frc.robot.subsystems.CannonSubsystem.Angle;
@@ -13,6 +15,7 @@ import frc.robot.subsystems.CannonSubsystem.Angle;
 public class ThreeBallAuto_Right extends SequentialCommandGroup{
     public ThreeBallAuto_Right(){
         addCommands(
+            new SetStartAngleCommand(Constants.DriveTrain.CLOSE_RIGHT_START_ANGLE),
             new AutoShootCommand(Angle.EIGHTY),
             new ActuateIntakeCommand(true),
             new WaitCommand(0.25),

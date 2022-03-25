@@ -22,8 +22,8 @@ public class PushCommand extends CommandBase{
 
     @Override
     public boolean isFinished() {
-        return Math.abs(lPos - Constants.Climber.PUSH_DEADZONE) >= Constants.Climber.PUSH_LEFT_POS ||
-               Math.abs(rPos - Constants.Climber.PUSH_DEADZONE) >= Constants.Climber.PUSH_RIGHT_POS;
+        return Math.abs(lPos - Constants.Climber.PUSH_LEFT_POS) <= Constants.Climber.PUSH_DEADZONE||
+               Math.abs(rPos - Constants.Climber.PUSH_RIGHT_POS) <= Constants.Climber.PUSH_DEADZONE;
     }
 
 }
