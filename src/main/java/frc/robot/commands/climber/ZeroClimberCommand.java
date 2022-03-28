@@ -41,42 +41,42 @@ public class ZeroClimberCommand extends CommandBase {
 
         long millis = System.currentTimeMillis();
 
-        double leftPos = ClimberSubsystem.getInstance().getPosition(ClimberMotor.LEFT_CLIMBER);
-        double rightPos = ClimberSubsystem.getInstance().getPosition(ClimberMotor.RIGHT_CLIMBER);
+        double leftPos = ClimberSubsystem.getInstance().getLeftPosition();
+        double rightPos = ClimberSubsystem.getInstance().getRightPosition();
 
-        if(leftFinished && !ClimberSubsystem.getInstance().getLimitSwitch(ClimberMotor.LEFT_CLIMBER)){
-            ClimberSubsystem.getInstance().setSpeed(ClimberMotor.LEFT_CLIMBER, 0);
+        if(leftFinished && !ClimberSubsystem.getInstance().getLeftLimitSwitch()){
+            ClimberSubsystem.getInstance().setLeftSpeed(0);
             ClimberSubsystem.getInstance().zeroLeftClimber();
             leftEnd = true;
         }
-        if(rightFinished && !ClimberSubsystem.getInstance().getLimitSwitch(ClimberMotor.RIGHT_CLIMBER)){
-            ClimberSubsystem.getInstance().setSpeed(ClimberMotor.RIGHT_CLIMBER, 0);
+        if(rightFinished && !ClimberSubsystem.getInstance().getRightLimitSwitch()){
+            ClimberSubsystem.getInstance().setRightSpeed(0);
             ClimberSubsystem.getInstance().zeroRightClimber();
             rightEnd = true;
         }
 
         if(millis > leftHitMillis + 1000) {
-            ClimberSubsystem.getInstance().setSpeed(ClimberMotor.LEFT_CLIMBER, 0);
+            ClimberSubsystem.getInstance().setLeftSpeed(0);
             leftEnd = true;
         }
         if(millis > rightHitMillis + 1000) {
-            ClimberSubsystem.getInstance().setSpeed(ClimberMotor.RIGHT_CLIMBER, 0);
+            ClimberSubsystem.getInstance().setRightSpeed(0);
             rightEnd = true;
         }
 
-        if(!ClimberSubsystem.getInstance().getLimitSwitch(ClimberMotor.LEFT_CLIMBER) && !leftFinished)
-            ClimberSubsystem.getInstance().setSpeed(ClimberMotor.LEFT_CLIMBER, -0.05);
+        if(!ClimberSubsystem.getInstance().getLeftLimitSwitch() && !leftFinished)
+            ClimberSubsystem.getInstance().setLeftSpeed(-0.05);
         else if(!leftFinished){
-            ClimberSubsystem.getInstance().setSpeed(ClimberMotor.LEFT_CLIMBER, 0.03);
+            ClimberSubsystem.getInstance().setRightSpeed(0.03);
             leftFinished = true;
             leftHitMillis = millis;
         }
 
 
-        if(!ClimberSubsystem.getInstance().getLimitSwitch(ClimberMotor.RIGHT_CLIMBER) && !rightFinished)
-            ClimberSubsystem.getInstance().setSpeed(ClimberMotor.RIGHT_CLIMBER, -0.05);
+        if(!ClimberSubsystem.getInstance().getRightLimitSwitch() && !rightFinished)
+            ClimberSubsystem.getInstance().setRightSpeed(-0.05);
         else if(!rightFinished){
-            ClimberSubsystem.getInstance().setSpeed(ClimberMotor.RIGHT_CLIMBER, 0.03);
+            ClimberSubsystem.getInstance().setLeftSpeed(0.03);
             rightFinished = true;
             rightHitMillis = millis;
         }

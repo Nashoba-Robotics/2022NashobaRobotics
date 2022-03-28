@@ -14,8 +14,7 @@ public class StopClimbCommand extends CommandBase{
 
     @Override
     public void execute() {
-        ClimberSubsystem.getInstance().setSpeed(ClimberMotor.LEFT_CLIMBER, 0);
-        ClimberSubsystem.getInstance().setSpeed(ClimberMotor.RIGHT_CLIMBER, 0);
+        ClimberSubsystem.getInstance().setSpeed(0);
 
         PusherSubsystem.getInstance().setSpeed(PusherMotor.LEFT_PUSHER, 0);
         PusherSubsystem.getInstance().setSpeed(PusherMotor.RIGHT_PUSHER, 0);

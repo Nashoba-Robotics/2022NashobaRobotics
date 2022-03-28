@@ -19,7 +19,7 @@ public class PukeCommand extends CommandBase {
     @Override
     public void initialize() {
         SmartDashboard.putBoolean("Puking?", true);
-        thing = new RenameThisLater(GrabberSubsystem.getInstance().getPercentOutput(), -0.3, 0.3);
+        thing = new RenameThisLater(GrabberSubsystem.getInstance().getPercentOutput(), -0.25, 0.3);
         thing.start();
     }
 

@@ -84,9 +84,9 @@ public class JoystickDriveCommand extends CommandBase {
         lastPressedLeft = buttonPressedLeft;
 
         // Enable break mode when the right trigger is pressed
-        buttonPressedRight = joystickTriggerRight.get();
-        if(buttonPressedRight && lastPressedRight != buttonPressedRight) DriveSubsystem.getInstance().changeBrakeMode();
-        lastPressedRight = buttonPressedRight;
+        // buttonPressedRight = joystickTriggerRight.get();
+        // if(buttonPressedRight && lastPressedRight != buttonPressedRight) DriveSubsystem.getInstance().changeBrakeMode();
+        // lastPressedRight = buttonPressedRight;
         
         // Show whether break mode is enabled
         SmartDashboard.putBoolean("Brake Mode", DriveSubsystem.getInstance().getBrakeMode());

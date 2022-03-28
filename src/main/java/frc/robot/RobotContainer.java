@@ -64,6 +64,7 @@ import frc.robot.commands.intakeshoot.RunIntakeCommand;
 import frc.robot.commands.intakeshoot.SetColorRejectionCommand;
 import frc.robot.commands.intakeshoot.ShootCommand;
 import frc.robot.commands.intakeshoot.StopIntakeCommand;
+import frc.robot.subsystems.CannonSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.JoystickSubsystem;
 import frc.robot.subsystems.CannonSubsystem.Angle;
@@ -94,15 +95,23 @@ public class RobotContainer {
 
   Trigger fixedClimbDeployButton = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), Constants.Buttons.FIXED_CLIMB_DEPLOY).debounce(Constants.Buttons.DEBOUNCE_VALUE);
   Trigger fixedClimbButton = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), Constants.Buttons.FIXED_CLIMB).debounce(Constants.Buttons.DEBOUNCE_VALUE);
-  Trigger fixedClimbeGrabButton = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), Constants.Buttons.FIXED_CLIMB_GRAB).debounce(Constants.Buttons.DEBOUNCE_VALUE);
+  Trigger traversalClimbButton = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), Constants.Buttons.TRAVERSAL_CLIMB).debounce(Constants.Buttons.DEBOUNCE_VALUE);
   Trigger fixedClimberReleaseButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), Constants.Buttons.FIXED_CLIMB_RELEASE).debounce(Constants.Buttons.DEBOUNCE_VALUE);
+  
+  Trigger enableManualPushButton = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), Constants.Buttons.ENABLE_MANUAL_PUSH);
+  Trigger enableManualClimbButton = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), Constants.Buttons.ENABLE_MANUAL_CLIMB);
 
   Trigger colorRejectionSwitch = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), Constants.Intake.COLOR_REJECTION_SWITCH_PORT);
 
   // Trigger rotatingClimbDeployButton = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), 6).debounce(Constants.Buttons.DEBOUNCE_VALUE);
   // Trigger rotatingClimbUndeployButton = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), 5).debounce(Constants.Buttons.DEBOUNCE_VALUE);
-  // Trigger rotatingClimbeGrabButton = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), 4).debounce(Constants.Buttons.DEBOUNCE_VALUE);
-  // Trigger rotatingClimberReleaseButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 5).debounce(Constants.Buttons.DEBOUNCE_VALUE);
+  Trigger rotatingClimbeGrabButton = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), 4).debounce(Constants.Buttons.DEBOUNCE_VALUE);
+  //Trigger rotatingClimberReleaseButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 5).debounce(Constants.Buttons.DEBOUNCE_VALUE);
+
+  Trigger autoAimButton = new JoystickButton(JoystickSubsystem.getInstance().getRightJoystick(), Constants.Buttons.AUTO_AIM);
+
+  // JoystickButton incrementShooterSpeed = new JoystickButton(JoystickSubsystem.getInstance().getLeftJoystick(), /* TODO */);
+  // JoystickButton decrementShooterSpeed = new JoystickButton(JoystickSubsystem.getInstance().getLeftJoystick(), /* TODO */);
 
   static DigitalInput ballSensor1 = new DigitalInput(Constants.Intake.DIO_SENSOR_1);
   static DigitalInput ballSensor2 = new DigitalInput(Constants.Intake.DIO_SENSOR_2);
@@ -133,20 +142,20 @@ public class RobotContainer {
     SmartDashboard.putData(new ZeroClimberSensorsCommand());
     // SmartDashboard.putData(new DeployClimberCommad());
     // SmartDashboard.putData(new RetractClimberCommand());
-    SmartDashboard.putData(new ManualPusherCommand());
-    SmartDashboard.putData(new ManualClimberCommand());
+    // SmartDashboard.putData(new ManualPusherCommand());
+    // SmartDashboard.putData(new ManualClimberCommand());
     // SmartDashboard.putData(new DeployPusher());
-    SmartDashboard.putData(new TraversalClimbCommand());
+    // SmartDashboard.putData(new TraversalClimbCommand());
 
-    SmartDashboard.putData(new PushCommand());
+    // SmartDashboard.putData(new PushCommand());
 
-    SmartDashboard.putData(new ReleaseClimberCommand());
-    SmartDashboard.putData(new ReleasePusherCommand());
-    SmartDashboard.putData(new TemporaryReleaseCommand());
+    // SmartDashboard.putData(new ReleaseClimberCommand());
+    // SmartDashboard.putData(new ReleasePusherCommand());
+    // SmartDashboard.putData(new TemporaryReleaseCommand());
 
-    SmartDashboard.putData(new ResetPusherCommand());
+    // SmartDashboard.putData(new ResetPusherCommand());
 
-    SmartDashboard.putData(new DiagnosticClimberCommand());
+    // SmartDashboard.putData(new DiagnosticClimberCommand());
     SmartDashboard.putData(new ZeroPusherCommand());
 
     SmartDashboard.putData(new StopClimbCommand());
@@ -154,8 +163,8 @@ public class RobotContainer {
     SmartDashboard.putData(new CannonTestCommand());
     SmartDashboard.putData(new LimelightCommand());
 
-    SmartDashboard.putData(new ColorSensorTestCommand());
-    SmartDashboard.putData(new LedTestCommand());
+    // SmartDashboard.putData(new ColorSensorTestCommand());
+    // SmartDashboard.putData(new LedTestCommand());
 
     // SmartDashboard.putData(new ZeroClimberCommand());
     // SmartDashboard.putData(new LoaderCommand());
@@ -184,6 +193,8 @@ public class RobotContainer {
     deployIntakeSwitch.whenInactive(new ActuateIntakeCommand(true));
     deployIntakeSwitch.whenActive(new ActuateIntakeCommand(false));
 
+    // incrementShooterSpeed.whenActive(() -> {CannonSubsystem.getInstance().changeSpeedChange(0.005);});
+    // decrementShooterSpeed.whenActive(() -> {CannonSubsystem.getInstance().changeSpeedChange(-0.005);});
 
     runIntakeButton.whenActive(new RunIntakeCommand());
     stopIntakeButton.whenActive(new StopIntakeCommand());
@@ -201,18 +212,26 @@ public class RobotContainer {
     // runShooterButton.whenActive(new StopCommand()); //TODO: Change to actual Run Shooter Command
 
     fixedClimbDeployButton.whenActive(new DeployClimberCommad());
-    fixedClimbButton.whenActive(new RetractClimberCommand());
+    fixedClimbButton.whenActive(new TraversalClimbCommand());
+    traversalClimbButton.whenActive(new PushCommand());
+
+    enableManualPushButton.whenActive(new ManualPusherCommand());
+    enableManualClimbButton.whenActive(new ManualClimberCommand());
 
     
-    colorRejectionSwitch.whenActive(new SetColorRejectionCommand(true));
-    colorRejectionSwitch.whenInactive(new SetColorRejectionCommand(false));
+
+    
+    // colorRejectionSwitch.whenActive(new SetColorRejectionCommand(true));
+    // colorRejectionSwitch.whenInactive(new SetColorRejectionCommand(false));
     // fixedClimbeGrabButton.whenActive(new StopCommand());  //TODO: Change to actual Grab Command
-    // fixedClimberReleaseButton.whenActive();
+    fixedClimberReleaseButton.whenActive(new StopIntakeCommand());
 
     // rotatingClimbDeployButton.whenActive(new StopCommand());  //TODO: Change to actual Rotating Deploy Command
     // rotatingClimbUndeployButton.whenActive(new StopCommand());  //TODO: Change to actual Rotating Undeploy Command
-    // rotatingClimbeGrabButton.whenActive(new StopCommand());   //TODO: Change to actual Rotating Grab Command
-    // rotatingClimberReleaseButton.whenActive();
+    rotatingClimbeGrabButton.whenActive(new TemporaryReleaseCommand());   //TODO: Change to actual Rotating Grab Command
+    //rotatingClimberReleaseButton.whenActive(new TemporaryReleaseCommand());
+
+    autoAimButton.whenActive(new AutoAimCommand());
   }
 
 }

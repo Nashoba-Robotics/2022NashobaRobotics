@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 public class TraversalClimbCommand extends SequentialCommandGroup{
     public TraversalClimbCommand(){
         addCommands(
+            //new ResetPusherCommand(),
             new ParallelCommandGroup(   //Climbs onto Mid Bar and raises pushers above the High Bar
                 new RetractClimberCommand(),
                 new DeployPusher()

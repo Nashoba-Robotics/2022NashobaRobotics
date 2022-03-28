@@ -19,8 +19,8 @@ public class ManualPusherCommand extends CommandBase{
         SmartDashboard.putNumber("Right Pusher NU", PusherSubsystem.getInstance().getPosition(PusherMotor.RIGHT_PUSHER));
         SmartDashboard.putNumber("Left Pusher Current", PusherSubsystem.getInstance().getStatorCurrent(PusherMotor.LEFT_PUSHER));
         SmartDashboard.putNumber("Right Pusher Current", PusherSubsystem.getInstance().getStatorCurrent(PusherMotor.RIGHT_PUSHER));
-        SmartDashboard.putNumber("Left Climber Currect", ClimberSubsystem.getInstance().getStatorCurrent(ClimberMotor.LEFT_CLIMBER));
-        SmartDashboard.putNumber("Right Climber Current", ClimberSubsystem.getInstance().getStatorCurrent(ClimberMotor.RIGHT_CLIMBER));
+        // SmartDashboard.putNumber("Left Climber Currect", ClimberSubsystem.getInstance().getStatorCurrent(ClimberMotor.LEFT_CLIMBER));
+        // SmartDashboard.putNumber("Right Climber Current", ClimberSubsystem.getInstance().getStatorCurrent(ClimberMotor.RIGHT_CLIMBER));
     }
     @Override
     public void execute() {
@@ -34,8 +34,8 @@ public class ManualPusherCommand extends CommandBase{
         SmartDashboard.putNumber("Left Pusher Current", PusherSubsystem.getInstance().getStatorCurrent(PusherMotor.LEFT_PUSHER));
         SmartDashboard.putNumber("Right Pusher Current", PusherSubsystem.getInstance().getStatorCurrent(PusherMotor.RIGHT_PUSHER));
 
-        SmartDashboard.putNumber("Left Climber Currect", ClimberSubsystem.getInstance().getStatorCurrent(ClimberMotor.LEFT_CLIMBER));
-        SmartDashboard.putNumber("Right Climber Current", ClimberSubsystem.getInstance().getStatorCurrent(ClimberMotor.RIGHT_CLIMBER));
+        // SmartDashboard.putNumber("Left Climber Currect", ClimberSubsystem.getInstance().getStatorCurrent(ClimberMotor.LEFT_CLIMBER));
+        // SmartDashboard.putNumber("Right Climber Current", ClimberSubsystem.getInstance().getStatorCurrent(ClimberMotor.RIGHT_CLIMBER));
     }
 
     @Override

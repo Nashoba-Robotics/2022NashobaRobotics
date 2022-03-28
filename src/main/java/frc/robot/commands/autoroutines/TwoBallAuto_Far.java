@@ -20,17 +20,17 @@ public class TwoBallAuto_Far extends SequentialCommandGroup {
         addRequirements(DriveSubsystem.getInstance());
         addCommands(
             new SetStartAngleCommand(Constants.DriveTrain.FAR_LEFT_START_ANGLE),
-            // new AutoShootCommand(Angle.EIGHTY),
-            // new ActuateIntakeCommand(true),
+            new AutoShootCommand(Angle.EIGHTY),
+            new ActuateIntakeCommand(true),
             new WaitCommand(0.5),
             new ParallelCommandGroup(
-                //new RunIntakeCommand().until(RobotContainer::getSensor2).withTimeout(3),
+                new RunIntakeCommand().until(RobotContainer::getSensor2).withTimeout(3),
                 new PathFollowCommand("paths/ToBall_LeftFar.wpilib.json")
             ),
-            // new ActuateIntakeCommand(false),
-            new PathFollowCommand("paths/TwoBallFromBallToShoot.wpilib.json")
-            //new AutoAimCommand(),
-            //new AutoShootCommand(Angle.SIXTY)
+            new ActuateIntakeCommand(false),
+            new PathFollowCommand("paths/TwoBallFromBallToShoot.wpilib.json"),
+            new AutoAimCommand(),
+            new AutoShootCommand(Angle.SIXTY)
         );
     }
 }

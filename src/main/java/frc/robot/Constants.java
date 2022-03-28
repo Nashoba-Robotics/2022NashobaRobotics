@@ -67,20 +67,21 @@ public final class Constants {
     public static final double TAU = 2 * Math.PI;
 
     //HybridDrive constants
-    public static final double AUTO_AIM_DEADZONE = 3.0/27;  //Hybrid Drive Graph:
-    public static final double AUTO_AIM_SENSITIVITY = 0.420;  //https://www.desmos.com/calculator/mzhsaym2ef  (CHECK GRAPH BEFORE CHANGING CONSTANTS)
+    public static final double AUTO_AIM_DEADZONE = 2.0/27;  //Hybrid Drive Graph:
+    public static final double AUTO_AIM_SENSITIVITY = 0.45;  //https://www.desmos.com/calculator/mzhsaym2ef  (CHECK GRAPH BEFORE CHANGING CONSTANTS)
 
     public static final double FALCON_NU = 2048; // the number of native units per rotation
 
-    public static final double K_CARPET = 0.055;
+    // public static final double K_CARPET = 0.055;
+    public static final double K_CARPET = 0;
 
     public static class Cannon {
         public static final int PORT_TOP = 9;
         public static final int PORT_BOTTOM = 10;
 
-        public static final double KP = 0.05;
+        public static final double KP = 0.048;
         public static final double KI = 0.0;
-        public static final double KD = 0.0;
+        public static final double KD = 0.0048;
         public static final double KF = 0.0475;
 
         public static final int SOLENOID_PORT = 7;
@@ -99,8 +100,8 @@ public final class Constants {
         public static final int ROTATING_ANGLE_JOYSTICK_PORT = 4;   //X axis
         public static final double ROTATING_ANGLE_JOYSTICK_DEADZONE = 0.12;
 
-        public static final int DEPLOY_LEFT_POS = 182_500;
-        public static final int DEPLOY_RIGHT_POS = 179_500;
+        public static final int DEPLOY_LEFT_POS = 184_500;
+        public static final int DEPLOY_RIGHT_POS = 181_500;
         public static final int DEPLOY_LEFT_PUSHER_POS = -109_000;
         public static final int DEPLOY_RIGHT_PUSHER_POS = -109_000;
 
@@ -115,13 +116,15 @@ public final class Constants {
 
         public static final int PUSH_DEADZONE = 200;
 
-        public static final int RETRACT_LEFT_POS = 13_750;
-        public static final int RETRACT_RIGHT_POS = 13_750;
+        // public static final int RETRACT_LEFT_POS = 13_750;
+        // public static final int RETRACT_RIGHT_POS = 13_750;
+        public static final int RETRACT_LEFT_POS = 8_000;
+        public static final int RETRACT_RIGHT_POS = 8_000;
 
         // public static final int RELEASE_LEFT_POS = 70_000;
         // public static final int RELEASE_RIGHT_POS = 70_000;
-        public static final int RELEASE_LEFT_POS = 26_000;
-        public static final int RELEASE_RIGHT_POS = 26_000;
+        public static final int RELEASE_LEFT_POS = 160_000;
+        public static final int RELEASE_RIGHT_POS = 160_000;
 
         public static final int RELEASE_LEFT_CRUISE_VELOCITY = 15_000;
         public static final int RELEASE_RIGHT_CRUISE_VELOCITY = 15_000;
@@ -131,11 +134,13 @@ public final class Constants {
 
         public static final int RELEASE_DEADZONE = 700;
 
+        public static final int RESET_DEADZONE = 500;
+
         // public static final int RELEASE_LEFT_PUSHER_SLOW_POS = -10_000;
         // public static final int RELEASE_RIGHT_PUSHER_SLOW_POS = -10_000;
 
-        public static final int RELEASE_LEFT_PUSHER_SLOW_POS = -90_000;
-        public static final int RELEASE_RIGHT_PUSHER_SLOW_POS = -90_000;
+        public static final int RELEASE_LEFT_PUSHER_SLOW_POS = -1_750;
+        public static final int RELEASE_RIGHT_PUSHER_SLOW_POS = -1_750;
 
         public static final int RELEASE_LEFT_PUSHER_CRUISE_VELOCITY_SLOW = 500;
         public static final int RELEASE_RIGHT_PUSHER_CRUISE_VELOCITY_SLOW = 500;
@@ -146,8 +151,8 @@ public final class Constants {
         public static final int RELEASE_LEFT_PUSHER_FAST_POS = -90_000;
         public static final int RELEASE_RIGHT_PUSHER_FAST_POS = -90_000;
 
-        public static final int RELEASE_LEFT_PUSHER_CRUISE_VELOCITY_FAST = 20_000;
-        public static final int RELEASE_RIGHT_PUSHER_CRUISE_VELOCITY_FAST = 20_000;
+        public static final int RELEASE_LEFT_PUSHER_CRUISE_VELOCITY_FAST = 50_000;
+        public static final int RELEASE_RIGHT_PUSHER_CRUISE_VELOCITY_FAST = 50_000;
 
         public static final int RELEASE_LEFT_PUSHER_ACCELERATION_FAST = 40_000;
         public static final int RELEASE_RIGHT_PUSHER_ACCELERATION_FAST = 40_000;
@@ -201,7 +206,8 @@ public final class Constants {
         public static final double AFF_LEFT = 0.05117;
 
         public static final double WHEEL_GAP = 0.85162; // distance between wheels in meters
-        public static final double WHEEL_RADIUS = Units.inches2Meters(1.97775696); // wheel radius in meters
+        // public static final double WHEEL_RADIUS = Units.inches2Meters(1.97775696); // wheel radius in meters
+        public static final double WHEEL_RADIUS = Units.inches2Meters(2.25); // wheel radius in meters
 
         public static final double DRIVE_GEAR_RATIO = 20.0 / 3;
 
@@ -226,10 +232,10 @@ public final class Constants {
         public static final int DIO_SENSOR_2 = 9;
 
         public static final int INTAKE_SOLENOID_PORT = 8;
-        public static final int INTAKE_SOLENOID_PORT2 = 15;
+        public static final int INTAKE_SOLENOID_PORT2 = 14;
 
         public static final double INTAKE_SPEED = 0.75;
-        public static final double GRABBER_SPEED = 0.5;
+        public static final double GRABBER_SPEED = 0.6;
         public static final double LOADER_SPEED = 0.15;
 
         public static final int COLOR_REJECTION_SWITCH_PORT = 12;
@@ -283,7 +289,12 @@ public final class Constants {
         //Ports for static climber
         public static final int FIXED_CLIMB_DEPLOY = 3;
         public static final int FIXED_CLIMB = 2;
-        public static final int FIXED_CLIMB_GRAB = 1;
+        public static final int TRAVERSAL_CLIMB = 1;
         public static final int FIXED_CLIMB_RELEASE = 11;
+
+        public static final int ENABLE_MANUAL_PUSH = 6;
+        public static final int ENABLE_MANUAL_CLIMB = 5;
+
+        public static final int AUTO_AIM = 1;
     }
 }

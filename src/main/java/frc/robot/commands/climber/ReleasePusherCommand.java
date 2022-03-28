@@ -24,11 +24,11 @@ public class ReleasePusherCommand extends CommandBase{
 
     @Override
     public void end(boolean interrupted) {
-        //PusherSubsystem.getInstance().releasePusherFast();
+        PusherSubsystem.getInstance().releasePusherFast();
         SmartDashboard.putNumber("L Final Pos", lPos);
         SmartDashboard.putNumber("R Final Pos", rPos);
-        PusherSubsystem.getInstance().seLefttMotionMagic(lPos);
-        PusherSubsystem.getInstance().setRighttMotionMagic(rPos);
+        // PusherSubsystem.getInstance().seLefttMotionMagic(lPos);
+        // PusherSubsystem.getInstance().setRighttMotionMagic(rPos);
     }
 
     @Override

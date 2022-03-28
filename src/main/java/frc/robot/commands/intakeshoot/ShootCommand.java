@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.Intake;
 import frc.robot.subsystems.CannonSubsystem;
@@ -47,6 +48,10 @@ public class ShootCommand extends CommandBase {
     public void execute() {         
         long millis = System.currentTimeMillis();
 
+        if(Math.abs(LimelightSubsystem.getInstance().getIntakeTx()) <= Constants.AUTO_AIM_DEADZONE)
+        SmartDashboard.putBoolean("I've Got'chu in my Sights", true);
+        else SmartDashboard.putBoolean("I've Got'chu in my Sights", false);
+
         if(shoot.get()) {
             on = true;
             startMillis = millis;
@@ -60,11 +65,10 @@ public class ShootCommand extends CommandBase {
             if(LimelightSubsystem.getInstance().shooterValidTarget()){
                 lastValidTy = LimelightSubsystem.getInstance().getShooterTy();
             }
-            // cannonSpeed = 0.445 - 0.00527 * ty; // limelight math
-            //cannonSpeed = 0.47 - 0.00527 * lastValidTy; // limelight math
             cannonSpeed = 0.53 - 0.00825 * lastValidTy;
+            //cannonSpeed = 0.545 - 0.007 * lastValidTy;
         } else {
-            cannonSpeed = 0.5; // close up shot
+            cannonSpeed = 0.465; // close up shot
         }
 
         CannonSubsystem.getInstance().set(cannonSpeed);    
@@ -93,6 +97,8 @@ public class ShootCommand extends CommandBase {
     public void end(boolean interrupted) {
         IntakeSubsystem.getInstance().stop();
         CannonSubsystem.getInstance().set(0);
+        LoaderSubsystem.getInstance().set(0);
+        GrabberSubsystem.getInstance().set(0);
         SmartDashboard.putBoolean("Shooter On?", false);
     }
 

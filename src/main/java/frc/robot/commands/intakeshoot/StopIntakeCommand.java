@@ -19,13 +19,13 @@ public class StopIntakeCommand extends CommandBase{
     @Override
     public void initialize() {
         thing = new RenameThisLater(GrabberSubsystem.getInstance().getPercentOutput(), 0, 0.3);
-        IntakeSubsystem.getInstance().set(0);
-        LoaderSubsystem.getInstance().set(0);
         thing.start();
     }
 
     @Override
     public void execute() {
+        IntakeSubsystem.getInstance().set(0);
+        LoaderSubsystem.getInstance().set(0);
         GrabberSubsystem.getInstance().set(thing.get());
     }
 

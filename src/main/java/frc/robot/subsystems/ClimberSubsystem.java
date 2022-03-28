@@ -38,8 +38,12 @@ public class ClimberSubsystem extends SubsystemBase {
         return motors[motor.ordinal()];
     }
 
-    public boolean getLimitSwitch(ClimberMotor motor) {
-         return getMotor(motor).getSensorCollection().isRevLimitSwitchClosed() == 1;
+    public boolean getLeftLimitSwitch() {
+         return leftClimber.getSensorCollection().isRevLimitSwitchClosed() == 1;
+    }
+
+    public boolean getRightLimitSwitch(){
+        return rightClimber.getSensorCollection().isRevLimitSwitchClosed() == 1;
     }
 
     private static ClimberSubsystem singleton;
@@ -153,13 +157,25 @@ public class ClimberSubsystem extends SubsystemBase {
     //     motorRight1.configReverseSoftLimitEnable(false);
     // }
 
-    public void setSpeed(ClimberMotor motor, double speed) {
-        TalonFX talon = getMotor(motor);
+    public void setLeftSpeed(double speed) {
         if(Math.abs(speed) <= 1) {
-            talon.set(ControlMode.PercentOutput, speed);
+            leftClimber.set(ControlMode.PercentOutput, speed);
         } else {
-            talon.set(ControlMode.PercentOutput, 0);
+            leftClimber.set(ControlMode.PercentOutput, 0);
         }
+    }
+
+    public void setRightSpeed(double speed){
+        if(Math.abs(speed) <= 1) {
+            rightClimber.set(ControlMode.PercentOutput, speed);
+        } else {
+            rightClimber.set(ControlMode.PercentOutput, 0);
+        }
+    }
+
+    public void setSpeed(double speed){
+        setLeftSpeed(speed);
+        setRightSpeed(speed);
     }
 
     public void setDiagnosticSpeed(ClimberMotor motor, double speed, ControlMode controlMode){
@@ -191,21 +207,6 @@ public class ClimberSubsystem extends SubsystemBase {
 
     public void zeroRightClimber(){
         rightClimber.setSelectedSensorPosition(0);
-    }
-
-    public void checkLimitSwitches() {
-        // Zero on exit from limit switch
-        for(int i = 0; i < motors.length; i++) {
-            boolean ls = getLimitSwitch(ClimberMotor.values()[i]);
-            boolean lastLs = lastLSState[i];
-
-            // arm is leaving limit switch; zero position
-            if(lastLs == true && ls == false) {
-                getMotor(ClimberMotor.values()[i]).setSelectedSensorPosition(0);
-            }
-            
-            lastLSState[i] = ls;
-        }
     }
 
     public void setLimitSwitchEnable(boolean tRue){
@@ -252,16 +253,28 @@ public class ClimberSubsystem extends SubsystemBase {
     //     mantainPositionRetract(ClimberMotor.RIGHT_1);
     // }
     
-    public double getPosition(ClimberMotor motor) {
-        return getMotor(motor).getSelectedSensorPosition();
+    public double getLeftPosition() {
+        return leftClimber.getSelectedSensorPosition();
     }
 
-    public double getStatorCurrent(ClimberMotor motor) {
-        return getMotor(motor).getStatorCurrent();
+    public double getRightPosition(){
+        return rightClimber.getSelectedSensorPosition();
     }
 
-    public double getSupplyCurrent(ClimberMotor motor) {
-        return getMotor(motor).getSupplyCurrent();
+    public double getLeftStatorCurrent() {
+        return leftClimber.getStatorCurrent();
+    }
+
+    public double getRightStatorCurrent() {
+        return rightClimber.getStatorCurrent();
+    }
+
+    public double getLeftSupplyCurrent() {
+        return leftClimber.getSupplyCurrent();
+    }
+
+    public double getRightSupplyCurrent() {
+        return rightClimber.getSupplyCurrent();
     }
 
     public void stop() {
@@ -304,9 +317,6 @@ public class ClimberSubsystem extends SubsystemBase {
     
 
     public void undeployClimber(){
-        leftClimber = getMotor(ClimberMotor.LEFT_CLIMBER);
-        rightClimber = getMotor(ClimberMotor.RIGHT_CLIMBER);
-
         leftClimber.configMotionCruiseVelocity(Constants.Climber.RETRACT_LEFT_CRUISE_VELOCITY);
         leftClimber.configMotionAcceleration(Constants.Climber.RETRACT_LEFT_ACCELERATION);
 
@@ -318,9 +328,6 @@ public class ClimberSubsystem extends SubsystemBase {
     }
 
     public void deployClimber(){
-        leftClimber = getMotor(ClimberMotor.LEFT_CLIMBER);
-        rightClimber = getMotor(ClimberMotor.RIGHT_CLIMBER);
-
         leftClimber.configMotionCruiseVelocity(Constants.Climber.DEPLOY_LEFT_CRUISE_VELOCITY);
         leftClimber.configMotionAcceleration(Constants.Climber.DEPLOY_LEFT_ACCELERATION);
 
@@ -333,9 +340,6 @@ public class ClimberSubsystem extends SubsystemBase {
 
     //After the robot has been pushed up, the climbers release, allowing it to fall - DIFFERENT FROM UNDEPLOY
     public void releaseClimber(){
-        leftClimber = getMotor(ClimberMotor.LEFT_CLIMBER);
-        rightClimber = getMotor(ClimberMotor.RIGHT_CLIMBER);
-
         leftClimber.configMotionCruiseVelocity(Constants.Climber.RELEASE_LEFT_CRUISE_VELOCITY);
         leftClimber.configMotionAcceleration(Constants.Climber.RELEASE_LEFT_ACCELERATION);
 
@@ -354,23 +358,23 @@ public class ClimberSubsystem extends SubsystemBase {
 
 
     public void setF(double kP){
-        getMotor(ClimberMotor.LEFT_CLIMBER).config_kF(0, kP);
-        getMotor(ClimberMotor.RIGHT_CLIMBER).config_kF(0, kP);
+        leftClimber.config_kF(0, kP);
+        rightClimber.config_kF(0, kP);
     }
 
     public void setP(double kI){
-        getMotor(ClimberMotor.LEFT_CLIMBER).config_kP(0, kI);
-        getMotor(ClimberMotor.RIGHT_CLIMBER).config_kP(0, kI);
+        leftClimber.config_kP(0, kI);
+        rightClimber.config_kP(0, kI);
     }
 
     public void setI(double kD){
-        getMotor(ClimberMotor.LEFT_CLIMBER).config_kI(0, kD);
-        getMotor(ClimberMotor.RIGHT_CLIMBER).config_kI(0, kD);
+        leftClimber.config_kI(0, kD);
+        rightClimber.config_kI(0, kD);
     }
 
     public void setD(double kF){
-        getMotor(ClimberMotor.LEFT_CLIMBER).config_kD(0, kF);
-        getMotor(ClimberMotor.RIGHT_CLIMBER).config_kD(0, kF);
+        leftClimber.config_kD(0, kF);
+        rightClimber.config_kD(0, kF);
     }
 
     public void setCruiseVelocity(ClimberMotor motor, double velocity){

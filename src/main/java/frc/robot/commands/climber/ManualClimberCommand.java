@@ -12,17 +12,15 @@ public class ManualClimberCommand extends CommandBase{
 
     @Override
     public void execute() {
-        ClimberSubsystem.getInstance().setSpeed(ClimberMotor.LEFT_CLIMBER, ClimberSubsystem.getInstance().getClimberJoystickValue());
-        ClimberSubsystem.getInstance().setSpeed(ClimberMotor.RIGHT_CLIMBER, ClimberSubsystem.getInstance().getClimberJoystickValue());
+        ClimberSubsystem.getInstance().setSpeed(ClimberSubsystem.getInstance().getClimberJoystickValue());
 
-        SmartDashboard.putNumber("L Climber Pos", ClimberSubsystem.getInstance().getPosition(ClimberMotor.LEFT_CLIMBER));
-        SmartDashboard.putNumber("R Climber Pos", ClimberSubsystem.getInstance().getPosition(ClimberMotor.RIGHT_CLIMBER));
+        SmartDashboard.putNumber("L Climber Pos", ClimberSubsystem.getInstance().getLeftPosition());
+        SmartDashboard.putNumber("R Climber Pos", ClimberSubsystem.getInstance().getRightPosition());
     }
 
     @Override
     public void end(boolean interrupted) {
-        ClimberSubsystem.getInstance().setSpeed(ClimberMotor.LEFT_CLIMBER, 0);
-        ClimberSubsystem.getInstance().setSpeed(ClimberMotor.RIGHT_CLIMBER, 0);
+        ClimberSubsystem.getInstance().setSpeed(0);
     }
 
     @Override

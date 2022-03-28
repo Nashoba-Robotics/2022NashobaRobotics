@@ -33,7 +33,13 @@ import frc.robot.commands.IntakePracticeCommand;
 import frc.robot.commands.JoystickDriveCommand;
 import frc.robot.commands.autoroutines.TestPathCommand;
 import frc.robot.commands.autoroutines.ThreeBallAuto;
+import frc.robot.commands.autoroutines.TwoBallAuto;
 import frc.robot.commands.autoroutines.TwoBallAuto_Far;
+import frc.robot.commands.climber.StopClimbCommand;
+import frc.robot.commands.climber.ZeroClimberCommand;
+import frc.robot.commands.climber.ZeroClimberSensorsCommand;
+import frc.robot.commands.climber.ZeroPusherCommand;
+import frc.robot.commands.intakeshoot.CannonAngleCommand;
 import frc.robot.lib.PicoColorSensor;
 import frc.robot.lib.PicoColorSensor.RawColor;
 import frc.robot.subsystems.CannonSubsystem;
@@ -88,11 +94,13 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().setDefaultCommand(DriveSubsystem.getInstance(), new JoystickDriveCommand());
 
     autoChooser = new SendableChooser<>();
-    autoChooser.setDefaultOption("Two Ball Auto", new TwoBallAuto_Far());
+    autoChooser.setDefaultOption("Two Ball Auto", new TwoBallAuto());
     autoChooser.addOption("Three Ball Auto", new ThreeBallAuto());
     autoChooser.addOption("Test Auto", new TestPathCommand());
     autoChooser.addOption("Two Ball Far", new TwoBallAuto_Far());
-    SmartDashboard.putData("Auto", autoChooser);    
+    SmartDashboard.putData("Auto", autoChooser); 
+
+    CommandScheduler.getInstance().schedule(new StopClimbCommand());   
   }
 
   long lastMillis = System.currentTimeMillis();
@@ -127,6 +135,7 @@ public class Robot extends TimedRobot {
     LimelightSubsystem.getInstance().setIntakeLed(1);
     LimelightSubsystem.getInstance().setShooterLed(1);
     ClimberSubsystem.getInstance().stop();
+    CommandScheduler.getInstance().schedule(new StopClimbCommand());
     //Cancels everything that's running
     CommandScheduler.getInstance().cancelAll();
   }
@@ -178,6 +187,12 @@ public class Robot extends TimedRobot {
 
     DriveSubsystem.getInstance().resetOdometryTrue();
     DriveSubsystem.getInstance().resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
+
+    CommandScheduler.getInstance().schedule(new StopClimbCommand());
+    CommandScheduler.getInstance().schedule(new ZeroClimberSensorsCommand());
+    CommandScheduler.getInstance().schedule(new ZeroPusherCommand());
+
+    CommandScheduler.getInstance().schedule(new CannonAngleCommand(Angle.EIGHTY));
 
     //Zeroes the climbers when teleop starts
     //CommandScheduler.getInstance().schedule(new ZeroClimberCommand());
