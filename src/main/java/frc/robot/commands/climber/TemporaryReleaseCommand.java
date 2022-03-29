@@ -9,6 +9,7 @@ public class TemporaryReleaseCommand extends ParallelCommandGroup{
     public TemporaryReleaseCommand(){
         addCommands(
             new ReleaseClimberCommand(),
+            // new DeployClimberCommad(),
             new ReleasePusherCommand()
         );
     }

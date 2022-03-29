@@ -70,11 +70,11 @@ public class DiagnosticClimberCommand extends CommandBase {
         SmartDashboard.putNumber("R Climber Cruise Velocity", Constants.Climber.DEPLOY_RIGHT_CRUISE_VELOCITY);
         SmartDashboard.putNumber("R Climber Acceleration", Constants.Climber.DEPLOY_RIGHT_ACCELERATION);
 
-        SmartDashboard.putNumber("L Climber Pos", ClimberSubsystem.getInstance().getPosition(ClimberMotor.LEFT_CLIMBER));
-        SmartDashboard.putNumber("R Climber Pos", ClimberSubsystem.getInstance().getPosition(ClimberMotor.RIGHT_CLIMBER));
+        SmartDashboard.putNumber("L Climber Pos", ClimberSubsystem.getInstance().getLeftPosition());
+        SmartDashboard.putNumber("R Climber Pos", ClimberSubsystem.getInstance().getRightPosition());
 
-        SmartDashboard.putNumber("L Climber Curr", ClimberSubsystem.getInstance().getStatorCurrent(ClimberMotor.LEFT_CLIMBER));
-        SmartDashboard.putNumber("R Climber Curr", ClimberSubsystem.getInstance().getStatorCurrent(ClimberMotor.RIGHT_CLIMBER));
+        SmartDashboard.putNumber("L Climber Curr", ClimberSubsystem.getInstance().getLeftStatorCurrent());
+        SmartDashboard.putNumber("R Climber Curr", ClimberSubsystem.getInstance().getRightStatorCurrent());
 
         
         SmartDashboard.putNumber("L Pusher Coeff", 1);
@@ -123,11 +123,11 @@ public class DiagnosticClimberCommand extends CommandBase {
         ClimberSubsystem.getInstance().setAcceleration(ClimberMotor.RIGHT_CLIMBER, SmartDashboard.getNumber("R Climber Acceleration", Constants.Climber.DEPLOY_RIGHT_ACCELERATION));
 
         //Diagnostic values for encoder position and current for each climber
-        SmartDashboard.putNumber("L Climber Pos", ClimberSubsystem.getInstance().getPosition(ClimberMotor.LEFT_CLIMBER));
-        SmartDashboard.putNumber("R Climber Pos", ClimberSubsystem.getInstance().getPosition(ClimberMotor.RIGHT_CLIMBER));
+        SmartDashboard.putNumber("L Climber Pos", ClimberSubsystem.getInstance().getLeftPosition());
+        SmartDashboard.putNumber("R Climber Pos", ClimberSubsystem.getInstance().getRightPosition());
 
-        SmartDashboard.putNumber("L Climber Curr", ClimberSubsystem.getInstance().getStatorCurrent(ClimberMotor.LEFT_CLIMBER));
-        SmartDashboard.putNumber("R Climber Curr", ClimberSubsystem.getInstance().getStatorCurrent(ClimberMotor.RIGHT_CLIMBER));
+        SmartDashboard.putNumber("L Climber Curr", ClimberSubsystem.getInstance().getLeftStatorCurrent());
+        SmartDashboard.putNumber("R Climber Curr", ClimberSubsystem.getInstance().getRightStatorCurrent());
 
         
         double lPushCoeff = SmartDashboard.getNumber("L Climber Coeff", 1);

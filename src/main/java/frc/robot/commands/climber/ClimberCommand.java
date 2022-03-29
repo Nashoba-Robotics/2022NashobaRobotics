@@ -30,19 +30,19 @@ public class ClimberCommand extends CommandBase {
             finished = true;
             return;
         }
-        ClimberSubsystem.getInstance().setSpeed(ClimberMotor.RIGHT_CLIMBER, SmartDashboard.getNumber("Climber",0));
-        ClimberSubsystem.getInstance().setSpeed(ClimberMotor.LEFT_CLIMBER, SmartDashboard.getNumber("Climber", 0));
+        ClimberSubsystem.getInstance().setLeftSpeed(SmartDashboard.getNumber("Climber",0));
+        ClimberSubsystem.getInstance().setRightSpeed(SmartDashboard.getNumber("Climber", 0));
         // ClimberSubsystem.getInstance().setSpeed(ClimberMotor.RIGHT_PUSHER, SmartDashboard.getNumber("Pusher", 0));
         // ClimberSubsystem.getInstance().setSpeed(ClimberMotor.LEFT_PUSHER, SmartDashboard.getNumber("Pusher", 0));
 
-        SmartDashboard.putNumber("RC Stator", ClimberSubsystem.getInstance().getStatorCurrent(ClimberMotor.RIGHT_CLIMBER));
+        SmartDashboard.putNumber("RC Stator", ClimberSubsystem.getInstance().getRightStatorCurrent());
         // SmartDashboard.putNumber("RP Stator", ClimberSubsystem.getInstance().getStatorCurrent(ClimberMotor.RIGHT_PUSHER));
-        SmartDashboard.putNumber("LC Stator", ClimberSubsystem.getInstance().getStatorCurrent(ClimberMotor.LEFT_CLIMBER));
+        SmartDashboard.putNumber("LC Stator", ClimberSubsystem.getInstance().getLeftStatorCurrent());
         // SmartDashboard.putNumber("LP Stator", ClimberSubsystem.getInstance().getStatorCurrent(ClimberMotor.LEFT_PUSHER));
 
-        SmartDashboard.putNumber("RC Pos", ClimberSubsystem.getInstance().getPosition(ClimberMotor.RIGHT_CLIMBER));
+        SmartDashboard.putNumber("RC Pos", ClimberSubsystem.getInstance().getRightPosition());
         // SmartDashboard.putNumber("RP Pos", ClimberSubsystem.getInstance().getPosition(ClimberMotor.RIGHT_PUSHER));
-        SmartDashboard.putNumber("LC Pos", ClimberSubsystem.getInstance().getPosition(ClimberMotor.LEFT_CLIMBER));
+        SmartDashboard.putNumber("LC Pos", ClimberSubsystem.getInstance().getLeftPosition());
         // SmartDashboard.putNumber("LP Pos", ClimberSubsystem.getInstance().getPosition(ClimberMotor.LEFT_PUSHER));
 
         //SmartDashboard.putBoolean("RC Switch", csi.getLimitSwitch(ClimberMotor.RIGHT_1));

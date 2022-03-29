@@ -75,12 +75,11 @@ public class RunIntakeCommand extends CommandBase {
             && finishedPuking
             && finishedShooting){
                 IntakeSubsystem.getInstance().set(ball2 ? -0.2 : Constants.Intake.INTAKE_SPEED);
-                GrabberSubsystem.getInstance().set(ball2 ? thing.get() : Constants.Intake.GRABBER_SPEED);
+                GrabberSubsystem.getInstance().set(ball2 ? 0 : Constants.Intake.GRABBER_SPEED);
                 LoaderSubsystem.getInstance().set(ball1 ? 0 : Constants.Intake.LOADER_SPEED);
             } else if(ball1 && finishedShooting){   //Puking out back
-                thing.setStopValue(-0.2);
                 IntakeSubsystem.getInstance().set(-0.3);
-                GrabberSubsystem.getInstance().set(thing.get());
+                GrabberSubsystem.getInstance().set(-0.2);
                 LoaderSubsystem.getInstance().set(ball1 ? 0 : Constants.Intake.LOADER_SPEED);
                 if(finishedPuking) pukeMillis = System.currentTimeMillis();
                 finishedPuking = false;
@@ -94,22 +93,22 @@ public class RunIntakeCommand extends CommandBase {
             }
         } else {
             IntakeSubsystem.getInstance().set(ball2 ? -0.2 : Constants.Intake.INTAKE_SPEED);
-            GrabberSubsystem.getInstance().set(ball2 ? thing.get() : Constants.Intake.GRABBER_SPEED);
+            GrabberSubsystem.getInstance().set(ball2 ? 0 : Constants.Intake.GRABBER_SPEED);
             LoaderSubsystem.getInstance().set(ball1 ? 0 : Constants.Intake.LOADER_SPEED);
         }
 
-        if(ball2 && !lastStateBall2){
-            grabberChange = true;
-            lastStateBall2 = true;
-        }
-        if(grabberChange){
-            thing.restart(0, 0.3);
-            grabberChange = false;
-        }
+        // if(ball2 && !lastStateBall2){
+        //     grabberChange = true;
+        //     lastStateBall2 = true;
+        // }
+        // if(grabberChange){
+        //     thing.restart(0, 0.3);
+        //     grabberChange = false;
+        // }
 
-        if(!ball2){
-            lastStateBall2 = false;
-        }
+        // if(!ball2){
+        //     lastStateBall2 = false;
+        // }
 
         int balls = (ball1 ? 1 : 0) + (ball2 ? 1 : 0);
         SmartDashboard.putNumber("Balls", balls);

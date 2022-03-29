@@ -3,7 +3,9 @@ package frc.robot.commands.climber;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.ClimberSubsystem.ClimberMotor;
 
 //Climbing Command
@@ -19,12 +21,14 @@ public class RetractClimberCommand extends CommandBase {
         ClimberSubsystem.getInstance().undeployClimber();
         // SmartDashboard.putNumber("LC Stator", ClimberSubsystem.getInstance().getStatorCurrent(ClimberMotor.LEFT_CLIMBER));
         // SmartDashboard.putNumber("RC Stator", ClimberSubsystem.getInstance().getStatorCurrent(ClimberMotor.RIGHT_CLIMBER));
+        Robot.enableBallLeds = false;
+        LedSubsystem.getInstance().twinkle(0, 255, 0);
     }
 
     @Override
     public void execute() {
-        lPos = ClimberSubsystem.getInstance().getPosition(ClimberMotor.LEFT_CLIMBER);
-        rPos = ClimberSubsystem.getInstance().getPosition(ClimberMotor.RIGHT_CLIMBER);
+        lPos = ClimberSubsystem.getInstance().getLeftPosition();
+        rPos = ClimberSubsystem.getInstance().getRightPosition();
     }
 
     @Override

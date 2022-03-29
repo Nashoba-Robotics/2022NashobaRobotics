@@ -15,8 +15,8 @@ public class ReleaseClimberCommand extends CommandBase{
 
     @Override
     public void execute() {
-        lPos = ClimberSubsystem.getInstance().getPosition(ClimberMotor.LEFT_CLIMBER);
-        rPos = ClimberSubsystem.getInstance().getPosition(ClimberMotor.RIGHT_CLIMBER);
+        lPos = ClimberSubsystem.getInstance().getLeftPosition();
+        rPos = ClimberSubsystem.getInstance().getRightPosition();
         ClimberSubsystem.getInstance().releaseClimber();
     }
 
