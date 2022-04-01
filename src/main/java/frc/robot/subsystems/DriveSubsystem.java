@@ -31,7 +31,6 @@ public class DriveSubsystem extends SubsystemBase {
     private static DriveSubsystem instance;
 
     //x-speed, y-speed, rate of rotation
-    private final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(Constants.DriveTrain.WHEEL_GAP);
     private Rotation2d gyroAngle = Rotation2d.fromDegrees(0);
     private OdometryCarpetCompensator odometry = new OdometryCarpetCompensator(0, gyroAngle);   //6.033
     private Pose2d pose;
@@ -186,10 +185,6 @@ public class DriveSubsystem extends SubsystemBase {
 
     public double getTranslationY(){
         return getPose().getTranslation().getY();
-    }
-
-    public DifferentialDriveKinematics getKinematics(){
-        return kinematics;
     }
 
     private void configureMotor(TalonFX motor) {

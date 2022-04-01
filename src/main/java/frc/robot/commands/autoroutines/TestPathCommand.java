@@ -19,14 +19,14 @@ public class TestPathCommand extends SequentialCommandGroup{
         DifferentialDriveVoltageConstraint autoVoltageConstraint = 
         new DifferentialDriveVoltageConstraint(
           new SimpleMotorFeedforward(Constants.DriveTrain.KS, Constants.DriveTrain.KV, Constants.DriveTrain.KA),
-          DriveSubsystem.getInstance().getKinematics(),
+          Constants.DriveTrain.KINEMATICS,
           10);
     
         TrajectoryConfig config =
         new TrajectoryConfig(
           Constants.DriveTrain.MAX_VELOCITY,
           Constants.DriveTrain.MAX_ACCELERATION)
-          .setKinematics(DriveSubsystem.getInstance().getKinematics())
+          .setKinematics(Constants.DriveTrain.KINEMATICS)
           .addConstraint(autoVoltageConstraint);
     
         Trajectory trajectory =

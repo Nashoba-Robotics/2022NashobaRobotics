@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import frc.robot.lib.Units;
 
 /**
@@ -221,6 +222,9 @@ public final class Constants {
         public static final double CLOSE_LEFT_START_ANGLE = 6.033;
         public static final double CLOSE_RIGHT_START_ANGLE = 0;
         public static final double FAR_RIGHT_START_ANGLE = 0;
+
+        public static final DifferentialDriveKinematics KINEMATICS = 
+        new DifferentialDriveKinematics(WHEEL_GAP);
     }
 
     public static class Intake {
