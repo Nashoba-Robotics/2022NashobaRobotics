@@ -10,7 +10,6 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.RobotState;
@@ -32,8 +31,9 @@ public class DriveSubsystem extends SubsystemBase {
 
     //x-speed, y-speed, rate of rotation
     private Rotation2d gyroAngle = Rotation2d.fromDegrees(0);
-    private OdometryCarpetCompensator odometry = new OdometryCarpetCompensator(0, gyroAngle);   //6.033
+    private OdometryCarpetCompensator odometry;
     private Pose2d pose;
+    private double angOfResistance;
 
     public static final int VOLTAGE_COMPENSATION_LEVEL = 12;
     //public static final VelocityMeasPeriod VELOCITY_MEASUREMENT_PERIOD_DRIVE = VelocityMeasPeriod.Period_10Ms; // find
@@ -54,8 +54,7 @@ public class DriveSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         if(RobotState.isAutonomous()){
-            if(odometryResetFinished){
-                odometry.updateAngle(Units.degrees2Radians(GyroSubsystem.getInstance().getAbsoluteAngle()));
+            if(odometryResetFinished && odometry != null){
                 gyroAngle = Rotation2d.fromDegrees(GyroSubsystem.getInstance().getAbsoluteAngle());
                 double deltaLeft = Units.NU2Meters(leftMotor.getSelectedSensorPosition() - lastLeftNU);
                 double deltaRight = Units.NU2Meters(rightMotor.getSelectedSensorPosition() - lastRightNU);
@@ -64,7 +63,7 @@ public class DriveSubsystem extends SubsystemBase {
                     deltaLeft,
                     deltaRight);
 
-                if(true) lastLeftNU = leftMotor.getSelectedSensorPosition();
+                lastLeftNU = leftMotor.getSelectedSensorPosition();
                 lastRightNU = rightMotor.getSelectedSensorPosition();
 
                 SmartDashboard.putNumber("angle odometry", odometry.getAngle());
@@ -137,9 +136,14 @@ public class DriveSubsystem extends SubsystemBase {
         return instance;
     }
 
-    public void resetOdometryTrue(){
-        odometryResetFinished = false;
+    public void createOdometry(double angOfResistance, double startAngle){
+        this.angOfResistance = angOfResistance;
+        odometry = new OdometryCarpetCompensator(angOfResistance, Rotation2d.fromDegrees(startAngle*360/Constants.TAU));
     }
+
+    // public void resetOdometryTrue(){
+    //     odometryResetFinished = false;
+    // }
 
     public void setMetersPerSecond(double left, double right){
         leftMotor.set(ControlMode.Velocity, Units.meters2NUSpeed(left));
@@ -151,20 +155,39 @@ public class DriveSubsystem extends SubsystemBase {
         rightMotor.set(ControlMode.PercentOutput, right / 12);
     }
 
-    public void resetOdometry(Pose2d pose){
+    public void resetOdometry(Pose2d pose, double angOfResistance){
+        odometryResetFinished = false;
+        this.angOfResistance = angOfResistance;
+        if(odometry == null){
+            odometry = new OdometryCarpetCompensator(angOfResistance, pose.getRotation());
+            odometry.resetPos(pose, pose.getRotation());
+        } else {
+            odometry.resetPos(pose, pose.getRotation(), angOfResistance);
+        }
         lastLeftNU = 0;
         lastRightNU = 0;
         leftMotor.setSelectedSensorPosition(0, Constants.PID_IDX, Constants.TIMEOUT);
         rightMotor.setSelectedSensorPosition(0, Constants.PID_IDX, Constants.TIMEOUT);
-        odometry.resetPos(pose, Rotation2d.fromDegrees(0));
-        GyroSubsystem.getInstance().zeroHeading();
+        GyroSubsystem.getInstance().setAngle(pose.getRotation().getRadians());
         SmartDashboard.putNumber("Reset Angle", odometry.getPoseMeters().getRotation().getRadians());
         odometryResetFinished = true;
     }
 
-    public void setStartAngle(double startAngle){
-        odometry.setStartAngle(startAngle);
-        GyroSubsystem.getInstance().zeroHeading();
+    public void resetOdometry(Pose2d pose){
+        odometryResetFinished = false;
+        if(odometry == null){
+            odometry = new OdometryCarpetCompensator(angOfResistance, pose.getRotation());
+            odometry.resetPos(pose, pose.getRotation());
+        } else {
+            odometry.resetPos(pose, pose.getRotation(), angOfResistance);
+        }
+        lastLeftNU = 0;
+        lastRightNU = 0;
+        leftMotor.setSelectedSensorPosition(0, Constants.PID_IDX, Constants.TIMEOUT);
+        rightMotor.setSelectedSensorPosition(0, Constants.PID_IDX, Constants.TIMEOUT);
+        GyroSubsystem.getInstance().setAngle(pose.getRotation().getRadians());
+        SmartDashboard.putNumber("Reset Angle", odometry.getPoseMeters().getRotation().getRadians());
+        odometryResetFinished = true;
     }
 
     public DifferentialDriveWheelSpeeds getWheelSpeeds(){

@@ -54,6 +54,7 @@ public class Units {
         return BallColor.NONE;
     }
 
+    //for drivetrain
     public static double NU2Meters(double nu){
         double rate = (Constants.TAU * Constants.DriveTrain.WHEEL_RADIUS) / (Constants.DriveTrain.DRIVE_GEAR_RATIO * Constants.FALCON_NU);
         return nu * rate;

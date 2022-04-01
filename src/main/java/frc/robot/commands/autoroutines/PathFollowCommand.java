@@ -44,7 +44,7 @@ public class PathFollowCommand extends SequentialCommandGroup{
 
 
        addCommands(
-        new ResetOdometryCommand(trajectory),
+        new ResetOdometryCommand(trajectory, Constants.FIELD.ANGLE_OF_RESISTANCE),
         ramseteCommand,
         new StopCommand()
        );
@@ -54,18 +54,18 @@ public class PathFollowCommand extends SequentialCommandGroup{
 
         
 
-        TrajectoryConfig config = new TrajectoryConfig(
-            Constants.DriveTrain.MAX_VELOCITY,
-            Constants.DriveTrain.MAX_ACCELERATION);
+        // TrajectoryConfig config = new TrajectoryConfig(
+        //     Constants.DriveTrain.MAX_VELOCITY,
+        //     Constants.DriveTrain.MAX_ACCELERATION);
 
-        config.setStartVelocity(0);
-        config.setReversed(false);
-        config.setEndVelocity(0);
-        config.addConstraint(new DifferentialDriveVoltageConstraint(
-            new SimpleMotorFeedforward(Constants.DriveTrain.KS, Constants.DriveTrain.KV, Constants.DriveTrain.KA),
-            Constants.DriveTrain.KINEMATICS,
-            10));
-        config.addConstraint(new CentripetalAccelerationConstraint(Constants.DriveTrain.MAX_ACCELERATION));
+        //config.setStartVelocity(0);
+        // config.setReversed(false);
+        // config.setEndVelocity(0);
+        // config.addConstraint(new DifferentialDriveVoltageConstraint(
+        //     new SimpleMotorFeedforward(Constants.DriveTrain.KS, Constants.DriveTrain.KV, Constants.DriveTrain.KA),
+        //     Constants.DriveTrain.KINEMATICS,
+        //     10));
+        //config.addConstraint(new CentripetalAccelerationConstraint(Constants.DriveTrain.MAX_ACCELERATION));
 
         RamseteCommand ramseteCommand =
        new RamseteCommand(
@@ -78,7 +78,7 @@ public class PathFollowCommand extends SequentialCommandGroup{
 
 
        addCommands(
-        new ResetOdometryCommand(trajectory),
+        new ResetOdometryCommand(trajectory, Constants.FIELD.ANGLE_OF_RESISTANCE),
         ramseteCommand,
         new StopCommand()
        );

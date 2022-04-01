@@ -152,9 +152,8 @@ public class Robot extends TimedRobot {
     LedSubsystem.getInstance().rainbow();
     LimelightSubsystem.getInstance().setIntakeLed(3);
     LimelightSubsystem.getInstance().setShooterLed(3);
-    DriveSubsystem.getInstance().resetOdometryTrue();
-    DriveSubsystem.getInstance().resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(0)));DriveSubsystem.getInstance().resetOdometryTrue();
-    DriveSubsystem.getInstance().resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(0)));DriveSubsystem.getInstance().resetOdometryTrue();
+    DriveSubsystem.getInstance().resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
+    DriveSubsystem.getInstance().resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
     DriveSubsystem.getInstance().resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
     autoChooser.getSelected().schedule();
   }
@@ -185,7 +184,6 @@ public class Robot extends TimedRobot {
     LimelightSubsystem.getInstance().setIntakeLed(3);
     LimelightSubsystem.getInstance().setShooterLed(3);
 
-    DriveSubsystem.getInstance().resetOdometryTrue();
     DriveSubsystem.getInstance().resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
 
     CommandScheduler.getInstance().schedule(new StopClimbCommand());

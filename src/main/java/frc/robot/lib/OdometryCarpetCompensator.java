@@ -7,52 +7,39 @@ import frc.robot.Constants;
 
 public class OdometryCarpetCompensator extends DifferentialDriveOdometry{
     
-    private double startAngle; // starting angle relative to direction on rug where there is no affect on odometry
+    //private double startAngle; // starting angle relative to direction on rug where there is no affect on odometry
+    private double angOfResistance;
     private double absAngle; // consistantly updated angle compared to starting angle
 
-    private double lastLeftPos = 0;
-    private double lastRightPos = 0;
+    private double lastLeftMeters;
+    private double lastRightMeters;
 
     // start Angle is relative to the direction on the rug where there is no affect on odometry (0 -> TAU)
     // currAngle is what the gyro is going to read when the auto command starts
-    public OdometryCarpetCompensator(double startAngle, Rotation2d currAngle){
+    public OdometryCarpetCompensator(double angOfResistance, Rotation2d currAngle){
         super(currAngle);
-        this.startAngle = Units.getAbsAngle(startAngle);
-        absAngle = Units.getAbsAngle(this.startAngle + currAngle.getRadians());
-    }
-
-    public void setStartAngle(double startAngle){
-        this.startAngle = Units.getAbsAngle(startAngle);
+        lastLeftMeters = 0;
+        lastRightMeters = 0;
+        this.angOfResistance = Units.getAbsAngle(angOfResistance);
+        absAngle = Units.getAbsAngle(currAngle.getRadians() - angOfResistance);
     }
 
     public Pose2d updatePose2d(Rotation2d angle, double deltaLeftMeters, double deltaRightMeters){
 
-        double leftPos = lastLeftPos + compensateRug(deltaLeftMeters);
-        double rightPos = lastRightPos + compensateRug(deltaRightMeters);
+        absAngle = Units.getAbsAngle(angle.getRadians() - angOfResistance);
+
+        double leftPos = lastLeftMeters + compensateRug(deltaLeftMeters);
+        double rightPos = lastRightMeters + compensateRug(deltaRightMeters);
 
         Pose2d pose = super.update(
             angle,
             leftPos,
             rightPos);
 
-        lastLeftPos = leftPos;
-        lastRightPos = rightPos;
+        lastLeftMeters = leftPos;
+        lastRightMeters = rightPos;
 
         return pose;
-    }
-
-    public double getLeftMeters(){
-        return lastLeftPos;
-    }
-
-    public double getRightMeters(){
-        return lastRightPos;
-    }
-
-    //radians
-    public void updateAngle(double angle){
-        // double nextAng = Units.getAbsAngle(startAngle + angle);
-        absAngle = Units.getAbsAngle(startAngle + angle);
     }
 
     public double getAngle(){
@@ -60,22 +47,35 @@ public class OdometryCarpetCompensator extends DifferentialDriveOdometry{
     }
 
     private double compensateRug(double deltaMeters){
-        return deltaMeters > 0 ? 
-            deltaMeters * (1 + Math.sin(absAngle) * Constants.K_CARPET):
-            deltaMeters * (1 + Math.sin(absAngle) * Constants.K_CARPET * -1);
+        return deltaMeters > 0 ?
+        deltaMeters+(deltaMeters*Constants.FIELD.K_CARPET/2)*(1-Math.cos(absAngle)):
+        deltaMeters+(deltaMeters*Constants.FIELD.K_CARPET/2)*(1+Math.cos(absAngle));
         
     }
 
     // call to reset the odometry position
     // zero heading AFTER calling function
-    public void resetPos(Pose2d pos, Rotation2d rotation){
-        startAngle = Units.getAbsAngle(absAngle + startAngle);
-        absAngle = Units.getAbsAngle(startAngle + rotation.getRadians());
-        lastLeftPos = 0;
-        lastRightPos = 0;
+    public void resetPos(Pose2d pos, Rotation2d rotation, double angOfResistance){
+        lastLeftMeters = 0;
+        lastRightMeters = 0;
+        this.angOfResistance = Units.getAbsAngle(angOfResistance);
+        absAngle = Units.getAbsAngle(rotation.getRadians() - angOfResistance);
         super.resetPosition(pos, rotation);
-        lastLeftPos = 0;
-        lastRightPos = 0;
+    }
+
+    public void resetPos(Pose2d pos, Rotation2d rotation){
+        lastLeftMeters = 0;
+        lastRightMeters = 0;
+        absAngle = Units.getAbsAngle(rotation.getRadians() - angOfResistance);
+        super.resetPosition(pos, rotation);
+    }
+
+    public double getLeftMeters(){
+        return lastLeftMeters;
+    }
+
+    public double getRightMeters(){
+        return lastRightMeters;
     }
 
 }

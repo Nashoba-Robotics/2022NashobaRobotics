@@ -73,8 +73,7 @@ public final class Constants {
 
     public static final double FALCON_NU = 2048; // the number of native units per rotation
 
-    // public static final double K_CARPET = 0.055;
-    public static final double K_CARPET = 0;
+    
 
     public static class Cannon {
         public static final int PORT_TOP = 9;
@@ -208,7 +207,7 @@ public final class Constants {
 
         public static final double WHEEL_GAP = 0.85162; // distance between wheels in meters
         // public static final double WHEEL_RADIUS = Units.inches2Meters(1.97775696); // wheel radius in meters
-        public static final double WHEEL_RADIUS = Units.inches2Meters(2.25); // wheel radius in meters
+        public static final double WHEEL_RADIUS = Units.inches2Meters(1.893888); // wheel radius in meters
 
         public static final double DRIVE_GEAR_RATIO = 20.0 / 3;
 
@@ -300,5 +299,12 @@ public final class Constants {
         public static final int ENABLE_MANUAL_CLIMB = 5;
 
         public static final int AUTO_AIM = 1;
+    }
+
+    public static class FIELD {
+        public static final double ANGLE_OF_RESISTANCE = 0;
+
+        // public static final double K_CARPET = 0.055;
+        public static final double K_CARPET = 0;
     }
 }
