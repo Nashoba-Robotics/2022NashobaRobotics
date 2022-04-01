@@ -239,7 +239,7 @@ public class RobotContainer {
     rotatingClimbeGrabButton.whenActive(new TemporaryReleaseCommand());   //TODO: Change to actual Rotating Grab Command
     //rotatingClimberReleaseButton.whenActive(new TemporaryReleaseCommand());
 
-    autoAimButton.whenActive(new AutoAimCommand());
+    autoAimButton.toggleWhenActive(new AutoAimMotionMagicCommand());
   }
 
 }
