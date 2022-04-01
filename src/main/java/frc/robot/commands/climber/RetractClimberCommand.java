@@ -21,8 +21,6 @@ public class RetractClimberCommand extends CommandBase {
         ClimberSubsystem.getInstance().undeployClimber();
         // SmartDashboard.putNumber("LC Stator", ClimberSubsystem.getInstance().getStatorCurrent(ClimberMotor.LEFT_CLIMBER));
         // SmartDashboard.putNumber("RC Stator", ClimberSubsystem.getInstance().getStatorCurrent(ClimberMotor.RIGHT_CLIMBER));
-        Robot.enableBallLeds = false;
-        LedSubsystem.getInstance().twinkle(0, 255, 0);
     }
 
     @Override

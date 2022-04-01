@@ -24,6 +24,8 @@ public class CannonSubsystem extends SubsystemBase{
     public TalonFX topCannonMotor;
     public TalonFX bottomCannonMotor;
 
+    private double speedChange;
+
     private Solenoid solenoid;
 
     public enum Angle {
@@ -45,6 +47,8 @@ public class CannonSubsystem extends SubsystemBase{
         bottomCannonMotor.setInverted(true);
         configureMotor(topCannonMotor);
         configureMotor(bottomCannonMotor);
+
+        speedChange = 0;
     }
 
 
@@ -75,6 +79,10 @@ public class CannonSubsystem extends SubsystemBase{
         motor.setNeutralMode(NeutralMode.Coast);
     }
 
+    public void changeSpeedChange(double delta){
+        speedChange += delta;
+    }
+
     public double getCurrentTop(){
         return topCannonMotor.getStatorCurrent();
     }
@@ -85,8 +93,8 @@ public class CannonSubsystem extends SubsystemBase{
 
     //sets the speed of each individual motor
     public void set(double topSpeed, double bottomSpeed){
-        topCannonMotor.set(ControlMode.Velocity, Units.percent2Velocity(topSpeed));
-        bottomCannonMotor.set(ControlMode.Velocity, Units.percent2Velocity(bottomSpeed));
+        topCannonMotor.set(ControlMode.Velocity, Units.percent2Velocity(topSpeed + speedChange));
+        bottomCannonMotor.set(ControlMode.Velocity, Units.percent2Velocity(bottomSpeed + speedChange));
     }
     
     //sets the speed of both motors to same value

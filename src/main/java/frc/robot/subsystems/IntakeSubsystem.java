@@ -33,4 +33,8 @@ public class IntakeSubsystem extends SubsystemBase {
     public void stop() {
         motor.set(ControlMode.PercentOutput, 0);
     }
+
+    public double getCurrent() {
+        return motor.getStatorCurrent();
+    }
 }

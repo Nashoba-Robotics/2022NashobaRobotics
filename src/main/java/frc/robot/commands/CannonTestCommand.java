@@ -35,7 +35,9 @@ public class CannonTestCommand extends CommandBase {
 
     @Override
     public void initialize(){
-        SmartDashboard.putNumber("Cannon Speed", 0);
+        //SmartDashboard.putNumber("Cannon Speed", 0);
+        SmartDashboard.putNumber("Top Speed", 0);
+        SmartDashboard.putNumber("Bottom Speed", 0);
         SmartDashboard.putNumber("Loader speed", 0);
         SmartDashboard.putData(cannonAngle);
         timer = new Timer();
@@ -44,37 +46,41 @@ public class CannonTestCommand extends CommandBase {
 
     @Override
     public void execute(){
-        // double cannonSpeed = SmartDashboard.getNumber("Cannon Speed", 0);
-        // double loaderSpeed = SmartDashboard.getNumber("Loader speed", 0);
+        //double cannonSpeed = SmartDashboard.getNumber("Cannon Speed", 0);
+        double topSpeed = SmartDashboard.getNumber("Top Speed", 0);
+        double bottomSpeed = SmartDashboard.getNumber("Bottom Speed", 0);
+        double loaderSpeed = SmartDashboard.getNumber("Loader speed", 0);
         CannonSubsystem.getInstance().setAngle(cannonAngle.getSelected());
-        // if(shooting) {
-        //     GrabberSubsystem.getInstance().set(0);
-        //     if(timer.get() > 1.7) {
-        //         CannonSubsystem.getInstance().set(0);
-        //         LoaderSubsystem.getInstance().set(0);
-        //         shooting = false;
-        //     } else if(timer.get() > 0.7) {
-        //         LoaderSubsystem.getInstance().set(loaderSpeed);
-        //         CannonSubsystem.getInstance().set(cannonSpeed);
-        //     }
-        //     else if(timer.get() > 0.2) {
-        //         CannonSubsystem.getInstance().set(cannonSpeed);
-        //         LoaderSubsystem.getInstance().set(0);
-        //     } else {
-        //         CannonSubsystem.getInstance().set(0);
-        //         LoaderSubsystem.getInstance().set(0);
-        //     }
-        // } else {
-        //     if(RobotContainer.getSensor2()) {
-        //         shooting = true;
-        //         timer.reset();
-        //         timer.start();
-        //     } else {
-        //         CannonSubsystem.getInstance().set(0);
-        //         GrabberSubsystem.getInstance().set(Constants.Intake.GRABBER_SPEED);
-        //         LoaderSubsystem.getInstance().set(Constants.Intake.LOADER_SPEED);
-        //     }
-        // }
+        if(shooting) {
+            GrabberSubsystem.getInstance().set(0);
+            if(timer.get() > 1.7) {
+                CannonSubsystem.getInstance().set(0);
+                LoaderSubsystem.getInstance().set(0);
+                shooting = false;
+            } else if(timer.get() > 0.7) {
+                LoaderSubsystem.getInstance().set(loaderSpeed);
+                //CannonSubsystem.getInstance().set(cannonSpeed);
+                CannonSubsystem.getInstance().set(topSpeed, bottomSpeed);
+            }
+            else if(timer.get() > 0.2) {
+                //CannonSubsystem.getInstance().set(cannonSpeed);
+                CannonSubsystem.getInstance().set(topSpeed, bottomSpeed);
+                LoaderSubsystem.getInstance().set(0);
+            } else {
+                CannonSubsystem.getInstance().set(0);
+                LoaderSubsystem.getInstance().set(0);
+            }
+        } else {
+            if(RobotContainer.getSensor2()) {
+                shooting = true;
+                timer.reset();
+                timer.start();
+            } else {
+                CannonSubsystem.getInstance().set(0);
+                GrabberSubsystem.getInstance().set(Constants.Intake.GRABBER_SPEED);
+                LoaderSubsystem.getInstance().set(Constants.Intake.LOADER_SPEED);
+            }
+        }
 
         //CannonSubsystem.getInstance().setAngle(SmartDashboard.getNumber("Solenoid", 0) != 0 ? CannonSubsystem.Angle.SIXTY : CannonSubsystem.Angle.EIGHTY);
         

@@ -6,6 +6,7 @@ import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.LedSubsystem;
+import frc.robot.subsystems.PusherSubsystem;
 import frc.robot.subsystems.ClimberSubsystem.ClimberMotor;
 
 public class DeployClimberCommad extends CommandBase{
@@ -13,13 +14,15 @@ public class DeployClimberCommad extends CommandBase{
 
     public DeployClimberCommad(){
         addRequirements(ClimberSubsystem.getInstance());
+        addRequirements(PusherSubsystem.getInstance());
     }
 
     @Override
     public void initialize() {
-        ClimberSubsystem.getInstance().deployClimber();
         Robot.enableBallLeds = false;
-        LedSubsystem.getInstance().twinkle(255, 0, 0);
+        LedSubsystem.getInstance().twinkle(Constants.Leds.DEPLOY_CLIMBER);
+        ClimberSubsystem.getInstance().deployClimber();
+        PusherSubsystem.getInstance().resetPusher();
     }
 
     @Override

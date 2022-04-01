@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.Constants.Intake;
 import frc.robot.lib.RenameThisLater;
 import frc.robot.lib.Units;
 import frc.robot.subsystems.CannonSubsystem;
@@ -70,7 +71,7 @@ public class RunIntakeCommand extends CommandBase {
 
         if(finishedShooting) CannonSubsystem.getInstance().set(0);
 
-        if(colorRejection){
+        if(false){
             if(ColorSensorSubsystem.getInstance().getBall() != Units.oppositeBallColor(allianceColor)   //Normal intake
             && finishedPuking
             && finishedShooting){
@@ -113,6 +114,10 @@ public class RunIntakeCommand extends CommandBase {
         int balls = (ball1 ? 1 : 0) + (ball2 ? 1 : 0);
         SmartDashboard.putNumber("Balls", balls);
         SmartDashboard.putString("Ball Color", ColorSensorSubsystem.getInstance().getBall().toString());
+
+        // Stall detection
+        double intakeCurrent = IntakeSubsystem.getInstance().getCurrent();
+        SmartDashboard.putBoolean("Intake stalling?", intakeCurrent > 50);
     }
 
     @Override

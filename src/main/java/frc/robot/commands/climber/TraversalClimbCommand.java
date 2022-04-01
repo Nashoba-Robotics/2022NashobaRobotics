@@ -2,12 +2,14 @@ package frc.robot.commands.climber;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.subsystems.LedSubsystem;
 
 public class TraversalClimbCommand extends SequentialCommandGroup{
     public TraversalClimbCommand(){
         addCommands(
+            //new ResetPusherCommand(),
             new ParallelCommandGroup(   //Climbs onto Mid Bar and raises pushers above the High Bar
                 new RetractClimberCommand(),
                 new DeployPusher()
@@ -23,6 +25,6 @@ public class TraversalClimbCommand extends SequentialCommandGroup{
     @Override
     public void initialize() {
         Robot.enableBallLeds = false;
-        LedSubsystem.getInstance().twinkle(0, 0, 255);
+        LedSubsystem.getInstance().twinkle(Constants.Leds.TRAVERSAL_CLIMB);
     }
 }

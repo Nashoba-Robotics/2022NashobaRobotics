@@ -78,10 +78,13 @@ public class LedSubsystem extends SubsystemBase {
         }
     }
 
-    public void twinkle(int r, int g, int b) {
-        if(lastMode != 4) {
-            Animation a = new TwinkleAnimation(r, g, b, 0, 0.5, 46, TwinklePercent.Percent64);
+    public void twinkle(int[] col) {
+        if(lastMode != 4 || lastR != col[0] || lastG != col[1] || lastB != col[2]) {
+            Animation a = new TwinkleAnimation(col[0], col[1], col[2], 0, 0.5, 46, TwinklePercent.Percent64);
             candle.animate(a);
+            lastR = col[0];
+            lastG = col[1];
+            lastB = col[2];
             lastMode = 4;
         }
     }

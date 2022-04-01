@@ -41,7 +41,7 @@ public class AutoAimCommand extends CommandBase{
     @Override
     public void execute() {
         // Get the X position of the tracked object (-27 to +27)
-        double tx = LimelightSubsystem.getInstance().getShooterTx();
+        double tx = LimelightSubsystem.getInstance().getIntakeTx();
         // Will be set in conditional later
         double turn = 0;
 
@@ -67,7 +67,7 @@ public class AutoAimCommand extends CommandBase{
                 turn *= Math.signum(txPercent);
                 inTargetTimer.reset();
             }
-            if(!LimelightSubsystem.getInstance().shooterValidTarget()){
+            if(!LimelightSubsystem.getInstance().intakeValidTarget()){
                 noTargetTimer.reset();
             }
             else{
