@@ -2,8 +2,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.Constants.Cannon;
-import frc.robot.Constants.Intake;
 import frc.robot.subsystems.CannonSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -43,11 +41,8 @@ public class AutoShootCommand extends CommandBase{
             if(LimelightSubsystem.getInstance().shooterValidTarget()){
                 lastValidTy = LimelightSubsystem.getInstance().getShooterTy();
             }
-            //cannonSpeed = 0.545 - 0.007 * lastValidTy;
-            //cannonSpeed = 0.53 - 0.00825 * lastValidTy;
             cannonSpeed = Constants.Cannon.farShotSpeed(lastValidTy);
         } else {
-            //cannonSpeed = 0.465; // close up shot
             cannonSpeed = Constants.Cannon.CLOSE_SHOT_SPEED;
         }
 

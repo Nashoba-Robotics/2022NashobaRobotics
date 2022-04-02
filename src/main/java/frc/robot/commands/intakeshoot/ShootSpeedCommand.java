@@ -10,7 +10,7 @@ public class ShootSpeedCommand extends CommandBase{
 
     private long startMillis;
 
-    public ShootSpeedCommand(double shootSpeed, double finishTimeMillis){
+    public ShootSpeedCommand(double shootSpeed, int finishTimeMillis){
         this.shootSpeed = shootSpeed;
         this.finishTimeMilllis = finishTimeMilllis;
         startMillis = System.currentTimeMillis();

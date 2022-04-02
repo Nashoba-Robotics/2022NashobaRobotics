@@ -1,10 +1,7 @@
 package frc.robot.commands.intakeshoot;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.Constants.Intake;
 import frc.robot.subsystems.IntakeSolenoidSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 

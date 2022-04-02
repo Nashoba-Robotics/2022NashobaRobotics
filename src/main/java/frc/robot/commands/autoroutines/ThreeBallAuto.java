@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.Intake;
-import frc.robot.commands.AutoAimCommand;
 import frc.robot.commands.AutoShootCommand;
 import frc.robot.commands.intakeshoot.CannonAngleCommand;
 import frc.robot.commands.intakeshoot.ActuateIntakeCommand;

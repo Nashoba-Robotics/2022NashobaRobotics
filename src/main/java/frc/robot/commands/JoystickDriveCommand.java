@@ -2,17 +2,11 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.Constants;
-import frc.robot.RobotContainer;
-import frc.robot.lib.AccelerationControl;
 import frc.robot.lib.JoystickProcessing;
-import frc.robot.lib.Units;
 import frc.robot.lib.JoystickValues;
 import frc.robot.lib.MotorValues;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.JoystickSubsystem;
-import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.DriveSubsystem.DriveMode;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -28,23 +22,15 @@ public class JoystickDriveCommand extends CommandBase {
     // are pressed/released
     private boolean buttonPressedLeft;
     private boolean lastPressedLeft;
-    private boolean buttonPressedRight;
-    private boolean lastPressedRight;
 
     // The left and right joystick triggers
     private JoystickButton joystickTriggerLeft;
-    private JoystickButton joystickTriggerRight;
 
-    private JoystickButton joystickBottomRight;
-
-    //private AccelerationControl accelerationControl;
 
     public JoystickDriveCommand() {
         addRequirements(DriveSubsystem.getInstance());
         addRequirements(JoystickSubsystem.getInstance());
         joystickTriggerLeft = new JoystickButton(JoystickSubsystem.getInstance().getLeftJoystick(), 1);
-        joystickTriggerRight = new JoystickButton(JoystickSubsystem.getInstance().getRightJoystick(), 1);
-        joystickBottomRight = new JoystickButton(JoystickSubsystem.getInstance().getRightJoystick(), 2);
     }
 
     @Override
@@ -56,16 +42,6 @@ public class JoystickDriveCommand extends CommandBase {
         // Joystick buttons start off unpressed
         buttonPressedLeft = joystickTriggerLeft.get();
         lastPressedLeft = joystickTriggerLeft.get();
-        buttonPressedRight = joystickTriggerRight.get();
-        lastPressedRight = joystickTriggerRight.get();
-
-        // accelerationControl = new AccelerationControl(
-        //     Constants.MAX_ACCEL, Constants.MAX_DECEL, 
-        //     Constants.MAX_ACCEL_TURN, Constants.MAX_DECEL_TURN);
-
-        SmartDashboard.putNumber("distanceX", 0);
-        SmartDashboard.putNumber("distanceY", 0);
-        SmartDashboard.putNumber("Limelight Angle", 0);
     }
 
     @Override
@@ -77,19 +53,9 @@ public class JoystickDriveCommand extends CommandBase {
         //Temporarily switch left trigger to invert drive
         buttonPressedLeft = joystickTriggerLeft.get();
         if(buttonPressedLeft && lastPressedLeft != buttonPressedLeft){
-            //arcadeDrive = !arcadeDrive;
             invertDrive = !invertDrive;
-            // accelerationControl.invert();
         } 
         lastPressedLeft = buttonPressedLeft;
-
-        // Enable break mode when the right trigger is pressed
-        // buttonPressedRight = joystickTriggerRight.get();
-        // if(buttonPressedRight && lastPressedRight != buttonPressedRight) DriveSubsystem.getInstance().changeBrakeMode();
-        // lastPressedRight = buttonPressedRight;
-        
-        // Show whether break mode is enabled
-        SmartDashboard.putBoolean("Brake Mode", DriveSubsystem.getInstance().getBrakeMode());
 
         // right joystick x position - turning
         double rightX = JoystickSubsystem.getInstance().getRightX();
@@ -101,9 +67,6 @@ public class JoystickDriveCommand extends CommandBase {
         joystickValues = JoystickProcessing.scaleJoysticks(joystickValues);
         // adds shaping to joystick; see JoystickProcessing
         joystickValues = JoystickProcessing.shapeJoysticks(joystickValues);
-
-        // changes joystickValues if exceeds acceleration limit
-        //joystickValues = accelerationControl.next(joystickValues);
 
         //Switches between Arcade Drive and Radius Drive
         //motorValues are move/turn instead of left/right
@@ -121,23 +84,6 @@ public class JoystickDriveCommand extends CommandBase {
         //Sets the speed
         if(!invertDrive) DriveSubsystem.getInstance().setSpeed(motorValues.left, motorValues.right);
         else DriveSubsystem.getInstance().setSpeed(-motorValues.left, -motorValues.right);
-        
-        // //Diagnostic values for Joysticks and motors
-        // SmartDashboard.putNumber("Joystick Left Y", leftY);
-        // SmartDashboard.putNumber("Joystick Right X", rightX);
-        // SmartDashboard.putNumber("Left percent", motorValues.left);
-        // SmartDashboard.putNumber("Right percent", motorValues.right);
-        // //Puts the velocity that the motor controller is reading to SmartDashboard
-        // SmartDashboard.putNumber("Left Motor Real Velocity", DriveSubsystem.getInstance().getLeftMotorVelocity());
-        // SmartDashboard.putNumber("Right Motor Real Velocity", DriveSubsystem.getInstance().getRightMotorVelocity());
-        // SmartDashboard.putNumber("leftCurrent", DriveSubsystem.getInstance().getLeftMotorCurrent());
-        // SmartDashboard.putNumber("rightCurrent", DriveSubsystem.getInstance().getRightMotorCurrent());
-        // SmartDashboard.putNumber("distanceX", DriveSubsystem.getInstance().getTranslationX());
-        // SmartDashboard.putNumber("distanceY", DriveSubsystem.getInstance().getTranslationY());
-        // SmartDashboard.putNumber("robotAngle", DriveSubsystem.getInstance().getAngle());
-        // SmartDashboard.putNumber("rightDistance", DriveSubsystem.getInstance().getDistanceLeft());
-        // SmartDashboard.putNumber("leftDistance", DriveSubsystem.getInstance().getDistanceRight());
-        // SmartDashboard.putNumber("Limelight Angle", LimelightSubsystem.getInstance().getShooterTy());
     }
 
     // Called once the command ends or is interrupted.

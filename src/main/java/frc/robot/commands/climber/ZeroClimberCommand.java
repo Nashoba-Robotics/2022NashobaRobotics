@@ -1,9 +1,7 @@
 package frc.robot.commands.climber;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ClimberSubsystem;
-import frc.robot.subsystems.ClimberSubsystem.ClimberMotor;
 
 public class ZeroClimberCommand extends CommandBase {
     private long leftHitMillis;
@@ -34,15 +32,8 @@ public class ZeroClimberCommand extends CommandBase {
 
     @Override
     public void execute() {
-        // SmartDashboard.putNumber("L Millis", leftHitMillis);
-        // SmartDashboard.putNumber("R Millis", rightHitMillis);
-        // SmartDashboard.putBoolean("L Limit", ClimberSubsystem.getInstance().getLimitSwitch(ClimberMotor.LEFT_1));
-        // SmartDashboard.putBoolean("R Limit", ClimberSubsystem.getInstance().getLimitSwitch(ClimberMotor.RIGHT_1));
 
         long millis = System.currentTimeMillis();
-
-        double leftPos = ClimberSubsystem.getInstance().getLeftPosition();
-        double rightPos = ClimberSubsystem.getInstance().getRightPosition();
 
         if(leftFinished && !ClimberSubsystem.getInstance().getLeftLimitSwitch()){
             ClimberSubsystem.getInstance().setLeftSpeed(0);
@@ -80,11 +71,6 @@ public class ZeroClimberCommand extends CommandBase {
             rightFinished = true;
             rightHitMillis = millis;
         }
-
-        // SmartDashboard.putNumber("L 1 Pos", leftPos);
-        // SmartDashboard.putNumber("R 1 Pos", rightPos);
-        // SmartDashboard.putBoolean("L finished", leftEnd);
-        // SmartDashboard.putBoolean("R finished", rightEnd);
     }
 
     @Override

@@ -25,7 +25,6 @@ public class IntakePracticeCommand extends CommandBase{
 
     @Override
     public void end(boolean interrupted) {
-        // TODO Auto-generated method stub
         IntakeSubsystem.getInstance().set(0);
         GrabberSubsystem.getInstance().set(0);
         LoaderSubsystem.getInstance().set(0);
@@ -34,7 +33,6 @@ public class IntakePracticeCommand extends CommandBase{
 
     @Override
     public boolean isFinished() {
-        // TODO Auto-generated method stub
         return false;
     }
 }

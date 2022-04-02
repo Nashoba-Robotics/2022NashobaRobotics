@@ -1,14 +1,11 @@
 package frc.robot.commands;
 
-import javax.swing.plaf.basic.BasicMenuUI.ChangeHandler;
-
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
-import frc.robot.Constants.Cannon;
 import frc.robot.subsystems.CannonSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;
 import frc.robot.subsystems.LoaderSubsystem;
@@ -35,7 +32,6 @@ public class CannonTestCommand extends CommandBase {
 
     @Override
     public void initialize(){
-        //SmartDashboard.putNumber("Cannon Speed", 0);
         SmartDashboard.putNumber("Top Speed", 0);
         SmartDashboard.putNumber("Bottom Speed", 0);
         SmartDashboard.putNumber("Loader speed", 0);
@@ -46,7 +42,6 @@ public class CannonTestCommand extends CommandBase {
 
     @Override
     public void execute(){
-        //double cannonSpeed = SmartDashboard.getNumber("Cannon Speed", 0);
         double topSpeed = SmartDashboard.getNumber("Top Speed", 0);
         double bottomSpeed = SmartDashboard.getNumber("Bottom Speed", 0);
         double loaderSpeed = SmartDashboard.getNumber("Loader speed", 0);
@@ -59,11 +54,9 @@ public class CannonTestCommand extends CommandBase {
                 shooting = false;
             } else if(timer.get() > 0.7) {
                 LoaderSubsystem.getInstance().set(loaderSpeed);
-                //CannonSubsystem.getInstance().set(cannonSpeed);
                 CannonSubsystem.getInstance().set(topSpeed, bottomSpeed);
             }
             else if(timer.get() > 0.2) {
-                //CannonSubsystem.getInstance().set(cannonSpeed);
                 CannonSubsystem.getInstance().set(topSpeed, bottomSpeed);
                 LoaderSubsystem.getInstance().set(0);
             } else {
@@ -81,15 +74,6 @@ public class CannonTestCommand extends CommandBase {
                 LoaderSubsystem.getInstance().set(Constants.Intake.LOADER_SPEED);
             }
         }
-
-        //CannonSubsystem.getInstance().setAngle(SmartDashboard.getNumber("Solenoid", 0) != 0 ? CannonSubsystem.Angle.SIXTY : CannonSubsystem.Angle.EIGHTY);
-        
-        // SmartDashboard.putNumber("topCurrent", CannonSubsystem.getInstance().getCurrentTop());
-        // SmartDashboard.putNumber("bottomCurrent", CannonSubsystem.getInstance().getCurretBottom());
-        // CannonSubsystem.getInstance().setProportional(SmartDashboard.getNumber("Cannon P", 0));
-        // CannonSubsystem.getInstance().setIntegral(SmartDashboard.getNumber("Cannon I", 0));
-        // CannonSubsystem.getInstance().setDerivative(SmartDashboard.getNumber("Cannon D", 0));
-        // CannonSubsystem.getInstance().setKF(SmartDashboard.getNumber("Cannon kF", 0));
     }
 
     @Override

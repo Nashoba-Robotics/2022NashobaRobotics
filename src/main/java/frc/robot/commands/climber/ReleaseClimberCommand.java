@@ -3,7 +3,6 @@ package frc.robot.commands.climber;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.Climber;
 import frc.robot.subsystems.ClimberSubsystem;
-import frc.robot.subsystems.ClimberSubsystem.ClimberMotor;
 
 public class ReleaseClimberCommand extends CommandBase{
     private double lPos;

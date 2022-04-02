@@ -1,13 +1,11 @@
 package frc.robot.commands.intakeshoot;
 
-import edu.wpi.first.hal.simulation.RoboRioDataJNI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
-import frc.robot.Constants.Intake;
 import frc.robot.subsystems.CannonSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -65,8 +63,6 @@ public class ShootCommand extends CommandBase {
             if(LimelightSubsystem.getInstance().shooterValidTarget()){
                 lastValidTy = LimelightSubsystem.getInstance().getShooterTy();
             }
-            //cannonSpeed = 0.53 - 0.00825 * lastValidTy;
-            //cannonSpeed = 0.545 - 0.007 * lastValidTy;
             cannonSpeed = Constants.Cannon.farShotSpeed(lastValidTy);
 
         } else {

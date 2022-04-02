@@ -1,6 +1,5 @@
 package frc.robot.commands.climber;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.PusherSubsystem;
@@ -18,17 +17,11 @@ public class ReleasePusherCommand extends CommandBase{
         lPos = PusherSubsystem.getInstance().getPosition(PusherMotor.LEFT_PUSHER);
         rPos = PusherSubsystem.getInstance().getPosition(PusherMotor.RIGHT_PUSHER);
         PusherSubsystem.getInstance().releasePusherSlow();
-        SmartDashboard.putNumber("L Push Pos", lPos);
-        SmartDashboard.putNumber("R Push Pos", rPos);
     }
 
     @Override
     public void end(boolean interrupted) {
         PusherSubsystem.getInstance().releasePusherFast();
-        SmartDashboard.putNumber("L Final Pos", lPos);
-        SmartDashboard.putNumber("R Final Pos", rPos);
-        // PusherSubsystem.getInstance().seLefttMotionMagic(lPos);
-        // PusherSubsystem.getInstance().setRighttMotionMagic(rPos);
     }
 
     @Override
