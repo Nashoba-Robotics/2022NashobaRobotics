@@ -53,48 +53,56 @@ public class DriveSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if(RobotState.isAutonomous()){
+        if(RobotState.isAutonomous() && RobotState.isEnabled()){
             if(odometryResetFinished && odometry != null){
                 gyroAngle = Rotation2d.fromDegrees(GyroSubsystem.getInstance().getAbsoluteAngle());
-                double deltaLeft = Units.NU2Meters(leftMotor.getSelectedSensorPosition() - lastLeftNU);
-                double deltaRight = Units.NU2Meters(rightMotor.getSelectedSensorPosition() - lastRightNU);
+                double currLeft = getPositionLeft();
+                double currRight = getPositionRight();
+                double deltaLeft = currLeft - lastLeftNU;
+                double deltaRight = currRight - lastRightNU;
+                // SmartDashboard.putNumber("l delta", deltaLeft);
+                // SmartDashboard.putNumber("r delta", deltaRight);
                 pose = odometry.updatePose2d(
                     gyroAngle,
                     deltaLeft,
                     deltaRight);
 
-                lastLeftNU = leftMotor.getSelectedSensorPosition();
-                lastRightNU = rightMotor.getSelectedSensorPosition();
+                lastLeftNU = currLeft;
+                lastRightNU = currRight;
 
                 SmartDashboard.putNumber("angle odometry", odometry.getAngle());
                 SmartDashboard.putNumber("angle gyro", GyroSubsystem.getInstance().getAbsoluteAngle());
-                SmartDashboard.putNumber("l meters", odometry.getLeftMeters());
-                SmartDashboard.putNumber("r meters", odometry.getRightMeters());
+                SmartDashboard.putNumber("l odo", odometry.getLeftNU());
+                SmartDashboard.putNumber("r odo", odometry.getRightNU());
+
+                SmartDashboard.putNumber("Odometry X", getPose().getX());
+                SmartDashboard.putNumber("Odometry Y", getPose().getY());
             }
 
             SmartDashboard.putNumber("l NU", getPositionLeft());
             SmartDashboard.putNumber("r NU", getPositionRight());
-            SmartDashboard.putNumber("Odometry X", getPose().getX());
-            SmartDashboard.putNumber("Odometry Y", getPose().getY());
+        } else {
+            odometryResetFinished = false;
         }
+
     }
     
     public DriveSubsystem() {
         odometryResetFinished = false;
 
-        // leftMotor = new TalonFX(Constants.LEFT_MOTOR_PORTS[0], "Drive");
-        // leftMotor2 = new TalonFX(Constants.LEFT_MOTOR_PORTS[1], "Drive");
-        // leftMotor3 = new TalonFX(Constants.LEFT_MOTOR_PORTS[2], "Drive");
-        // rightMotor = new TalonFX(Constants.RIGHT_MOTOR_PORTS[0], "Drive");
-        // rightMotor2 = new TalonFX(Constants.RIGHT_MOTOR_PORTS[1], "Drive");
-        // rightMotor3 = new TalonFX(Constants.RIGHT_MOTOR_PORTS[2], "Drive");
+        leftMotor = new TalonFX(Constants.LEFT_MOTOR_PORTS[0], "Drive");
+        leftMotor2 = new TalonFX(Constants.LEFT_MOTOR_PORTS[1], "Drive");
+        leftMotor3 = new TalonFX(Constants.LEFT_MOTOR_PORTS[2], "Drive");
+        rightMotor = new TalonFX(Constants.RIGHT_MOTOR_PORTS[0], "Drive");
+        rightMotor2 = new TalonFX(Constants.RIGHT_MOTOR_PORTS[1], "Drive");
+        rightMotor3 = new TalonFX(Constants.RIGHT_MOTOR_PORTS[2], "Drive");
 
-        leftMotor = new TalonFX(Constants.LEFT_MOTOR_PORTS[0]);
-        leftMotor2 = new TalonFX(Constants.LEFT_MOTOR_PORTS[1]);
-        leftMotor3 = new TalonFX(Constants.LEFT_MOTOR_PORTS[2]);
-        rightMotor = new TalonFX(Constants.RIGHT_MOTOR_PORTS[0]);
-        rightMotor2 = new TalonFX(Constants.RIGHT_MOTOR_PORTS[1]);
-        rightMotor3 = new TalonFX(Constants.RIGHT_MOTOR_PORTS[2]);
+        // leftMotor = new TalonFX(Constants.LEFT_MOTOR_PORTS[0]);
+        // leftMotor2 = new TalonFX(Constants.LEFT_MOTOR_PORTS[1]);
+        // leftMotor3 = new TalonFX(Constants.LEFT_MOTOR_PORTS[2]);
+        // rightMotor = new TalonFX(Constants.RIGHT_MOTOR_PORTS[0]);
+        // rightMotor2 = new TalonFX(Constants.RIGHT_MOTOR_PORTS[1]);
+        // rightMotor3 = new TalonFX(Constants.RIGHT_MOTOR_PORTS[2]);
 
         leftMotor2.follow(leftMotor);
         leftMotor3.follow(leftMotor);
@@ -157,7 +165,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     public void resetOdometry(Pose2d pose, double angOfResistance){
         odometryResetFinished = false;
-        this.angOfResistance = angOfResistance;
+        this.angOfResistance = Units.getAbsAngle(angOfResistance);
         if(odometry == null){
             odometry = new OdometryCarpetCompensator(angOfResistance, pose.getRotation());
             odometry.resetPos(pose, pose.getRotation());
@@ -168,7 +176,7 @@ public class DriveSubsystem extends SubsystemBase {
         lastRightNU = 0;
         leftMotor.setSelectedSensorPosition(0, Constants.PID_IDX, Constants.TIMEOUT);
         rightMotor.setSelectedSensorPosition(0, Constants.PID_IDX, Constants.TIMEOUT);
-        GyroSubsystem.getInstance().setAngle(pose.getRotation().getRadians());
+        GyroSubsystem.getInstance().setAngle(pose.getRotation().getDegrees());
         SmartDashboard.putNumber("Reset Angle", odometry.getPoseMeters().getRotation().getRadians());
         odometryResetFinished = true;
     }

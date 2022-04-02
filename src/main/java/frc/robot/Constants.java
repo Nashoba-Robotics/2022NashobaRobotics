@@ -305,6 +305,6 @@ public final class Constants {
         public static final double ANGLE_OF_RESISTANCE = 0;
 
         // public static final double K_CARPET = 0.055;
-        public static final double K_CARPET = 0;
+        public static final double K_CARPET = 0.094564;
     }
 }

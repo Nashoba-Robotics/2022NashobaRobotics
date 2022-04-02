@@ -137,6 +137,7 @@ public class Robot extends TimedRobot {
     ClimberSubsystem.getInstance().stop();
     CommandScheduler.getInstance().schedule(new StopClimbCommand());
     //Cancels everything that's running
+    DriveSubsystem.getInstance().resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
     CommandScheduler.getInstance().cancelAll();
   }
 
