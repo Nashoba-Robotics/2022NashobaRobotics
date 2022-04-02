@@ -10,11 +10,13 @@ import frc.robot.subsystems.LimelightSubsystem;
 
 public class AutoAimMotionMagicCommand extends CommandBase{
 //    private double angle;
-//    Timer timer;
+   Timer timer;
+    private double leftTargetPos;
+    private double rightTargetPos;
 
     public AutoAimMotionMagicCommand(){
-        // timer = new Timer();
-        // timer.start();
+        timer = new Timer();
+        timer.start();
         addRequirements(DriveSubsystem.getInstance());
         addRequirements(GyroSubsystem.getInstance());
     }
@@ -24,8 +26,15 @@ public class AutoAimMotionMagicCommand extends CommandBase{
         GyroSubsystem.getInstance().zeroHeading();
         // double angle = SmartDashboard.getNumber("Target Angle", 0);
         double angle = -LimelightSubsystem.getInstance().getIntakeTx();
-        DriveSubsystem.getInstance().turnToAngle(angle + Math.signum(angle) * 3);
-        // timer.reset();
+        double[] targetPoses = DriveSubsystem.getInstance().turnToAngle(angle + Math.signum(angle) * 3);
+        leftTargetPos = targetPoses[0];
+        rightTargetPos= targetPoses[1];
+        timer.reset();
+    }
+
+    @Override
+    public void execute() {
+        
     }
 
     @Override
@@ -38,6 +47,12 @@ public class AutoAimMotionMagicCommand extends CommandBase{
     public boolean isFinished() {
         // return Math.abs(DriveSubsystem.getInstance().getPositionLeft() - DriveSubsystem.getInstance().getLeftTargetAimPos(angle)) <= 300 || 
         // Math.abs(DriveSubsystem.getInstance().getPositionRight() - DriveSubsystem.getInstance().getRightTargetAimPos(angle)) <= 300;  //<-- TEMPORARY
-        return false;
+        double leftDifference = leftTargetPos - DriveSubsystem.getInstance().getPositionLeft();
+        double rightDifference = rightTargetPos - DriveSubsystem.getInstance().getPositionRight();
+        SmartDashboard.putNumber("L Diff", leftDifference);
+        SmartDashboard.putNumber("R Diff", rightDifference);
+        return (Math.abs(leftDifference) < 1150
+            && Math.abs(rightDifference) < 1000)
+            || timer.get() >= 0.3;
     }
 }

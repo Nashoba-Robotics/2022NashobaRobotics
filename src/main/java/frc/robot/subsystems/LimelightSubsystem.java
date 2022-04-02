@@ -4,6 +4,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.util.sendable.SendableRegistry;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -36,6 +37,12 @@ public class LimelightSubsystem extends SubsystemBase {
         shooterTy = shooter.getEntry("ty");
         shooterPipeline = shooter.getEntry("pipeline");
         shooterLedMode = shooter.getEntry("ledMode");
+    }
+
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("Limelight Angle", getIntakeTx());
+        SmartDashboard.putNumber("Limelight Y", getIntakeTy());
     }
 
     public static LimelightSubsystem getInstance() {
