@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.lib.AccelerationControl;
 import frc.robot.lib.JoystickProcessing;
 import frc.robot.lib.JoystickValues;
 import frc.robot.lib.MotorValues;
@@ -31,7 +30,7 @@ public class AutoAimCommand extends CommandBase{
         SmartDashboard.putBoolean("target?", false);
 
         // Choose which Limelight pipeline is used
-        LimelightSubsystem.getInstance().setIntakePipeline(Constants.Limelight.REFLECTIVE_TAPE_PIPELINE);
+        LimelightSubsystem.getInstance().setShooterPipeline(Constants.Limelight.REFLECTIVE_TAPE_PIPELINE);
         noTargetTimer = new Timer();
         noTargetTimer.start();
         inTargetTimer = new Timer();
@@ -41,11 +40,11 @@ public class AutoAimCommand extends CommandBase{
     @Override
     public void execute() {
         // Get the X position of the tracked object (-27 to +27)
-        double tx = LimelightSubsystem.getInstance().getIntakeTx();
+        double tx = LimelightSubsystem.getInstance().getShooterTx();
         // Will be set in conditional later
         double turn = 0;
 
-        if(LimelightSubsystem.getInstance().intakeValidTarget()) {
+        if(LimelightSubsystem.getInstance().shooterValidTarget()) {
             // If a target is found
 
             // if(Math.abs(tx) > 5) {
@@ -67,7 +66,7 @@ public class AutoAimCommand extends CommandBase{
                 turn *= Math.signum(txPercent);
                 inTargetTimer.reset();
             }
-            if(!LimelightSubsystem.getInstance().intakeValidTarget()){
+            if(!LimelightSubsystem.getInstance().shooterValidTarget()){
                 noTargetTimer.reset();
             }
             else{
@@ -79,7 +78,7 @@ public class AutoAimCommand extends CommandBase{
         JoystickValues joystickValues = new JoystickValues(0, turn);
         
         // Put diagnostics on Shuffleboard
-        SmartDashboard.putBoolean("target?", LimelightSubsystem.getInstance().intakeValidTarget());
+        SmartDashboard.putBoolean("target?", LimelightSubsystem.getInstance().shooterValidTarget());
         SmartDashboard.putNumber("angle auto", tx);
         
         // Calculate the motor velocities using arcade drive

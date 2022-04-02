@@ -39,7 +39,6 @@ import frc.robot.commands.LimelightCommand;
 import frc.robot.commands.LoaderCommand;
 import frc.robot.commands.ManualZeroOdometryCommand;
 import frc.robot.commands.ResetOdometryCommand;
-import frc.robot.commands.SensorTestCommand;
 import frc.robot.commands.StopCommand;
 import frc.robot.commands.autoroutines.TestPathCommand;
 import frc.robot.commands.climber.ClimberCommand;

@@ -1,9 +1,5 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.Color;
-import frc.robot.Constants;
 import frc.robot.lib.ColorDetection;
 import frc.robot.lib.PicoColorSensor;
 import frc.robot.lib.ColorDetection.BallColor;

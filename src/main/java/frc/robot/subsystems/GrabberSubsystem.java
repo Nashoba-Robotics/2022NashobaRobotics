@@ -12,7 +12,6 @@ public class GrabberSubsystem extends SubsystemBase  {
     private GrabberSubsystem() {
         motor = new TalonFX(Constants.Intake.PORT_GRABBER);
         motor.setInverted(true);
-
     }
 
     private static GrabberSubsystem instance;

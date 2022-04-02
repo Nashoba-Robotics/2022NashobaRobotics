@@ -297,24 +297,11 @@ public class ClimberSubsystem extends SubsystemBase {
         // || currentRight2 > MAX_CURRENT;
     }
 
-
-    public void manualFixedClimb(){
-        // getMotor(ClimberMotor.LEFT_1).set(ControlMode.PercentOutput, getFixedValue());
-        // getMotor(ClimberMotor.RIGHT_1).set(ControlMode.PercentOutput, getFixedValue());
-    }
-
     public double getClimberJoystickValue(){
         double rawX = rotatingClimbJoystick.getX();
         double value = rawX;
         return value;
     }
-
-    public void manualRotatingClimb(){
-        // getMotor(ClimberMotor.LEFT_1).set(ControlMode.PercentOutput, getRotatingValue());
-        // getMotor(ClimberMotor.RIGHT_1).set(ControlMode.PercentOutput, getRotatingValue());
-    }
-
-    
 
     public void undeployClimber(){
         leftClimber.configMotionCruiseVelocity(Constants.Climber.RETRACT_LEFT_CRUISE_VELOCITY);

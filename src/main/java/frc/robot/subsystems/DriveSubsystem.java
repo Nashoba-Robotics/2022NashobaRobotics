@@ -32,11 +32,9 @@ public class DriveSubsystem extends SubsystemBase {
     //x-speed, y-speed, rate of rotation
     private Rotation2d gyroAngle = Rotation2d.fromDegrees(0);
     private OdometryCarpetCompensator odometry;
-    private Pose2d pose;
     private double angOfResistance;
 
     public static final int VOLTAGE_COMPENSATION_LEVEL = 12;
-    //public static final VelocityMeasPeriod VELOCITY_MEASUREMENT_PERIOD_DRIVE = VelocityMeasPeriod.Period_10Ms; // find
     public static final int VELOCITY_MEASUREMENT_WINDOW_DRIVE = 32; // find this
 
     private DriveMode driveMode = DriveMode.VELOCITY;
@@ -60,13 +58,10 @@ public class DriveSubsystem extends SubsystemBase {
                 double currRight = getPositionRight();
                 double deltaLeft = currLeft - lastLeftNU;
                 double deltaRight = currRight - lastRightNU;
-                // SmartDashboard.putNumber("l delta", deltaLeft);
-                // SmartDashboard.putNumber("r delta", deltaRight);
-                pose = odometry.updatePose2d(
+                odometry.updatePose2d(
                     gyroAngle,
                     deltaLeft,
                     deltaRight);
-
                 lastLeftNU = currLeft;
                 lastRightNU = currRight;
 
@@ -147,10 +142,6 @@ public class DriveSubsystem extends SubsystemBase {
         this.angOfResistance = angOfResistance;
         odometry = new OdometryCarpetCompensator(angOfResistance, Rotation2d.fromDegrees(startAngle*360/Constants.TAU));
     }
-
-    // public void resetOdometryTrue(){
-    //     odometryResetFinished = false;
-    // }
 
     public void setMetersPerSecond(double left, double right){
         leftMotor.set(ControlMode.Velocity, Units.meters2NUSpeed(left));
@@ -409,13 +400,5 @@ public class DriveSubsystem extends SubsystemBase {
         targetPoses[1] = targetPos;
 
         return targetPoses;
-    }
-
-    public double getLeftTargetAimPos(double angle){
-        return -332 * angle + leftMotor.getSelectedSensorPosition();
-    }
-
-    public double getRightTargetAimPos(double angle){
-        return 277 * angle + rightMotor.getSelectedSensorPosition();
     }
 }
