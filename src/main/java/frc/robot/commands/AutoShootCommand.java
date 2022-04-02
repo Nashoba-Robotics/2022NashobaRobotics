@@ -43,10 +43,12 @@ public class AutoShootCommand extends CommandBase{
             if(LimelightSubsystem.getInstance().shooterValidTarget()){
                 lastValidTy = LimelightSubsystem.getInstance().getShooterTy();
             }
-            cannonSpeed = 0.53 - 0.00825 * lastValidTy;
             //cannonSpeed = 0.545 - 0.007 * lastValidTy;
+            //cannonSpeed = 0.53 - 0.00825 * lastValidTy;
+            cannonSpeed = Constants.Cannon.farShotSpeed(lastValidTy);
         } else {
-            cannonSpeed = 0.465; // close up shot
+            //cannonSpeed = 0.465; // close up shot
+            cannonSpeed = Constants.Cannon.CLOSE_SHOT_SPEED;
         }
 
         CannonSubsystem.getInstance().set(cannonSpeed);

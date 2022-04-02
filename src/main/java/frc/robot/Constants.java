@@ -74,8 +74,16 @@ public final class Constants {
     public static final double FALCON_NU = 2048; // the number of native units per rotation
 
     // public static final double K_CARPET = 0.055;
-    public static final double K_CARPET = 0;
+    public static final double K_CARPET = 0; //0.07354766;
 
+    public static class Leds {
+        public static final int[] DEPLOY_CLIMBER = {146, 100, 71};
+        public static final int[] TRAVERSAL_CLIMB = {131, 74, 166};
+        public static final int[] PUSH_CLIMBER = {183, 74, 102};
+        public static final int[] TEMPORARY_RELEASE = {56, 243, 214};
+        public static final int[] MANUAL_PUSH = {215, 154, 216};
+        public static final int[] MANUAL_CLIMB = {17, 84, 175};
+    }
     public static class Cannon {
         public static final int PORT_TOP = 9;
         public static final int PORT_BOTTOM = 10;
@@ -86,6 +94,11 @@ public final class Constants {
         public static final double KF = 0.0475;
 
         public static final int SOLENOID_PORT = 7;
+
+        public static final double CLOSE_SHOT_SPEED = 0.465;
+        public static final double farShotSpeed(double ty) {
+            return 0.53 - 0.00825 * ty;
+        }
     }
     public static class Climber {
         public static final int LEFT_PUSHER_PORT = 15; 
@@ -119,6 +132,8 @@ public final class Constants {
 
         // public static final int RETRACT_LEFT_POS = 13_750;
         // public static final int RETRACT_RIGHT_POS = 13_750;
+     //   public static final int RETRACT_LEFT_POS = 10_000;
+    //    public static final int RETRACT_RIGHT_POS = 10_000;
         public static final int RETRACT_LEFT_POS = 8_000;
         public static final int RETRACT_RIGHT_POS = 8_000;
 
@@ -140,6 +155,8 @@ public final class Constants {
         // public static final int RELEASE_LEFT_PUSHER_SLOW_POS = -10_000;
         // public static final int RELEASE_RIGHT_PUSHER_SLOW_POS = -10_000;
 
+        // public static final int RELEASE_LEFT_PUSHER_SLOW_POS = -3_000;
+        // public static final int RELEASE_RIGHT_PUSHER_SLOW_POS = -3_000;
         public static final int RELEASE_LEFT_PUSHER_SLOW_POS = -1_750;
         public static final int RELEASE_RIGHT_PUSHER_SLOW_POS = -1_750;
 
@@ -190,25 +207,25 @@ public final class Constants {
     }
 
     public static class DriveTrain {
-        public static final double KS = 0.61405;
-        public static final double KV = 2.143;
-        public static final double KA = 0.25872;
+        public static final double KS = 0.66937;
+        public static final double KV = 2.1999;
+        public static final double KA = 0.2522;
 
-        public static final double KF_RIGHT = 0.046222;
-        public static final double P_RIGHT = 0.127; 
+        public static final double KF_RIGHT = 0.04365; //0.046222;
+        public static final double P_RIGHT = 0.04843; //0.127; 
         public static final double I_RIGHT = 0;
         public static final double D_RIGHT = 0;
-        public static final double AFF_RIGHT = 0.05047;
+        public static final double AFF_RIGHT = 0.054; //0.05047; 0.0563
 
-        public static final double KF_LEFT = 0.046135;
-        public static final double P_LEFT = 0.1128;
+        public static final double KF_LEFT = 0.04374; //0.046135;
+        public static final double P_LEFT = 0.045201; //0.1128;
         public static final double I_LEFT = 0;
         public static final double D_LEFT = 0;
-        public static final double AFF_LEFT = 0.05117;
+        public static final double AFF_LEFT = 0.0575; //0.05117;
 
         public static final double WHEEL_GAP = 0.85162; // distance between wheels in meters
         // public static final double WHEEL_RADIUS = Units.inches2Meters(1.97775696); // wheel radius in meters
-        public static final double WHEEL_RADIUS = Units.inches2Meters(2.25); // wheel radius in meters
+        public static final double WHEEL_RADIUS = Units.inches2Meters(2.00292245); // wheel radius in meters
 
         public static final double DRIVE_GEAR_RATIO = 20.0 / 3;
 

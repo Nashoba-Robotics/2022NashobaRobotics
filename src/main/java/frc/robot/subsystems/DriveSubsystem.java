@@ -53,7 +53,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if(RobotState.isAutonomous()){
+        //if(RobotState.isAutonomous()){
             if(odometryResetFinished){
                 odometry.updateAngle(Units.degrees2Radians(GyroSubsystem.getInstance().getAbsoluteAngle()));
                 gyroAngle = Rotation2d.fromDegrees(GyroSubsystem.getInstance().getAbsoluteAngle());
@@ -77,7 +77,7 @@ public class DriveSubsystem extends SubsystemBase {
             SmartDashboard.putNumber("r NU", getPositionRight());
             SmartDashboard.putNumber("Odometry X", getPose().getX());
             SmartDashboard.putNumber("Odometry Y", getPose().getY());
-        }
+        //}
     }
     
     public DriveSubsystem() {
@@ -163,8 +163,9 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public void setStartAngle(double startAngle){
-        odometry.setStartAngle(startAngle);
         GyroSubsystem.getInstance().zeroHeading();
+        odometry.setStartAngle(startAngle);
+
     }
 
     public DifferentialDriveWheelSpeeds getWheelSpeeds(){
@@ -359,5 +360,27 @@ public class DriveSubsystem extends SubsystemBase {
 
     public double getDistanceRight(){
         return Units.NU2Meters(getPositionRight());
+    }
+
+    public void turnToAngle(double angle){  //in degrees
+        leftMotor.configMotionCruiseVelocity(18_000);
+        leftMotor.configMotionAcceleration(30_000);
+
+        double targetPos = -332 * angle + leftMotor.getSelectedSensorPosition();
+        leftMotor.set(ControlMode.MotionMagic, targetPos);
+
+        rightMotor.configMotionCruiseVelocity(18_000);
+        rightMotor.configMotionAcceleration(30_000);
+
+        targetPos = 277 * angle + rightMotor.getSelectedSensorPosition();
+        rightMotor.set(ControlMode.MotionMagic, targetPos);
+    }
+
+    public double getLeftTargetAimPos(double angle){
+        return -332 * angle + leftMotor.getSelectedSensorPosition();
+    }
+
+    public double getRightTargetAimPos(double angle){
+        return 277 * angle + rightMotor.getSelectedSensorPosition();
     }
 }

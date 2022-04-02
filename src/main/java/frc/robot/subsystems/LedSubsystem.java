@@ -4,8 +4,11 @@ import com.ctre.phoenix.led.Animation;
 import com.ctre.phoenix.led.CANdle;
 import com.ctre.phoenix.led.CANdleConfiguration;
 import com.ctre.phoenix.led.RainbowAnimation;
+import com.ctre.phoenix.led.RgbFadeAnimation;
 import com.ctre.phoenix.led.StrobeAnimation;
+import com.ctre.phoenix.led.TwinkleAnimation;
 import com.ctre.phoenix.led.CANdle.LEDStripType;
+import com.ctre.phoenix.led.TwinkleAnimation.TwinklePercent;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -64,6 +67,25 @@ public class LedSubsystem extends SubsystemBase {
             Animation a = new RainbowAnimation(1, RAINBOW_SPEED, LIGHT_COUNT);
             candle.animate(a);
             lastMode = 2;
+        }
+    }
+
+    public void rgbfade() {
+        if(lastMode != 3) {
+            Animation a = new RgbFadeAnimation(1, 0.6, 46);
+            candle.animate(a);
+            lastMode = 3;
+        }
+    }
+
+    public void twinkle(int[] col) {
+        if(lastMode != 4 || lastR != col[0] || lastG != col[1] || lastB != col[2]) {
+            Animation a = new TwinkleAnimation(col[0], col[1], col[2], 0, 0.5, 46, TwinklePercent.Percent64);
+            candle.animate(a);
+            lastR = col[0];
+            lastG = col[1];
+            lastB = col[2];
+            lastMode = 4;
         }
     }
     

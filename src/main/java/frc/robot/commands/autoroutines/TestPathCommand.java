@@ -11,6 +11,7 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
+import frc.robot.commands.SetStartAngleCommand;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class TestPathCommand extends SequentialCommandGroup{
@@ -37,6 +38,7 @@ public class TestPathCommand extends SequentialCommandGroup{
           config);
 
         addCommands(
+            new SetStartAngleCommand(Constants.TAU * 3 / 4),
             new PathFollowCommand(trajectory)
         );
     }

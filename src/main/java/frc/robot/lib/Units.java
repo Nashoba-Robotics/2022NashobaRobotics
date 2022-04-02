@@ -28,6 +28,10 @@ public class Units {
         return degrees * (Constants.TAU / 360);
     }
 
+    public static double radians2Degrees(double radians){
+        return radians * (360 / Constants.TAU);
+    }
+
     // turns any angle (radians) into 0 -> TAU space
     public static double getAbsAngle(double ang){
         return ((ang % Constants.TAU) + Constants.TAU) % Constants.TAU;

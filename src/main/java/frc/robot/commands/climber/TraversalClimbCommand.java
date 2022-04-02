@@ -2,6 +2,9 @@ package frc.robot.commands.climber;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants;
+import frc.robot.Robot;
+import frc.robot.subsystems.LedSubsystem;
 
 public class TraversalClimbCommand extends SequentialCommandGroup{
     public TraversalClimbCommand(){
@@ -17,5 +20,11 @@ public class TraversalClimbCommand extends SequentialCommandGroup{
             //     new ReleasePusherCommand()
             // )
         );
+    }
+
+    @Override
+    public void initialize() {
+        Robot.enableBallLeds = false;
+        LedSubsystem.getInstance().twinkle(Constants.Leds.TRAVERSAL_CLIMB);
     }
 }
