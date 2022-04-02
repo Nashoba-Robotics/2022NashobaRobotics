@@ -8,7 +8,6 @@ import frc.robot.RobotContainer;
 import frc.robot.Constants.Intake;
 import frc.robot.commands.AutoAimCommand;
 import frc.robot.commands.AutoShootCommand;
-import frc.robot.commands.SetStartAngleCommand;
 import frc.robot.commands.intakeshoot.CannonAngleCommand;
 import frc.robot.commands.intakeshoot.ActuateIntakeCommand;
 import frc.robot.commands.intakeshoot.RunIntakeCommand;
@@ -19,18 +18,17 @@ public class TwoBallAuto_Far extends SequentialCommandGroup {
     public TwoBallAuto_Far(){
         addRequirements(DriveSubsystem.getInstance());
         addCommands(
-            new SetStartAngleCommand(Constants.DriveTrain.FAR_LEFT_START_ANGLE),
-            new AutoShootCommand(Angle.EIGHTY),
-            new ActuateIntakeCommand(true),
-            new WaitCommand(0.5),
-            new ParallelCommandGroup(
-                new RunIntakeCommand().until(RobotContainer::getSensor2).withTimeout(3),
-                new PathFollowCommand("paths/ToBall_LeftFar.wpilib.json")
-            ),
-            new ActuateIntakeCommand(false),
-            new PathFollowCommand("paths/TwoBallFromBallToShoot.wpilib.json"),
-            new AutoAimCommand(),
-            new AutoShootCommand(Angle.SIXTY)
+            // new AutoShootCommand(Angle.EIGHTY),
+            // new ActuateIntakeCommand(true),
+            // new WaitCommand(0.5),
+            // new ParallelCommandGroup(
+            //     new RunIntakeCommand().until(RobotContainer::getSensor2).withTimeout(3),
+            //     new PathFollowCommand("paths/ToBall_LeftFar.wpilib.json")
+            // ),
+            // new ActuateIntakeCommand(false),
+            // new PathFollowCommand("paths/TwoBallFromBallToShoot.wpilib.json"),
+            // new AutoAimCommand(),
+            // new AutoShootCommand(Angle.SIXTY)
         );
     }
 }

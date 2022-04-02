@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import frc.robot.lib.Units;
 
 /**
@@ -71,9 +72,6 @@ public final class Constants {
     public static final double AUTO_AIM_SENSITIVITY = 0.45;  //https://www.desmos.com/calculator/mzhsaym2ef  (CHECK GRAPH BEFORE CHANGING CONSTANTS)
 
     public static final double FALCON_NU = 2048; // the number of native units per rotation
-
-    // public static final double K_CARPET = 0.055;
-    public static final double K_CARPET = 0; //0.07354766;
 
     public static class Leds {
         public static final int[] DEPLOY_CLIMBER = {146, 100, 71};
@@ -224,7 +222,7 @@ public final class Constants {
 
         public static final double WHEEL_GAP = 0.85162; // distance between wheels in meters
         // public static final double WHEEL_RADIUS = Units.inches2Meters(1.97775696); // wheel radius in meters
-        public static final double WHEEL_RADIUS = Units.inches2Meters(2.00292245); // wheel radius in meters
+        public static final double WHEEL_RADIUS = Units.inches2Meters(1.893888); // wheel radius in meters
 
         public static final double DRIVE_GEAR_RATIO = 20.0 / 3;
 
@@ -238,6 +236,9 @@ public final class Constants {
         public static final double CLOSE_LEFT_START_ANGLE = 6.033;
         public static final double CLOSE_RIGHT_START_ANGLE = 0;
         public static final double FAR_RIGHT_START_ANGLE = 0;
+
+        public static final DifferentialDriveKinematics KINEMATICS = 
+        new DifferentialDriveKinematics(WHEEL_GAP);
     }
 
     public static class Intake {
@@ -313,5 +314,12 @@ public final class Constants {
         public static final int ENABLE_MANUAL_CLIMB = 5;
 
         public static final int AUTO_AIM = 1;
+    }
+
+    public static class FIELD {
+        public static final double ANGLE_OF_RESISTANCE = 0;
+
+        // public static final double K_CARPET = 0.055;
+        public static final double K_CARPET = 0.094564;
     }
 }

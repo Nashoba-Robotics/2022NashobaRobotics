@@ -9,14 +9,15 @@ import frc.robot.subsystems.GyroSubsystem;
 
 public class ResetOdometryCommand extends CommandBase{
     Trajectory trajectory;
-    public ResetOdometryCommand(Trajectory trajectory){
+    double angOfResistance;
+    public ResetOdometryCommand(Trajectory trajectory, double angOfResistance){
         this.trajectory = trajectory;
+        this.angOfResistance = angOfResistance;
     }
     
     @Override
     public void execute() {
-        DriveSubsystem.getInstance().resetOdometryTrue();   //Ben's code is *insert bad word here
-        DriveSubsystem.getInstance().resetOdometry(trajectory.getInitialPose());
+        DriveSubsystem.getInstance().resetOdometry(trajectory.getInitialPose(), angOfResistance);
     }
 
     @Override

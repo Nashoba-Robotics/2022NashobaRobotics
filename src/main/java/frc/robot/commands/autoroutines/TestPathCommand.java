@@ -11,7 +11,6 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
-import frc.robot.commands.SetStartAngleCommand;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class TestPathCommand extends SequentialCommandGroup{
@@ -20,25 +19,24 @@ public class TestPathCommand extends SequentialCommandGroup{
         DifferentialDriveVoltageConstraint autoVoltageConstraint = 
         new DifferentialDriveVoltageConstraint(
           new SimpleMotorFeedforward(Constants.DriveTrain.KS, Constants.DriveTrain.KV, Constants.DriveTrain.KA),
-          DriveSubsystem.getInstance().getKinematics(),
+          Constants.DriveTrain.KINEMATICS,
           10);
     
         TrajectoryConfig config =
         new TrajectoryConfig(
           Constants.DriveTrain.MAX_VELOCITY,
           Constants.DriveTrain.MAX_ACCELERATION)
-          .setKinematics(DriveSubsystem.getInstance().getKinematics())
-          .addConstraint(autoVoltageConstraint);
+          .setKinematics(Constants.DriveTrain.KINEMATICS)
+          .addConstraint(autoVoltageConstraint).setReversed(false);
     
         Trajectory trajectory =
         TrajectoryGenerator.generateTrajectory(
-          new Pose2d(0, 0, new Rotation2d(0)), //starting position
+          new Pose2d(0, 0, Rotation2d.fromDegrees(0)), //starting position
           List.of(), //nodes for robot to travel to
-          new Pose2d(5, 0, new Rotation2d(0)), //finishing position
+          new Pose2d(5, 3, Rotation2d.fromDegrees(0)), //finishing position
           config);
 
         addCommands(
-            new SetStartAngleCommand(Constants.TAU * 3 / 4),
             new PathFollowCommand(trajectory)
         );
     }
