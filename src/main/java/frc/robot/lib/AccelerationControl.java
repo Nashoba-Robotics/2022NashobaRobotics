@@ -49,7 +49,6 @@ public class AccelerationControl {
 
     public void invert(){
         lastMove *= -1;
-        //lastTurn *= -1;
     }
 
     //helper function of next()

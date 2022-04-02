@@ -1,17 +1,12 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
-import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.motorcontrol.Talon;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -29,7 +24,6 @@ public class ClimberSubsystem extends SubsystemBase {
     // private TalonFX rightPusher;
 
     private TalonFX[] motors;
-    private boolean[] lastLSState;
 
     // private Joystick fixedClimbJoystick;
     private Joystick rotatingClimbJoystick;
@@ -68,8 +62,6 @@ public class ClimberSubsystem extends SubsystemBase {
             leftClimber, 
             rightClimber
         };
-
-        lastLSState = new boolean[4];
         
         for(TalonFX motor: motors) {
             configureMotor(motor);
@@ -297,24 +289,11 @@ public class ClimberSubsystem extends SubsystemBase {
         // || currentRight2 > MAX_CURRENT;
     }
 
-
-    public void manualFixedClimb(){
-        // getMotor(ClimberMotor.LEFT_1).set(ControlMode.PercentOutput, getFixedValue());
-        // getMotor(ClimberMotor.RIGHT_1).set(ControlMode.PercentOutput, getFixedValue());
-    }
-
     public double getClimberJoystickValue(){
         double rawX = rotatingClimbJoystick.getX();
         double value = rawX;
         return value;
     }
-
-    public void manualRotatingClimb(){
-        // getMotor(ClimberMotor.LEFT_1).set(ControlMode.PercentOutput, getRotatingValue());
-        // getMotor(ClimberMotor.RIGHT_1).set(ControlMode.PercentOutput, getRotatingValue());
-    }
-
-    
 
     public void undeployClimber(){
         leftClimber.configMotionCruiseVelocity(Constants.Climber.RETRACT_LEFT_CRUISE_VELOCITY);

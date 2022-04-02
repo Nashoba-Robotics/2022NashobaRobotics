@@ -14,6 +14,7 @@ import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.LoaderSubsystem;
 
 public class ShootCommand extends CommandBase {
+    public static double speedOffset80 = 0;
     long startMillis;
     long stopMillis;
     boolean on;
@@ -46,7 +47,7 @@ public class ShootCommand extends CommandBase {
     public void execute() {         
         long millis = System.currentTimeMillis();
 
-        if(Math.abs(LimelightSubsystem.getInstance().getIntakeTx()) <= Constants.AUTO_AIM_DEADZONE)
+        if(Math.abs(LimelightSubsystem.getInstance().getShooterTx()) <= Constants.AUTO_AIM_DEADZONE)
         SmartDashboard.putBoolean("I've Got'chu in my Sights", true);
         else SmartDashboard.putBoolean("I've Got'chu in my Sights", false);
 
@@ -66,7 +67,7 @@ public class ShootCommand extends CommandBase {
             cannonSpeed = Constants.Cannon.farShotSpeed(lastValidTy);
 
         } else {
-            cannonSpeed = Constants.Cannon.CLOSE_SHOT_SPEED; // close up shot
+            cannonSpeed = Constants.Cannon.CLOSE_SHOT_SPEED + speedOffset80; // close up shot
         }
 
         CannonSubsystem.getInstance().set(cannonSpeed);    

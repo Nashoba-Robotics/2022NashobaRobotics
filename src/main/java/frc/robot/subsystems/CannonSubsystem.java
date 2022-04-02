@@ -11,20 +11,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.lib.Units;
 
-//public means accessible by other classes
-//class means this is being defined as a class
-//CannonSubsystem is what we are calling this class
-//extends means it is using another class
-//SubsystemBase allows us access to functions found in SubsystemBase
-//{ indicates the start of the class
-//(//) indicates it is a comment (not read by compiler) instead of code
-//() is notation for signifying characters we are talking about inside the parentheses
 public class CannonSubsystem extends SubsystemBase{
     private static CannonSubsystem singleton;
     public TalonFX topCannonMotor;
     public TalonFX bottomCannonMotor;
-
-    private double speedChange;
 
     private Solenoid solenoid;
 
@@ -47,8 +37,6 @@ public class CannonSubsystem extends SubsystemBase{
         bottomCannonMotor.setInverted(true);
         configureMotor(topCannonMotor);
         configureMotor(bottomCannonMotor);
-
-        speedChange = 0;
     }
 
 
@@ -79,10 +67,6 @@ public class CannonSubsystem extends SubsystemBase{
         motor.setNeutralMode(NeutralMode.Coast);
     }
 
-    public void changeSpeedChange(double delta){
-        speedChange += delta;
-    }
-
     public double getCurrentTop(){
         return topCannonMotor.getStatorCurrent();
     }
@@ -93,33 +77,13 @@ public class CannonSubsystem extends SubsystemBase{
 
     //sets the speed of each individual motor
     public void set(double topSpeed, double bottomSpeed){
-        topCannonMotor.set(ControlMode.Velocity, Units.percent2Velocity(topSpeed + speedChange));
-        bottomCannonMotor.set(ControlMode.Velocity, Units.percent2Velocity(bottomSpeed + speedChange));
+        topCannonMotor.set(ControlMode.Velocity, Units.percent2Velocity(topSpeed));
+        bottomCannonMotor.set(ControlMode.Velocity, Units.percent2Velocity(bottomSpeed));
     }
     
     //sets the speed of both motors to same value
     public void set(double speed){
         set(speed, speed);
-    }
-
-    public void setProportional(double p){
-        topCannonMotor.config_kP(Constants.SLOT_IDX, p, Constants.TIMEOUT);
-        bottomCannonMotor.config_kP(Constants.SLOT_IDX, p, Constants.TIMEOUT);
-    }
-
-    public void setIntegral(double i){
-        topCannonMotor.config_kI(Constants.SLOT_IDX, i, Constants.TIMEOUT);
-        bottomCannonMotor.config_kI(Constants.SLOT_IDX, i, Constants.TIMEOUT);
-    }
-
-    public void setDerivative(double d){
-        topCannonMotor.config_kD(Constants.SLOT_IDX, d, Constants.TIMEOUT);
-        bottomCannonMotor.config_kD(Constants.SLOT_IDX, d, Constants.TIMEOUT);
-    }
-
-    public void setKF(double kF){
-        topCannonMotor.config_kF(Constants.SLOT_IDX, kF, Constants.TIMEOUT);
-        bottomCannonMotor.config_kF(Constants.SLOT_IDX, kF, Constants.TIMEOUT);
     }
 
     public void setAngle(Angle angle) {

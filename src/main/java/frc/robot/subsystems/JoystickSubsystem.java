@@ -8,7 +8,6 @@ import frc.robot.Constants;
 
 // Subsystem for processing joystick inputs
 public class JoystickSubsystem extends SubsystemBase {
-    // The singleton instance; generated on the first call of getInstance()
     private static JoystickSubsystem instance;
 
     private Joystick leftJoystick;

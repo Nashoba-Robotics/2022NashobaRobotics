@@ -112,12 +112,12 @@ public class JoystickProcessing {
     }
 
     //returns the max allowed velocity in order to prevent tipping
-    private static double allowedTipVelocity(double turn) {
-        double k_turn = Constants.WIDTH/2;
-        double sqrtNumerator = Constants.GRAVITY * (Constants.WIDTH/2) * k_turn;
-        double sqrtDenominator = 4 * Constants.HEIGHT * turn;
-        return Math.sqrt(sqrtNumerator/sqrtDenominator)/Constants.METRICMAX;
-    }
+    // private static double allowedTipVelocity(double turn) {
+    //     double k_turn = Constants.WIDTH/2;
+    //     double sqrtNumerator = Constants.GRAVITY * (Constants.WIDTH/2) * k_turn;
+    //     double sqrtDenominator = 4 * Constants.HEIGHT * turn;
+    //     return Math.sqrt(sqrtNumerator/sqrtDenominator)/Constants.METRICMAX;
+    // }
 
     // Apply all joystick processing
     public static MotorValues processJoysticksArcadeDrive(JoystickValues joystickValues) {

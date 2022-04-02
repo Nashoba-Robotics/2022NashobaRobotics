@@ -10,9 +10,6 @@ public class LimelightCommand extends CommandBase {
         addRequirements(LimelightSubsystem.getInstance());
     }
     public void execute(){
-        SmartDashboard.putNumber("tx intake", LimelightSubsystem.getInstance().getIntakeTx());
-        SmartDashboard.putNumber("ty intake", LimelightSubsystem.getInstance().getIntakeTy());
-        SmartDashboard.putNumber("d intake", LimelightSubsystem.getInstance().getDistanceIntake());
         SmartDashboard.putNumber("tx shooter", LimelightSubsystem.getInstance().getShooterTx());
         SmartDashboard.putNumber("ty shooter", LimelightSubsystem.getInstance().getShooterTy());
         SmartDashboard.putNumber("d shooter", LimelightSubsystem.getInstance().getDistanceShooter());

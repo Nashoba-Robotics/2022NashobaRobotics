@@ -6,13 +6,13 @@ import frc.robot.subsystems.CannonSubsystem;
 public class ShootSpeedCommand extends CommandBase{
 
     private double shootSpeed;
-    private int finishTimeMilllis;
+    private int finishTimeMillis;
 
     private long startMillis;
 
     public ShootSpeedCommand(double shootSpeed, int finishTimeMillis){
         this.shootSpeed = shootSpeed;
-        this.finishTimeMilllis = finishTimeMilllis;
+        this.finishTimeMillis = finishTimeMillis;
         startMillis = System.currentTimeMillis();
 
         addRequirements(CannonSubsystem.getInstance());
@@ -26,7 +26,7 @@ public class ShootSpeedCommand extends CommandBase{
 
     @Override
     public boolean isFinished() {
-        return System.currentTimeMillis() - startMillis >= finishTimeMilllis;
+        return System.currentTimeMillis() - startMillis >= finishTimeMillis;
     }
 
     @Override
