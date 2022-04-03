@@ -12,7 +12,7 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
-import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.lib.Units;
 
 public class TestPathCommand extends SequentialCommandGroup{
     public TestPathCommand(){
@@ -28,13 +28,13 @@ public class TestPathCommand extends SequentialCommandGroup{
           Constants.DriveTrain.MAX_VELOCITY,
           Constants.DriveTrain.MAX_ACCELERATION)
           .setKinematics(Constants.DriveTrain.KINEMATICS)
-          .addConstraint(autoVoltageConstraint).setReversed(false);
+          .addConstraint(autoVoltageConstraint).setReversed(true);
     
         Trajectory trajectory =
         TrajectoryGenerator.generateTrajectory(
-          new Pose2d(3, 3, Rotation2d.fromDegrees(0)), //starting position
-          List.of(new Translation2d(1, 0)), //nodes for robot to travel to
-          new Pose2d(5, 3, Rotation2d.fromDegrees(0)), //finishing position
+          new Pose2d(new Translation2d(3, 3), Rotation2d.fromDegrees(333)), //starting position
+          List.of(), //nodes for robot to travel to
+          new Pose2d(new Translation2d(1, 1), Rotation2d.fromDegrees(333)), //finishing position
           config);
 
         addCommands(
