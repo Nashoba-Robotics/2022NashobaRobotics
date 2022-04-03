@@ -10,7 +10,7 @@ import frc.robot.commands.LedTestCommand;
 import frc.robot.commands.LimelightCommand;
 import frc.robot.commands.ParallelTestCommand;
 import frc.robot.commands.climber.ManualClimberCommand;
-import frc.robot.commands.climber.DeployClimberCommad;
+import frc.robot.commands.climber.DeployClimberCommadGroup;
 import frc.robot.commands.climber.DeployPusher;
 import frc.robot.commands.climber.ManualPusherCommand;
 import frc.robot.commands.climber.PushCommand;
@@ -123,7 +123,7 @@ public class RobotContainer {
         stopShooterButton.cancelWhenActive(shootCommand);
         // runShooterButton.whenActive(new StopCommand()); //TODO: Change to actual Run Shooter Command
 
-        fixedClimbDeployButton.whenActive(new DeployClimberCommad());
+        fixedClimbDeployButton.whenActive(new DeployClimberCommadGroup());
         fixedClimbButton.whenActive(new TraversalClimbCommand());
         traversalClimbButton.whenActive(new PushCommand());
 
