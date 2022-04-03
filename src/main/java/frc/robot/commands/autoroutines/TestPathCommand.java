@@ -5,6 +5,7 @@ import java.util.List;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
@@ -31,13 +32,13 @@ public class TestPathCommand extends SequentialCommandGroup{
     
         Trajectory trajectory =
         TrajectoryGenerator.generateTrajectory(
-          new Pose2d(0, 0, Rotation2d.fromDegrees(0)), //starting position
-          List.of(), //nodes for robot to travel to
+          new Pose2d(3, 3, Rotation2d.fromDegrees(0)), //starting position
+          List.of(new Translation2d(1, 0)), //nodes for robot to travel to
           new Pose2d(5, 3, Rotation2d.fromDegrees(0)), //finishing position
           config);
 
         addCommands(
-            new PathFollowCommand(trajectory)
+            new PathFollowCommand(trajectory, Constants.FIELD.ANGLE_OF_RESISTANCE)
         );
     }
 }

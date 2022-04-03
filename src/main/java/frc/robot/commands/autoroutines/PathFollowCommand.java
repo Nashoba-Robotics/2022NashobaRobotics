@@ -23,7 +23,7 @@ import frc.robot.subsystems.DriveSubsystem;
 
 public class PathFollowCommand extends SequentialCommandGroup{
     Trajectory trajectory;
-    public PathFollowCommand(String trajectoryJSON){
+    public PathFollowCommand(String trajectoryJSON, double angOfResistance){
         trajectory = new Trajectory();
     
         try {
@@ -44,13 +44,13 @@ public class PathFollowCommand extends SequentialCommandGroup{
 
 
        addCommands(
-        new ResetOdometryCommand(trajectory, Constants.FIELD.ANGLE_OF_RESISTANCE),
+        new ResetOdometryCommand(trajectory, angOfResistance),
         ramseteCommand,
         new StopCommand()
        );
     }
 
-    public PathFollowCommand(Trajectory trajectory){
+    public PathFollowCommand(Trajectory trajectory, double angOfResistance){
 
         
 
@@ -78,7 +78,7 @@ public class PathFollowCommand extends SequentialCommandGroup{
 
 
        addCommands(
-        new ResetOdometryCommand(trajectory, Constants.FIELD.ANGLE_OF_RESISTANCE),
+        new ResetOdometryCommand(trajectory, angOfResistance),
         ramseteCommand,
         new StopCommand()
        );
