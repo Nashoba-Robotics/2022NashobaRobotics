@@ -83,16 +83,16 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().schedule(new StopClimbCommand());     
     }
 
-    long lastMillis = System.currentTimeMillis();
+    // long lastMillis = System.currentTimeMillis();
 
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
-        long millis = System.currentTimeMillis();
-        if(millis / 500 > lastMillis / 500) {
-            SmartDashboard.putNumber("loop time", millis - lastMillis);
-        }
-        lastMillis = millis;
+        // long millis = System.currentTimeMillis();
+        // if(millis / 500 > lastMillis / 500) {
+        //     SmartDashboard.putNumber("loop time", millis - lastMillis);
+        // }
+        // lastMillis = millis;
     }
 
     @Override
@@ -100,7 +100,7 @@ public class Robot extends TimedRobot {
         DriveSubsystem.getInstance().setDriveMode(DriveMode.VELOCITY);
         DriveSubsystem.getInstance().setSpeed(0, 0);
         IntakeSubsystem.getInstance().stop();
-        IntakeSolenoidSubsystem.getInstance().retract();    //Undeploys the intake when the robot is disabled
+        // IntakeSolenoidSubsystem.getInstance().retract();    //Undeploys the intake when the robot is disabled
         CannonSubsystem.getInstance().setAngle(Angle.EIGHTY);
         DriveSubsystem.getInstance().changeNeutralMode(NeutralMode.Coast);    //Sets the robot into "coast" mode after robot is diabled -> Easier to move
         LimelightSubsystem.getInstance().setShooterLed(1);
@@ -144,8 +144,8 @@ public class Robot extends TimedRobot {
         DriveSubsystem.getInstance().resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
 
         CommandScheduler.getInstance().schedule(new StopClimbCommand());
-        CommandScheduler.getInstance().schedule(new ZeroClimberSensorsCommand());
-        CommandScheduler.getInstance().schedule(new ZeroPusherCommand());
+        // CommandScheduler.getInstance().schedule(new ZeroClimberSensorsCommand());
+        // CommandScheduler.getInstance().schedule(new ZeroPusherCommand());
 
         CommandScheduler.getInstance().schedule(new CannonAngleCommand(Angle.EIGHTY));
 

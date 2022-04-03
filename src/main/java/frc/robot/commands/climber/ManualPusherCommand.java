@@ -13,8 +13,8 @@ public class ManualPusherCommand extends CommandBase{
     }
     @Override
     public void initialize() {
-        Robot.enableBallLeds = false;
-        LedSubsystem.getInstance().twinkle(Constants.Leds.MANUAL_PUSH);
+        // Robot.enableBallLeds = false;
+        // LedSubsystem.getInstance().twinkle(Constants.Leds.MANUAL_PUSH);
     }
     @Override
     public void execute() {

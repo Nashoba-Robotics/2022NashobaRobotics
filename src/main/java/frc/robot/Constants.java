@@ -116,6 +116,16 @@ public final class Constants {
         public static final int DEPLOY_LEFT_PUSHER_POS = -109_000;
         public static final int DEPLOY_RIGHT_PUSHER_POS = -109_000;
 
+        // public static final double DEPLOY_ACCELERATION = 100000;
+        // public static final double DEPLOY_CRUISE_VELOCITY = 17500;
+        public static final double DEPLOY_LEFT_ACCELERATION = 40_000;
+        public static final double DEPLOY_RIGHT_ACCELERATION = 40_000;
+        public static final double DEPLOY_LEFT_CRUISE_VELOCITY = 20_000;
+        public static final double DEPLOY_RIGHT_CRUISE_VELOCITY = 20_500;
+
+        public static final double DEPLOY_PUSH_ACCELERATION = 20_000;
+        public static final double DEPLOY_PUSH_CRUISE_VELOCITY = 8_000;
+
         public static final int PUSH_LEFT_POS = 19_000;
         public static final int PUSH_RIGHT_POS = 19_000;
 
@@ -154,8 +164,8 @@ public final class Constants {
 
         // public static final int RELEASE_LEFT_PUSHER_SLOW_POS = -3_000;
         // public static final int RELEASE_RIGHT_PUSHER_SLOW_POS = -3_000;
-        public static final int RELEASE_LEFT_PUSHER_SLOW_POS = -1_750;
-        public static final int RELEASE_RIGHT_PUSHER_SLOW_POS = -1_750;
+        public static final int RELEASE_LEFT_PUSHER_SLOW_POS = 12_000; //-1_750
+        public static final int RELEASE_RIGHT_PUSHER_SLOW_POS = 12_000;
 
         public static final int RELEASE_LEFT_PUSHER_CRUISE_VELOCITY_SLOW = 500;
         public static final int RELEASE_RIGHT_PUSHER_CRUISE_VELOCITY_SLOW = 500;
@@ -163,8 +173,8 @@ public final class Constants {
         public static final int RELEASE_LEFT_PUSHER_ACCELERATION_SLOW = 2000;
         public static final int RELEASE_RIGHT_PUSHER_ACCELERATION_SLOW = 2000;
 
-        public static final int RELEASE_LEFT_PUSHER_FAST_POS = -90_000;
-        public static final int RELEASE_RIGHT_PUSHER_FAST_POS = -90_000;
+        public static final int RELEASE_LEFT_PUSHER_FAST_POS = -80_000;
+        public static final int RELEASE_RIGHT_PUSHER_FAST_POS = -80_000;
 
         public static final int RELEASE_LEFT_PUSHER_CRUISE_VELOCITY_FAST = 50_000;
         public static final int RELEASE_RIGHT_PUSHER_CRUISE_VELOCITY_FAST = 50_000;
@@ -183,16 +193,6 @@ public final class Constants {
         public static final double KD_PUSHER = 0;
 
         public static final int CLIMB_DEADZONE = 200;
-
-        // public static final double DEPLOY_ACCELERATION = 100000;
-        // public static final double DEPLOY_CRUISE_VELOCITY = 17500;
-        public static final double DEPLOY_LEFT_ACCELERATION = 20_000;
-        public static final double DEPLOY_RIGHT_ACCELERATION = 20_000;
-        public static final double DEPLOY_LEFT_CRUISE_VELOCITY = 10_000;
-        public static final double DEPLOY_RIGHT_CRUISE_VELOCITY = 10_500;
-
-        public static final double DEPLOY_PUSH_ACCELERATION = 20_000;
-        public static final double DEPLOY_PUSH_CRUISE_VELOCITY = 8_000;
         
         public static final double RETRACT_LEFT_ACCELERATION = 20_000;
         public static final double RETRACT_RIGHT_ACCELERATION = 20_000;

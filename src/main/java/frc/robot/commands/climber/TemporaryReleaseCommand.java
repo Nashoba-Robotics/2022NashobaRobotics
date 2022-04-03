@@ -13,8 +13,4 @@ public class TemporaryReleaseCommand extends ParallelCommandGroup{
         );
     }
 
-    public void initialize() {
-        Robot.enableBallLeds = false;
-        LedSubsystem.getInstance().twinkle(Constants.Leds.TEMPORARY_RELEASE);
-    }
 }

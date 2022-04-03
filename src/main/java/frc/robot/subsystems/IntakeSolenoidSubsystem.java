@@ -37,4 +37,8 @@ public class IntakeSolenoidSubsystem extends SubsystemBase {
             solenoid.set(s); //Sets the solenoid back;
         }
     }
+
+    public boolean getState(){  //returns true if the intake is out
+        return solenoid.get() == Value.kReverse;
+    }
 }

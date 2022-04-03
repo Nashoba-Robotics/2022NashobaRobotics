@@ -8,10 +8,13 @@ import frc.robot.commands.AutoAimMotionMagicCommand;
 import frc.robot.commands.JoystickDriveCommand;
 import frc.robot.commands.LedTestCommand;
 import frc.robot.commands.LimelightCommand;
+import frc.robot.commands.ParallelTestCommand;
 import frc.robot.commands.climber.ManualClimberCommand;
 import frc.robot.commands.climber.DeployClimberCommad;
+import frc.robot.commands.climber.DeployPusher;
 import frc.robot.commands.climber.ManualPusherCommand;
 import frc.robot.commands.climber.PushCommand;
+import frc.robot.commands.climber.RetractClimberCommand;
 import frc.robot.commands.climber.StopClimbCommand;
 import frc.robot.commands.climber.TemporaryReleaseCommand;
 import frc.robot.commands.climber.TraversalClimbCommand;
@@ -91,6 +94,12 @@ public class RobotContainer {
         SmartDashboard.putData(new LimelightCommand());
         SmartDashboard.putData(new LedTestCommand());
         SmartDashboard.putData(new AutoAimMotionMagicCommand());
+
+        SmartDashboard.putData(new RetractClimberCommand());
+        SmartDashboard.putData(new DeployPusher());
+        SmartDashboard.putData(new TraversalClimbCommand());
+
+        SmartDashboard.putData(new ParallelTestCommand());
     }
 
     private void configureButtonBindings() {
@@ -100,7 +109,7 @@ public class RobotContainer {
         // incrementShooterSpeed.whenActive(() -> {CannonSubsystem.getInstance().changeSpeedChange(0.005);});
         // decrementShooterSpeed.whenActive(() -> {CannonSubsystem.getInstance().changeSpeedChange(-0.005);});
         runIntakeButton.whenActive(new RunIntakeCommand());
-        stopIntakeButton.whenActive(new StopIntakeCommand());
+        // stopIntakeButton.whenActive(new StopIntakeCommand());
 
         shooterAngleSwitch.whenActive(new CannonAngleCommand(Angle.EIGHTY));
         shooterAngleSwitch.whenInactive(new CannonAngleCommand(Angle.SIXTY));

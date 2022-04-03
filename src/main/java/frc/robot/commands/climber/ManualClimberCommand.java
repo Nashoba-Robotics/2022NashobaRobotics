@@ -13,8 +13,8 @@ public class ManualClimberCommand extends CommandBase{
 
     @Override
     public void initialize() {
-        Robot.enableBallLeds = false;
-        LedSubsystem.getInstance().twinkle(Constants.Leds.MANUAL_CLIMB);
+        // Robot.enableBallLeds = false;
+        // LedSubsystem.getInstance().twinkle(Constants.Leds.MANUAL_CLIMB);
     }
 
     @Override

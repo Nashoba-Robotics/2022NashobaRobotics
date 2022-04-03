@@ -15,8 +15,9 @@ public class DeployClimberCommad extends CommandBase{
 
     @Override
     public void initialize() {
-        Robot.enableBallLeds = false;
-        LedSubsystem.getInstance().twinkle(Constants.Leds.DEPLOY_CLIMBER);
+        
+        // Robot.enableBallLeds = false;
+        // LedSubsystem.getInstance().twinkle(Constants.Leds.DEPLOY_CLIMBER);
         ClimberSubsystem.getInstance().deployClimber();
         PusherSubsystem.getInstance().resetPusher();
     }

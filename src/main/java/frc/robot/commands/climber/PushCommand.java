@@ -17,8 +17,8 @@ public class PushCommand extends CommandBase{
 
     @Override
     public void initialize() {
-        Robot.enableBallLeds = false;
-        LedSubsystem.getInstance().twinkle(Constants.Leds.PUSH_CLIMBER);
+        // Robot.enableBallLeds = false;
+        // LedSubsystem.getInstance().twinkle(Constants.Leds.PUSH_CLIMBER);
     }
 
     @Override
