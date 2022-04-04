@@ -34,7 +34,7 @@ public class TestPathCommand extends SequentialCommandGroup{
         Trajectory trajectory =
         TrajectoryGenerator.generateTrajectory(
           new Pose2d(new Translation2d(0, 0), Rotation2d.fromDegrees(0)), //starting position
-          List.of(), //nodes for robot to travel to
+          List.of(new Translation2d(1, 0)), //nodes for robot to travel to
           new Pose2d(new Translation2d(4, 0), Rotation2d.fromDegrees(0)), //finishing position
           config);
 

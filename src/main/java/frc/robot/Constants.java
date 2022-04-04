@@ -223,7 +223,7 @@ public final class Constants {
 
         public static final double WHEEL_GAP = 0.85162; // distance between wheels in meters
         // public static final double WHEEL_RADIUS = Units.inches2Meters(1.97775696); // wheel radius in meters
-        public static final double WHEEL_RADIUS = Units.inches2Meters(2.0359296); // wheel radius in meters
+        public static final double WHEEL_RADIUS = Units.inches2Meters(1.893888); // wheel radius in meters
 
         public static final double DRIVE_GEAR_RATIO = 20.0 / 3;
 
