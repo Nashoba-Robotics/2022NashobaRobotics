@@ -8,7 +8,9 @@ import com.ctre.phoenix.led.StrobeAnimation;
 import com.ctre.phoenix.led.TwinkleAnimation;
 import com.ctre.phoenix.led.TwinkleAnimation.TwinklePercent;
 
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.commands.DefaultLedCommand;
 
 public class LedSubsystem extends SubsystemBase {
     private static final int LIGHT_COUNT = 100;
@@ -22,7 +24,6 @@ public class LedSubsystem extends SubsystemBase {
         }
         return instance;
     }
-
 
     private CANdle candle;
     private int lastR = -1;

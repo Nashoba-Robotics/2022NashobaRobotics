@@ -2,7 +2,6 @@ package frc.robot.commands.climber;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.Robot;
 import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.PusherSubsystem;
 import frc.robot.subsystems.PusherSubsystem.PusherMotor;
@@ -13,12 +12,12 @@ public class PushCommand extends CommandBase{
     
     public PushCommand(){
         addRequirements(PusherSubsystem.getInstance());
+        addRequirements(LedSubsystem.getInstance());
     }
 
     @Override
     public void initialize() {
-        // Robot.enableBallLeds = false;
-        // LedSubsystem.getInstance().twinkle(Constants.Leds.PUSH_CLIMBER);
+        LedSubsystem.getInstance().twinkle(Constants.Leds.PUSH_CLIMBER);
     }
 
     @Override

@@ -25,7 +25,6 @@ public class OdometryCarpetCompensator extends DifferentialDriveOdometry{
     }
 
     public Pose2d updatePose2d(Rotation2d angle, double deltaLeftNU, double deltaRightNU){
-
         absAngle = Units.getAbsAngle(angle.getRadians() - angOfResistance);
 
         double leftNU = lastLeftNU + compensateRug(deltaLeftNU);
@@ -40,6 +39,7 @@ public class OdometryCarpetCompensator extends DifferentialDriveOdometry{
         lastRightNU = rightNU;
 
         return pose;
+
     }
 
     public double getAngle(){

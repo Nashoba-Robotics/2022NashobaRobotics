@@ -49,6 +49,9 @@ public class DriveSubsystem extends SubsystemBase {
 
     private boolean odometryResetFinished;
 
+    public static double returnLeftAimPos;
+    public static double returnRightAimPos;
+
     @Override
     public void periodic() {
         if(RobotState.isAutonomous() && RobotState.isEnabled()){
@@ -182,8 +185,8 @@ public class DriveSubsystem extends SubsystemBase {
         }
         lastLeftNU = 0;
         lastRightNU = 0;
-        leftMotor.setSelectedSensorPosition(0, Constants.PID_IDX, Constants.TIMEOUT);
-        rightMotor.setSelectedSensorPosition(0, Constants.PID_IDX, Constants.TIMEOUT);
+        leftMotor.setSelectedSensorPosition(0);
+        rightMotor.setSelectedSensorPosition(0);
         GyroSubsystem.getInstance().setAngle(pose.getRotation().getRadians());
         SmartDashboard.putNumber("Reset Angle", odometry.getPoseMeters().getRotation().getRadians());
         odometryResetFinished = true;
@@ -384,21 +387,41 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public double[] turnToAngle(double angle){  //in degrees
+        double currentLeftPos = leftMotor.getSelectedSensorPosition();
+        double currentRightPos = rightMotor.getSelectedSensorPosition();
+
+        returnLeftAimPos = currentLeftPos;
+        returnRightAimPos = currentRightPos;
+
         double[] targetPoses = new double[2];
         leftMotor.configMotionCruiseVelocity(18_000);
         leftMotor.configMotionAcceleration(30_000);
 
-        double targetPos = -332 * angle + leftMotor.getSelectedSensorPosition();
+        double targetPos = -332 * angle + currentLeftPos;
         leftMotor.set(ControlMode.MotionMagic, targetPos);
         targetPoses[0] = targetPos;
 
         rightMotor.configMotionCruiseVelocity(18_000);
         rightMotor.configMotionAcceleration(30_000);
 
-        targetPos = 277 * angle + rightMotor.getSelectedSensorPosition();
+        targetPos = 277 * angle + currentRightPos;
         rightMotor.set(ControlMode.MotionMagic, targetPos);
         targetPoses[1] = targetPos;
 
         return targetPoses;
+    }
+
+    public void unAim(){
+        leftMotor.configMotionCruiseVelocity(18_000);
+        leftMotor.configMotionAcceleration(30_000);
+        leftMotor.set(ControlMode.MotionMagic, returnLeftAimPos);
+
+        rightMotor.configMotionCruiseVelocity(18_000);
+        rightMotor.configMotionAcceleration(30_000);
+        rightMotor.set(ControlMode.MotionMagic, returnRightAimPos);
+    }
+
+    public double[] getReturnPos(){
+        return new double[]{returnLeftAimPos, returnRightAimPos};
     }
 }

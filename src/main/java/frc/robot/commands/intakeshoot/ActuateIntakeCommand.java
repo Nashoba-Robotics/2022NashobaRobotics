@@ -16,7 +16,6 @@ public class ActuateIntakeCommand extends CommandBase {
     @Override
     public void initialize() {
         IntakeSolenoidSubsystem.getInstance().setState(state);
-        SmartDashboard.putNumber("Initializations", 1 + SmartDashboard.getNumber("Initializations", 0));
     }
     
     @Override

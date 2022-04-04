@@ -43,8 +43,7 @@ public class AutoAimMotionMagicCommand extends CommandBase{
     public boolean isFinished() {
         double leftDifference = leftTargetPos - DriveSubsystem.getInstance().getPositionLeft();
         double rightDifference = rightTargetPos - DriveSubsystem.getInstance().getPositionRight();
-        SmartDashboard.putNumber("L Diff", leftDifference);
-        SmartDashboard.putNumber("R Diff", rightDifference);
+        
         return (Math.abs(leftDifference) < 1150
             && Math.abs(rightDifference) < 1000)
             || timer.get() >= 0.3;

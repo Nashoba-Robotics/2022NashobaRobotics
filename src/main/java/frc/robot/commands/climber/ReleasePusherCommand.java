@@ -2,6 +2,7 @@ package frc.robot.commands.climber;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
+import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.PusherSubsystem;
 import frc.robot.subsystems.PusherSubsystem.PusherMotor;
 
@@ -10,6 +11,12 @@ public class ReleasePusherCommand extends CommandBase{
     double rPos;
     public ReleasePusherCommand(){
         addRequirements(PusherSubsystem.getInstance());
+        addRequirements(LedSubsystem.getInstance());
+    }
+
+    @Override
+    public void initialize() {
+        LedSubsystem.getInstance().twinkle(Constants.Leds.TEMPORARY_RELEASE);
     }
 
     @Override

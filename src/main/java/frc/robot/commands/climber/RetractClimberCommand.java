@@ -11,7 +11,7 @@ public class RetractClimberCommand extends CommandBase {
     private double rPos;
     public RetractClimberCommand(){
         addRequirements(ClimberSubsystem.getInstance());
-        // addRequirements(LedSubsystem.getInstance()); //Uses LEDs in the TraversalClimbCommand
+        addRequirements(LedSubsystem.getInstance()); //Uses LEDs in the TraversalClimbCommand
                                                      //Ben said I was supposed to put it here
                                                      //If anyone is mad at this, blame Ben
     }
@@ -19,6 +19,7 @@ public class RetractClimberCommand extends CommandBase {
     @Override
     public void initialize() {
         ClimberSubsystem.getInstance().undeployClimber();
+        LedSubsystem.getInstance().twinkle(Constants.Leds.TRAVERSAL_CLIMB);
     }
 
     @Override

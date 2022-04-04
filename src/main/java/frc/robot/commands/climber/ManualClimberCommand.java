@@ -2,19 +2,19 @@ package frc.robot.commands.climber;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.Robot;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.LedSubsystem;
 
 public class ManualClimberCommand extends CommandBase{
     public ManualClimberCommand(){
         addRequirements(ClimberSubsystem.getInstance());
+        addRequirements(LedSubsystem.getInstance());
     }
 
     @Override
     public void initialize() {
         // Robot.enableBallLeds = false;
-        // LedSubsystem.getInstance().twinkle(Constants.Leds.MANUAL_CLIMB);
+        LedSubsystem.getInstance().twinkle(Constants.Leds.MANUAL_CLIMB);
     }
 
     @Override

@@ -19,8 +19,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.DefaultLedCommand;
 import frc.robot.commands.IntakePracticeCommand;
 import frc.robot.commands.JoystickDriveCommand;
+import frc.robot.commands.LedTestCommand;
 import frc.robot.commands.autoroutines.TestPathCommand;
 import frc.robot.commands.autoroutines.ThreeBallAuto;
 import frc.robot.commands.autoroutines.TwoBallAuto;
@@ -55,8 +57,6 @@ public class Robot extends TimedRobot {
     PneumaticHub ph = new PneumaticHub();
     SendableChooser<Command> autoChooser;
 
-    public static boolean enableBallLeds = true;
-
     @Override
     public void robotInit() {
         LiveWindow.disableAllTelemetry();
@@ -72,6 +72,7 @@ public class Robot extends TimedRobot {
         ph.enableCompressorAnalog(100, 120);
         //ph.disableCompressor();
         CommandScheduler.getInstance().setDefaultCommand(DriveSubsystem.getInstance(), new JoystickDriveCommand());
+        CommandScheduler.getInstance().setDefaultCommand(LedSubsystem.getInstance(), new DefaultLedCommand());
 
         autoChooser = new SendableChooser<>();
         autoChooser.setDefaultOption("Two Ball Auto", new TwoBallAuto());
@@ -80,7 +81,7 @@ public class Robot extends TimedRobot {
         autoChooser.addOption("Two Ball Far", new TwoBallAuto_Far());
         SmartDashboard.putData("Auto", autoChooser); 
 
-        CommandScheduler.getInstance().schedule(new StopClimbCommand());     
+        CommandScheduler.getInstance().schedule(new StopClimbCommand());
     }
 
     // long lastMillis = System.currentTimeMillis();
@@ -125,8 +126,6 @@ public class Robot extends TimedRobot {
         LedSubsystem.getInstance().rainbow();
         LimelightSubsystem.getInstance().setShooterLed(3);
         DriveSubsystem.getInstance().resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
-        DriveSubsystem.getInstance().resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
-        DriveSubsystem.getInstance().resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
         autoChooser.getSelected().schedule();
     }
 
@@ -151,21 +150,10 @@ public class Robot extends TimedRobot {
 
         //Zeroes the climbers when teleop starts
         //CommandScheduler.getInstance().schedule(new ZeroClimberCommand());
-
-        enableBallLeds = true;
     }
 
     @Override
     public void teleopPeriodic() {
-        if(enableBallLeds) {
-            if(RobotContainer.getSensor1() && RobotContainer.getSensor2()){
-                LedSubsystem.getInstance().setColor(255, 0, 0);
-            } else if(RobotContainer.getSensor1() || RobotContainer.getSensor2()){
-                LedSubsystem.getInstance().setColor(0, 0, 255);
-            } else{
-                LedSubsystem.getInstance().setColor(255, 255, 255);
-            }
-        }
     }
 
     @Override

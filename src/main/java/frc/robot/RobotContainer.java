@@ -9,6 +9,7 @@ import frc.robot.commands.JoystickDriveCommand;
 import frc.robot.commands.LedTestCommand;
 import frc.robot.commands.LimelightCommand;
 import frc.robot.commands.ParallelTestCommand;
+import frc.robot.commands.UnAimCommand;
 import frc.robot.commands.climber.ManualClimberCommand;
 import frc.robot.commands.climber.DeployClimberCommadGroup;
 import frc.robot.commands.climber.DeployPusher;
@@ -100,6 +101,8 @@ public class RobotContainer {
         SmartDashboard.putData(new TraversalClimbCommand());
 
         SmartDashboard.putData(new ParallelTestCommand());
+
+        SmartDashboard.putData(new UnAimCommand());
     }
 
     private void configureButtonBindings() {
