@@ -4,17 +4,17 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.LedSubsystem;
+import frc.robot.subsystems.LedSubsystem.LedStateType;
 
 public class ManualClimberCommand extends CommandBase{
     public ManualClimberCommand(){
         addRequirements(ClimberSubsystem.getInstance());
-        addRequirements(LedSubsystem.getInstance());
     }
 
     @Override
     public void initialize() {
-        // Robot.enableBallLeds = false;
-        LedSubsystem.getInstance().twinkle(Constants.Leds.MANUAL_CLIMB);
+        LedSubsystem.getInstance().setLedStateType(LedStateType.CLIMB);
+        LedSubsystem.getInstance().setClimbColor(Constants.Leds.MANUAL_CLIMB);
     }
 
     @Override

@@ -395,14 +395,14 @@ public class DriveSubsystem extends SubsystemBase {
 
         double[] targetPoses = new double[2];
         leftMotor.configMotionCruiseVelocity(18_000);
-        leftMotor.configMotionAcceleration(30_000);
+        leftMotor.configMotionAcceleration(35_000);
 
         double targetPos = -332 * angle + currentLeftPos;
         leftMotor.set(ControlMode.MotionMagic, targetPos);
         targetPoses[0] = targetPos;
 
         rightMotor.configMotionCruiseVelocity(18_000);
-        rightMotor.configMotionAcceleration(30_000);
+        rightMotor.configMotionAcceleration(35_000);
 
         targetPos = 277 * angle + currentRightPos;
         rightMotor.set(ControlMode.MotionMagic, targetPos);

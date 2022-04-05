@@ -90,5 +90,9 @@ public class CannonSubsystem extends SubsystemBase{
         boolean on = angle == Angle.SIXTY;
         if(solenoid.get() != on) solenoid.set(on);
     }
+
+    public Angle getAngle() {
+        return solenoid.get() ? Angle.SIXTY : Angle.EIGHTY;
+    }
 }
 

@@ -19,7 +19,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.DefaultLedCommand;
 import frc.robot.commands.IntakePracticeCommand;
 import frc.robot.commands.JoystickDriveCommand;
 import frc.robot.commands.LedTestCommand;
@@ -40,6 +39,7 @@ import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.CannonSubsystem.Angle;
 import frc.robot.subsystems.DriveSubsystem.DriveMode;
+import frc.robot.subsystems.LedSubsystem.LedStateType;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PowerDistribution;
 
@@ -72,7 +72,6 @@ public class Robot extends TimedRobot {
         ph.enableCompressorAnalog(100, 120);
         //ph.disableCompressor();
         CommandScheduler.getInstance().setDefaultCommand(DriveSubsystem.getInstance(), new JoystickDriveCommand());
-        CommandScheduler.getInstance().setDefaultCommand(LedSubsystem.getInstance(), new DefaultLedCommand());
 
         autoChooser = new SendableChooser<>();
         autoChooser.setDefaultOption("Two Ball Auto", new TwoBallAuto());
@@ -101,7 +100,7 @@ public class Robot extends TimedRobot {
         DriveSubsystem.getInstance().setDriveMode(DriveMode.VELOCITY);
         DriveSubsystem.getInstance().setSpeed(0, 0);
         IntakeSubsystem.getInstance().stop();
-        // IntakeSolenoidSubsystem.getInstance().retract();    //Undeploys the intake when the robot is disabled
+        IntakeSolenoidSubsystem.getInstance().retract();    //Undeploys the intake when the robot is disabled
         CannonSubsystem.getInstance().setAngle(Angle.EIGHTY);
         DriveSubsystem.getInstance().changeNeutralMode(NeutralMode.Coast);    //Sets the robot into "coast" mode after robot is diabled -> Easier to move
         LimelightSubsystem.getInstance().setShooterLed(1);
@@ -110,11 +109,11 @@ public class Robot extends TimedRobot {
         //Cancels everything that's running
         CommandScheduler.getInstance().cancelAll();
 
-        if(DriverStation.isFMSAttached()) {
-            LedSubsystem.getInstance().rgbfade();
-        } else {
-            LedSubsystem.getInstance().setColor(0,0,0);
-        }
+        //if(DriverStation.isFMSAttached()) {
+            LedSubsystem.getInstance().setLedStateType(LedStateType.FMS_DISABLE);
+        //} else {
+        //    LedSubsystem.getInstance().setLedStateType(LedStateType.NONE);
+        //}
     }
 
     @Override
@@ -123,7 +122,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-        LedSubsystem.getInstance().rainbow();
+        LedSubsystem.getInstance().setLedStateType(LedStateType.AUTO);
         LimelightSubsystem.getInstance().setShooterLed(3);
         DriveSubsystem.getInstance().resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
         autoChooser.getSelected().schedule();
@@ -135,6 +134,7 @@ public class Robot extends TimedRobot {
         
     @Override
     public void teleopInit() {
+        LedSubsystem.getInstance().setLedStateType(LedStateType.BALLS);
         LiveWindow.disableAllTelemetry();
         CommandScheduler.getInstance().cancelAll();
 
@@ -143,8 +143,8 @@ public class Robot extends TimedRobot {
         DriveSubsystem.getInstance().resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
 
         CommandScheduler.getInstance().schedule(new StopClimbCommand());
-        // CommandScheduler.getInstance().schedule(new ZeroClimberSensorsCommand());
-        // CommandScheduler.getInstance().schedule(new ZeroPusherCommand());
+        CommandScheduler.getInstance().schedule(new ZeroClimberSensorsCommand());
+        CommandScheduler.getInstance().schedule(new ZeroPusherCommand());
 
         CommandScheduler.getInstance().schedule(new CannonAngleCommand(Angle.EIGHTY));
 
@@ -154,6 +154,21 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
+        boolean ball1 = RobotContainer.getSensor1();
+        boolean ball2 = RobotContainer.getSensor2();
+        Angle angle = CannonSubsystem.getInstance().getAngle();//RobotContainer.shooterAngleSwitch.get();
+        if(angle == Angle.EIGHTY) {
+            LedSubsystem.getInstance().setLedStateType(LedStateType.BALLS);
+        } else {
+            LedSubsystem.getInstance().setLedStateType(LedStateType.BALLS_BLINK);
+        }
+        if(ball1 && ball2) {
+            LedSubsystem.getInstance().setBallColor(Constants.Leds.TWO_BALLS);
+        } else if(ball1 || ball2) {
+            LedSubsystem.getInstance().setBallColor(Constants.Leds.ONE_BALL);
+        } else {
+            LedSubsystem.getInstance().setBallColor(Constants.Leds.NO_BALLS);
+        }
     }
 
     @Override

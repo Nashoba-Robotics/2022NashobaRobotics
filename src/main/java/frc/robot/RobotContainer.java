@@ -22,12 +22,15 @@ import frc.robot.commands.climber.ZeroClimberSensorsCommand;
 import frc.robot.commands.climber.ZeroPusherCommand;
 import frc.robot.commands.intakeshoot.CannonAngleCommand;
 import frc.robot.commands.intakeshoot.ActuateIntakeCommand;
+import frc.robot.commands.intakeshoot.AimShootCG;
 import frc.robot.commands.intakeshoot.EjectBackCommand;
 import frc.robot.commands.intakeshoot.EjectFrontCommand;
+import frc.robot.commands.intakeshoot.NewShootCommand;
 import frc.robot.commands.intakeshoot.PukeCommand;
 import frc.robot.commands.intakeshoot.RunIntakeCommand;
 import frc.robot.commands.intakeshoot.ShootCommand;
 import frc.robot.commands.intakeshoot.StopIntakeCommand;
+import frc.robot.commands.intakeshoot.StopShooterCommand;
 import frc.robot.subsystems.JoystickSubsystem;
 import frc.robot.subsystems.CannonSubsystem.Angle;
 import frc.robot.commands.CannonTestCommand;
@@ -51,7 +54,7 @@ public class RobotContainer {
     Trigger shootButton = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), Constants.Buttons.SHOOT).debounce(Constants.Buttons.DEBOUNCE_VALUE);
     Trigger runShooterButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), Constants.Buttons.RUN_SHOOTER).debounce(Constants.Buttons.DEBOUNCE_VALUE);
     Trigger stopShooterButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), Constants.Buttons.STOP_SHOOTER);
-    Trigger shooterAngleSwitch = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), Constants.Buttons.SHOOTER_ANGLE).debounce(Constants.Buttons.DEBOUNCE_VALUE);
+    public static Trigger shooterAngleSwitch = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), Constants.Buttons.SHOOTER_ANGLE).debounce(Constants.Buttons.DEBOUNCE_VALUE);
 
     Trigger fixedClimbDeployButton = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), Constants.Buttons.FIXED_CLIMB_DEPLOY).debounce(Constants.Buttons.DEBOUNCE_VALUE);
     Trigger fixedClimbButton = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), Constants.Buttons.FIXED_CLIMB).debounce(Constants.Buttons.DEBOUNCE_VALUE);
@@ -100,6 +103,8 @@ public class RobotContainer {
         SmartDashboard.putData(new TraversalClimbCommand());
 
         SmartDashboard.putData(new ParallelTestCommand());
+
+        SmartDashboard.putData(new AimShootCG());
     }
 
     private void configureButtonBindings() {
@@ -109,7 +114,7 @@ public class RobotContainer {
         // incrementShooterSpeed.whenActive(() -> {CannonSubsystem.getInstance().changeSpeedChange(0.005);});
         // decrementShooterSpeed.whenActive(() -> {CannonSubsystem.getInstance().changeSpeedChange(-0.005);});
         runIntakeButton.whenActive(new RunIntakeCommand());
-        // stopIntakeButton.whenActive(new StopIntakeCommand());
+        stopIntakeButton.whenActive(new StopIntakeCommand());
 
         shooterAngleSwitch.whenActive(new CannonAngleCommand(Angle.EIGHTY));
         shooterAngleSwitch.whenInactive(new CannonAngleCommand(Angle.SIXTY));
@@ -118,10 +123,10 @@ public class RobotContainer {
         ejectBackButton.whenActive(new EjectBackCommand());
         pukeButton.whenActive(new PukeCommand());
 
-        ShootCommand shootCommand = new ShootCommand();
-        runShooterButton.whenActive(shootCommand);
-        stopShooterButton.cancelWhenActive(shootCommand);
-        // runShooterButton.whenActive(new StopCommand()); //TODO: Change to actual Run Shooter Command
+        //ShootCommand shootCommand = new ShootCommand();
+        runShooterButton.whenActive(new NewShootCommand(false));
+        shootButton.whenActive(new AimShootCG());
+        stopShooterButton.whenActive(new StopShooterCommand());
 
         fixedClimbDeployButton.whenActive(new DeployClimberCommadGroup());
         fixedClimbButton.whenActive(new TraversalClimbCommand());
@@ -136,7 +141,7 @@ public class RobotContainer {
         // colorRejectionSwitch.whenActive(new SetColorRejectionCommand(true));
         // colorRejectionSwitch.whenInactive(new SetColorRejectionCommand(false));
         // fixedClimbeGrabButton.whenActive(new StopCommand());    //TODO: Change to actual Grab Command
-        fixedClimberReleaseButton.whenActive(new StopIntakeCommand());
+        //fixedClimberReleaseButton.whenActive(new StopIntakeCommand());
 
         // rotatingClimbDeployButton.whenActive(new StopCommand());    //TODO: Change to actual Rotating Deploy Command
         // rotatingClimbUndeployButton.whenActive(new StopCommand());    //TODO: Change to actual Rotating Undeploy Command

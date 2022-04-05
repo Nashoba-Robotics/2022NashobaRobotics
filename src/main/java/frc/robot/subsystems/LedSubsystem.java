@@ -2,18 +2,21 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.led.Animation;
 import com.ctre.phoenix.led.CANdle;
+import com.ctre.phoenix.led.LarsonAnimation;
 import com.ctre.phoenix.led.RainbowAnimation;
 import com.ctre.phoenix.led.RgbFadeAnimation;
 import com.ctre.phoenix.led.StrobeAnimation;
 import com.ctre.phoenix.led.TwinkleAnimation;
+import com.ctre.phoenix.led.LarsonAnimation.BounceMode;
 import com.ctre.phoenix.led.TwinkleAnimation.TwinklePercent;
 
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.commands.DefaultLedCommand;
+import frc.robot.Constants;
+import frc.robot.lib.StateChange;
 
 public class LedSubsystem extends SubsystemBase {
-    private static final int LIGHT_COUNT = 100;
+    private static final int LIGHT_COUNT = 38;
     private static final double BLINK_RATE = 1;
     private static final double RAINBOW_SPEED = 1;
 
@@ -25,11 +28,15 @@ public class LedSubsystem extends SubsystemBase {
         return instance;
     }
 
+    public enum LedStateType {
+        NONE, AUTO, BALLS, BALLS_BLINK, CLIMB, FMS_DISABLE
+    }
+
     private CANdle candle;
-    private int lastR = -1;
-    private int lastG = -1;
-    private int lastB = -1;
-    private int lastMode = -1;
+    
+    private LedStateType type = LedStateType.NONE;
+    private int[] ballColor = {0,0,0};
+    private int[] climbColor = {0,0,0};
 
     private LedSubsystem() {
         candle = new CANdle(0);
@@ -39,53 +46,54 @@ public class LedSubsystem extends SubsystemBase {
         candle.configBrightnessScalar(0.7);
     }
 
-    public void setColor(int r, int g, int b) { //Much appreciation
-        if(lastR != r || lastG != g || lastB != b || lastMode != 0) {
-            candle.setLEDs(r, g, b, 0, 8, LIGHT_COUNT);
-            lastR = r;
-            lastG = g;
-            lastB = b;
-            lastMode = 0;
+    public void setLedStateType(LedStateType newType) {
+        if(type != newType) {
+            type = newType;
+            updateLeds();
         }
     }
 
-    public void blinkColor(int r, int g, int b) {
-        if(lastR != r || lastG != g || lastB != b || lastMode != 1) {
-            Animation a = new StrobeAnimation(r, g, b, 0, BLINK_RATE, LIGHT_COUNT + 8);
-            candle.animate(a);
-            // candle.setLEDs(0, 0, 0, 0, 0, 8);
-            lastR = r;
-            lastG = g;
-            lastB = b;
-            lastMode = 1;
+    public void setBallColor(int[] color) {
+        boolean update = color[0] != ballColor[0] || color[1] != ballColor[1] || color[2] != ballColor[2];
+        ballColor = color;
+        if(update && (type == LedStateType.BALLS || type == LedStateType.BALLS_BLINK)) {
+            updateLeds();
         }
     }
 
-    public void rainbow() {
-        if(lastMode != 2) {
-            Animation a = new RainbowAnimation(1, RAINBOW_SPEED, LIGHT_COUNT);
-            candle.animate(a);
-            lastMode = 2;
+    public void setClimbColor(int[] color) {
+        boolean update = color[0] != climbColor[0] || color[1] != climbColor[1] || color[2] != climbColor[2];
+        climbColor = color;
+        if(type == LedStateType.CLIMB && update) {
+            updateLeds();
         }
     }
 
-    public void rgbfade() {
-        if(lastMode != 3) {
-            Animation a = new RgbFadeAnimation(1, 0.6, 46);
-            candle.animate(a);
-            lastMode = 3;
+    private void updateLeds() {
+        switch(type) {
+            case NONE:
+                candle.setLEDs(0, 0, 0, 0, 0, LIGHT_COUNT + 8);
+                break;
+            case AUTO:
+                Animation a1 = new RainbowAnimation(1, RAINBOW_SPEED, LIGHT_COUNT + 8);
+                candle.animate(a1);
+                break;
+            case BALLS:
+                candle.setLEDs(ballColor[0], ballColor[1], ballColor[2], 0, 8, LIGHT_COUNT);
+                break;
+            case BALLS_BLINK:
+                //Animation a2 = new StrobeAnimation(ballColor[0], ballColor[1], ballColor[2], 0, 0.5, LIGHT_COUNT + 8);
+                Animation a2 = new TwinkleAnimation(ballColor[0], ballColor[1], ballColor[2], 0, 0.5, LIGHT_COUNT + 8, TwinklePercent.Percent76);//(ballColor[0], ballColor[1], ballColor[2], 0, 0.5, LIGHT_COUNT + 8);
+                candle.animate(a2);
+                break;
+            case CLIMB:
+                Animation a3 = new TwinkleAnimation(climbColor[0], climbColor[1], climbColor[2], 0, 0.5, LIGHT_COUNT + 8, TwinklePercent.Percent64);
+                candle.animate(a3);
+                break;
+            case FMS_DISABLE:
+                Animation a4 = new RgbFadeAnimation(1, 0.8, LIGHT_COUNT + 8);
+                candle.animate(a4);
+                break;
         }
     }
-
-    public void twinkle(int[] col) {
-        if(lastMode != 4 || lastR != col[0] || lastG != col[1] || lastB != col[2]) {
-            Animation a = new TwinkleAnimation(col[0], col[1], col[2], 0, 0.5, 46, TwinklePercent.Percent64);
-            candle.animate(a);
-            lastR = col[0];
-            lastG = col[1];
-            lastB = col[2];
-            lastMode = 4;
-        }
-    }
-    
 }

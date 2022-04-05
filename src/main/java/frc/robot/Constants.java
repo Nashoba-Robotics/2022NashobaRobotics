@@ -90,6 +90,10 @@ public final class Constants {
         public static final int[] TEMPORARY_RELEASE = {56, 243, 214};
         public static final int[] MANUAL_PUSH = {215, 154, 216};
         public static final int[] MANUAL_CLIMB = {17, 84, 175};
+
+        public static final int[] TWO_BALLS = {255,0,0};
+        public static final int[] ONE_BALL = {0,0,255};
+        public static final int[] NO_BALLS = {255,255,255};
     }
     public static class Cannon {
         public static final int PORT_TOP = 9;
@@ -97,14 +101,16 @@ public final class Constants {
 
         public static final double KP = 0.048;
         public static final double KI = 0.0;
-        public static final double KD = 0.0048;
+        public static final double KD = 0.005;
         public static final double KF = 0.0475;
 
         public static final int SOLENOID_PORT = 7;
 
-        public static final double CLOSE_SHOT_SPEED = 0.465;
+        public static final double CLOSE_SHOT_SPEED = 0.45;
         public static final double farShotSpeed(double ty) {
-            return 0.53 - 0.00825 * ty;
+            // return 0.53 - 0.00825 * ty;
+            // return 0.543677 - 0.00620598 * ty;
+            return 0.53491 - 0.00686079 * ty + 0.0000779582 * ty*ty;
         }
     }
     public static class Climber {

@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.GyroSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
@@ -41,11 +42,15 @@ public class AutoAimMotionMagicCommand extends CommandBase{
 
     @Override
     public boolean isFinished() {
+        if(RobotContainer.shooterAngleSwitch.get()) {
+            return true;
+        }
         double leftDifference = leftTargetPos - DriveSubsystem.getInstance().getPositionLeft();
         double rightDifference = rightTargetPos - DriveSubsystem.getInstance().getPositionRight();
         
         return (Math.abs(leftDifference) < 1150
             && Math.abs(rightDifference) < 1000)
-            || timer.get() >= 0.3;
+            || timer.get() >= 1
+            ;
     }
 }
