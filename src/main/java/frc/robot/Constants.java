@@ -7,8 +7,17 @@
 
 package frc.robot;
 
+import java.util.List;
+
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import frc.robot.lib.Units;
 
 /**
@@ -321,33 +330,28 @@ public final class Constants {
         public static final double ANGLE_OF_RESISTANCE = 0;
 
         public static final double K_CARPET = 0.094564;
+    }
 
-        public static Translation2d BLUE_CARGO_1 = new Translation2d( Units.inches2Meters(42), Units.inches2Meters(44.4));
-        public static Translation2d BLUE_CARGO_2 = new Translation2d( Units.inches2Meters(198), Units.inches2Meters(72));
-        public static Translation2d BLUE_CARGO_3 = new Translation2d( Units.inches2Meters(297.6), Units.inches2Meters(7.2));
-        public static Translation2d BLUE_CARGO_4 = new Translation2d( Units.inches2Meters(412.8), Units.inches2Meters(36));
-        public static Translation2d BLUE_CARGO_5 = new Translation2d( Units.inches2Meters(472.8), Units.inches2Meters(198));
-        public static Translation2d BLUE_CARGO_6 = new Translation2d( Units.inches2Meters(290.4), Units.inches2Meters(312));
-        public static Translation2d BLUE_CARGO_7 = new Translation2d( Units.inches2Meters(196.8), Units.inches2Meters(246));
-        public static Translation2d RED_CARGO_1 = new Translation2d( Units.inches2Meters(605), Units.inches2Meters(280));
-        public static Translation2d RED_CARGO_2 = new Translation2d( Units.inches2Meters(257), Units.inches2Meters(441));
-        public static Translation2d RED_CARGO_3 = new Translation2d( Units.inches2Meters(350), Units.inches2Meters(314));
-        public static Translation2d RED_CARGO_4 = new Translation2d( Units.inches2Meters(235), Units.inches2Meters(275));
-        public static Translation2d RED_CARGO_5 = new Translation2d( Units.inches2Meters(174), Units.inches2Meters(127));
-        public static Translation2d RED_CARGO_6 = new Translation2d( Units.inches2Meters(357), Units.inches2Meters(12));
-        public static Translation2d RED_CARGO_7 = new Translation2d( Units.inches2Meters(460), Units.inches2Meters(246));
-        public static Translation2d HUB_CENTER = new Translation2d( Units.inches2Meters(324), Units.inches2Meters(162));
-        public static Translation2d BLUE_LOW = new Translation2d( Units.inches2Meters(130), Units.inches2Meters(264));
-        public static Translation2d BLUE_MID = new Translation2d( Units.inches2Meters(85), Units.inches2Meters(264));
-        public static Translation2d BLUE_HIGH = new Translation2d( Units.inches2Meters(62), Units.inches2Meters(264));
-        public static Translation2d BLUE_TRANSVERSAL = new Translation2d( Units.inches2Meters(38), Units.inches2Meters(264));
-        public static Translation2d BLUE_PAD_1 = new Translation2d( Units.inches2Meters(130), Units.inches2Meters(216));
-        public static Translation2d BLUE_PAD_2 = new Translation2d( Units.inches2Meters(130), Units.inches2Meters(312));
-        public static Translation2d RED_LOW = new Translation2d( Units.inches2Meters(518), Units.inches2Meters(60));
-        public static Translation2d RED_MID = new Translation2d( Units.inches2Meters(562), Units.inches2Meters(60));
-        public static Translation2d RED_HIGH = new Translation2d( Units.inches2Meters(586), Units.inches2Meters(60));
-        public static Translation2d RED_TRANSVERSAL = new Translation2d( Units.inches2Meters(607), Units.inches2Meters(60));
-        public static Translation2d RED_PAD_1 = new Translation2d( Units.inches2Meters(518), Units.inches2Meters(108));
-        public static Translation2d RED_PAD_2 = new Translation2d( Units.inches2Meters(518), Units.inches2Meters(12));
+    public static class PATHS {
+        private static DifferentialDriveVoltageConstraint autoVoltageConstraint = 
+        new DifferentialDriveVoltageConstraint(
+          new SimpleMotorFeedforward(Constants.DriveTrain.KS, Constants.DriveTrain.KV, Constants.DriveTrain.KA),
+          Constants.DriveTrain.KINEMATICS,
+          10);
+
+        private static TrajectoryConfig config =
+        new TrajectoryConfig(
+          Constants.DriveTrain.MAX_VELOCITY,
+          Constants.DriveTrain.MAX_ACCELERATION)
+          .setKinematics(Constants.DriveTrain.KINEMATICS)
+          .addConstraint(autoVoltageConstraint).setReversed(true);
+    
+        //Start of 4 ball auto to first ball
+        public static final Trajectory TO_FIRST_BALL =
+        TrajectoryGenerator.generateTrajectory(
+          new Pose2d(new Translation2d(6.684, 2.292), Rotation2d.fromDegrees(15)), //starting position
+          List.of(), //nodes for robot to travel to
+          new Pose2d(new Translation2d(5.233, 1.91), Rotation2d.fromDegrees(15)), //finishing position
+          config);
     }
 }
