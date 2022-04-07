@@ -52,6 +52,11 @@ public class DriveSubsystem extends SubsystemBase {
     public static double returnLeftAimPos;
     public static double returnRightAimPos;
 
+    private boolean doAutoAim;
+
+    private double maxLCurrent;
+    private double maxRCurrent;
+
     @Override
     public void periodic() {
         if(RobotState.isAutonomous() && RobotState.isEnabled()){
@@ -82,6 +87,14 @@ public class DriveSubsystem extends SubsystemBase {
         } else {
             odometryResetFinished = false;
         }
+
+        maxLCurrent = Math.max(maxLCurrent, getLeftMotorCurrent());
+        maxRCurrent = Math.max(maxRCurrent, getRightMotorCurrent());
+
+        SmartDashboard.putNumber("Left stator", maxLCurrent);
+        SmartDashboard.putNumber("Right stator", maxRCurrent);
+        SmartDashboard.putNumber("angle gyro", GyroSubsystem.getInstance().getAbsoluteAngle());
+
     }
     
     public DriveSubsystem() {
@@ -129,6 +142,8 @@ public class DriveSubsystem extends SubsystemBase {
         rightMotor.setInverted(InvertType.None);
         rightMotor2.setInverted(InvertType.FollowMaster);
         rightMotor3.setInverted(InvertType.FollowMaster);
+
+        doAutoAim = true;
 
         // Set the name of the subsystem in smart dashboard
         SendableRegistry.setName(this, "Drive");
@@ -395,14 +410,16 @@ public class DriveSubsystem extends SubsystemBase {
 
         double[] targetPoses = new double[2];
         leftMotor.configMotionCruiseVelocity(18_000);
-        leftMotor.configMotionAcceleration(35_000);
+        // leftMotor.configMotionAcceleration(35_000);
+        leftMotor.configMotionAcceleration(Constants.DriveTrain.AUTO_AIM_ACCELARATION);
 
         double targetPos = -332 * angle + currentLeftPos;
         leftMotor.set(ControlMode.MotionMagic, targetPos);
         targetPoses[0] = targetPos;
 
         rightMotor.configMotionCruiseVelocity(18_000);
-        rightMotor.configMotionAcceleration(35_000);
+        // rightMotor.configMotionAcceleration(35_000);
+        rightMotor.configMotionAcceleration(Constants.DriveTrain.AUTO_AIM_ACCELARATION);
 
         targetPos = 277 * angle + currentRightPos;
         rightMotor.set(ControlMode.MotionMagic, targetPos);
@@ -423,5 +440,13 @@ public class DriveSubsystem extends SubsystemBase {
 
     public double[] getReturnPos(){
         return new double[]{returnLeftAimPos, returnRightAimPos};
+    }
+
+    public void changeAim(boolean toAimOrNotToAim){
+        doAutoAim = toAimOrNotToAim;
+    }
+
+    public boolean getDoAim(){
+        return doAutoAim;
     }
 }

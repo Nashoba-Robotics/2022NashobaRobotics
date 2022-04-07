@@ -69,7 +69,7 @@ public class Robot extends TimedRobot {
 
         LimelightSubsystem.getInstance().setShooterLed(1);
 
-        ph.enableCompressorAnalog(100, 120);
+        //ph.enableCompressorAnalog(100, 120);
         //ph.disableCompressor();
         CommandScheduler.getInstance().setDefaultCommand(DriveSubsystem.getInstance(), new JoystickDriveCommand());
 
@@ -78,6 +78,7 @@ public class Robot extends TimedRobot {
         autoChooser.addOption("Three Ball Auto", new ThreeBallAuto());
         autoChooser.addOption("Test Auto", new TestPathCommand());
         autoChooser.addOption("Two Ball Far", new TwoBallAuto_Far());
+        // TODO autoChooser.addOption("Do nothing", );
         SmartDashboard.putData("Auto", autoChooser); 
 
         CommandScheduler.getInstance().schedule(new StopClimbCommand());
@@ -114,6 +115,7 @@ public class Robot extends TimedRobot {
         //} else {
         //    LedSubsystem.getInstance().setLedStateType(LedStateType.NONE);
         //}
+        //LedSubsystem.getInstance().setLedStateType(LedStateType.GRACIOUS_PROFESSIONALISM);
     }
 
     @Override
@@ -150,6 +152,8 @@ public class Robot extends TimedRobot {
 
         //Zeroes the climbers when teleop starts
         //CommandScheduler.getInstance().schedule(new ZeroClimberCommand());
+
+        SmartDashboard.putNumber("auto angle", 0);
     }
 
     @Override

@@ -28,14 +28,14 @@ public class TestPathCommand extends SequentialCommandGroup{
           Constants.DriveTrain.MAX_VELOCITY,
           Constants.DriveTrain.MAX_ACCELERATION)
           .setKinematics(Constants.DriveTrain.KINEMATICS)
-          .addConstraint(autoVoltageConstraint).setReversed(true);
+          .addConstraint(autoVoltageConstraint).setReversed(false);
     
         //Start of 4 ball auto to first ball
         Trajectory trajectory =
         TrajectoryGenerator.generateTrajectory(
-          new Pose2d(new Translation2d(5.39, 1.966), Rotation2d.fromDegrees(15)), //starting position
+          new Pose2d(new Translation2d(1.555, 1.201), Rotation2d.fromDegrees(12)), //starting position
           List.of(), //nodes for robot to travel to
-          new Pose2d(new Translation2d(1.54, 1.222), Rotation2d.fromDegrees(12)), //finishing position
+          new Pose2d(new Translation2d(3.748, 1.64), Rotation2d.fromDegrees(30)), //finishing position
           config);
 
         addCommands(

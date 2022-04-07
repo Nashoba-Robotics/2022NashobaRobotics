@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.led.Animation;
 import com.ctre.phoenix.led.CANdle;
+import com.ctre.phoenix.led.FireAnimation;
 import com.ctre.phoenix.led.LarsonAnimation;
 import com.ctre.phoenix.led.RainbowAnimation;
 import com.ctre.phoenix.led.RgbFadeAnimation;
@@ -29,7 +30,7 @@ public class LedSubsystem extends SubsystemBase {
     }
 
     public enum LedStateType {
-        NONE, AUTO, BALLS, BALLS_BLINK, CLIMB, FMS_DISABLE
+        NONE, AUTO, BALLS, BALLS_BLINK, CLIMB, FMS_DISABLE, GRACIOUS_PROFESSIONALISM
     }
 
     private CANdle candle;
@@ -70,6 +71,7 @@ public class LedSubsystem extends SubsystemBase {
     }
 
     private void updateLeds() {
+        System.out.println("Update LEDs");
         switch(type) {
             case NONE:
                 candle.setLEDs(0, 0, 0, 0, 0, LIGHT_COUNT + 8);
@@ -82,8 +84,8 @@ public class LedSubsystem extends SubsystemBase {
                 candle.setLEDs(ballColor[0], ballColor[1], ballColor[2], 0, 8, LIGHT_COUNT);
                 break;
             case BALLS_BLINK:
-                //Animation a2 = new StrobeAnimation(ballColor[0], ballColor[1], ballColor[2], 0, 0.5, LIGHT_COUNT + 8);
-                Animation a2 = new TwinkleAnimation(ballColor[0], ballColor[1], ballColor[2], 0, 0.5, LIGHT_COUNT + 8, TwinklePercent.Percent76);//(ballColor[0], ballColor[1], ballColor[2], 0, 0.5, LIGHT_COUNT + 8);
+                Animation a2 = new StrobeAnimation(ballColor[0], ballColor[1], ballColor[2], 0, 0.5, LIGHT_COUNT + 8);
+                //Animation a2 = new TwinkleAnimation(ballColor[0], ballColor[1], ballColor[2], 0, 0.5, LIGHT_COUNT + 8, TwinklePercent.Percent76);//(ballColor[0], ballColor[1], ballColor[2], 0, 0.5, LIGHT_COUNT + 8);
                 candle.animate(a2);
                 break;
             case CLIMB:
@@ -93,6 +95,10 @@ public class LedSubsystem extends SubsystemBase {
             case FMS_DISABLE:
                 Animation a4 = new RgbFadeAnimation(1, 0.8, LIGHT_COUNT + 8);
                 candle.animate(a4);
+                break;
+            case GRACIOUS_PROFESSIONALISM:
+                Animation a5 = new FireAnimation(1, 0.75, LIGHT_COUNT + 8, 0.7, 0.4);
+                candle.animate(a5);
                 break;
         }
     }

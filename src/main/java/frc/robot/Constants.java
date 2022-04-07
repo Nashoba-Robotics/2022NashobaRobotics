@@ -255,6 +255,8 @@ public final class Constants {
 
         public static final DifferentialDriveKinematics KINEMATICS = 
         new DifferentialDriveKinematics(WHEEL_GAP);
+
+        public static final double AUTO_AIM_ACCELARATION = 30_000;
     }
 
     public static class Intake {
@@ -336,28 +338,5 @@ public final class Constants {
         public static final double ANGLE_OF_RESISTANCE = 0;
 
         public static final double K_CARPET = 0.094564;
-    }
-
-    public static class PATHS {
-        private static DifferentialDriveVoltageConstraint autoVoltageConstraint = 
-        new DifferentialDriveVoltageConstraint(
-          new SimpleMotorFeedforward(Constants.DriveTrain.KS, Constants.DriveTrain.KV, Constants.DriveTrain.KA),
-          Constants.DriveTrain.KINEMATICS,
-          10);
-
-        private static TrajectoryConfig config =
-        new TrajectoryConfig(
-          Constants.DriveTrain.MAX_VELOCITY,
-          Constants.DriveTrain.MAX_ACCELERATION)
-          .setKinematics(Constants.DriveTrain.KINEMATICS)
-          .addConstraint(autoVoltageConstraint).setReversed(true);
-    
-        //Start of 4 ball auto to first ball
-        public static final Trajectory TO_FIRST_BALL =
-        TrajectoryGenerator.generateTrajectory(
-          new Pose2d(new Translation2d(6.684, 2.292), Rotation2d.fromDegrees(15)), //starting position
-          List.of(), //nodes for robot to travel to
-          new Pose2d(new Translation2d(5.233, 1.91), Rotation2d.fromDegrees(15)), //finishing position
-          config);
     }
 }

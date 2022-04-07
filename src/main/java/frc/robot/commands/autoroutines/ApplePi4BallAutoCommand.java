@@ -1,6 +1,7 @@
 package frc.robot.commands.autoroutines;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.TestAutoAimCommand;
 import frc.robot.commands.AutoAimMotionMagicCommand;
 import frc.robot.commands.AutoShootCommand;
 import frc.robot.commands.AutoStopIntakeCommand;
@@ -18,7 +19,7 @@ public class ApplePi4BallAutoCommand extends SequentialCommandGroup{
             new PathFollowCommand("paths/AppleTauOver2ToFirstBall.wpilib.json", 200),
             new AutoStopIntakeCommand(),
 
-            new AutoAimMotionMagicCommand(),    //Aim, shoot, and unaim to reorient
+            new AutoAimMotionMagicCommand(true),    //Aim, shoot, and unaim to reorient
             new AutoShootCommand(Angle.SIXTY),
             new UnAimCommand(),
 
@@ -27,7 +28,7 @@ public class ApplePi4BallAutoCommand extends SequentialCommandGroup{
             new AutoStopIntakeCommand(),
 
             new PathFollowCommand("paths/AppleTauOver2BackToShoot.wpilib.json", 200),   //Go back to shoot
-            new AutoAimMotionMagicCommand(),
+            new AutoAimMotionMagicCommand(true),
             new AutoShootCommand(Angle.SIXTY)
         );
     }

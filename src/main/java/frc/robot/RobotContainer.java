@@ -4,11 +4,10 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.AutoAimMotionMagicCommand;
+import frc.robot.commands.TestAutoAimCommand;
 import frc.robot.commands.JoystickDriveCommand;
 import frc.robot.commands.LedTestCommand;
 import frc.robot.commands.LimelightCommand;
-import frc.robot.commands.ParallelTestCommand;
 import frc.robot.commands.climber.ManualClimberCommand;
 import frc.robot.commands.climber.DeployClimberCommadGroup;
 import frc.robot.commands.climber.DeployPusher;
@@ -31,8 +30,10 @@ import frc.robot.commands.intakeshoot.RunIntakeCommand;
 import frc.robot.commands.intakeshoot.ShootCommand;
 import frc.robot.commands.intakeshoot.StopIntakeCommand;
 import frc.robot.commands.intakeshoot.StopShooterCommand;
+import frc.robot.commands.intakeshoot.ToggleAutoAimCommand;
 import frc.robot.subsystems.JoystickSubsystem;
 import frc.robot.subsystems.CannonSubsystem.Angle;
+import frc.robot.commands.AutoAimMotionMagicCommand;
 import frc.robot.commands.CannonTestCommand;
 
 public class RobotContainer {
@@ -77,6 +78,8 @@ public class RobotContainer {
     // JoystickButton decrementShooterSpeed = new JoystickButton(JoystickSubsystem.getInstance().getLeftJoystick(), /* TODO */);
 
     Trigger autoAimButton = new JoystickButton(JoystickSubsystem.getInstance().getRightJoystick(), Constants.Buttons.AUTO_AIM);
+    Trigger onAim = new JoystickButton(JoystickSubsystem.getInstance().getLeftJoystick(), 13);
+    Trigger offAim = new JoystickButton(JoystickSubsystem.getInstance().getLeftJoystick(), 14);
 
     static DigitalInput ballSensor1 = new DigitalInput(Constants.Intake.DIO_SENSOR_1);
     static DigitalInput ballSensor2 = new DigitalInput(Constants.Intake.DIO_SENSOR_2);
@@ -96,15 +99,14 @@ public class RobotContainer {
         SmartDashboard.putData(new CannonTestCommand());
         SmartDashboard.putData(new LimelightCommand());
         SmartDashboard.putData(new LedTestCommand());
-        SmartDashboard.putData(new AutoAimMotionMagicCommand());
 
         SmartDashboard.putData(new RetractClimberCommand());
         SmartDashboard.putData(new DeployPusher());
         SmartDashboard.putData(new TraversalClimbCommand());
 
-        SmartDashboard.putData(new ParallelTestCommand());
-
         SmartDashboard.putData(new AimShootCG());
+
+        SmartDashboard.putData(new TestAutoAimCommand());
     }
 
     private void configureButtonBindings() {
@@ -150,7 +152,10 @@ public class RobotContainer {
         rotatingClimbeGrabButton.whenActive(new TemporaryReleaseCommand());     //TODO: Change to actual Rotating Grab Command
         //rotatingClimberReleaseButton.whenActive(new TemporaryReleaseCommand());
 
-        autoAimButton.toggleWhenActive(new AutoAimMotionMagicCommand());
+        autoAimButton.toggleWhenActive(new AutoAimMotionMagicCommand(false));
+
+        onAim.whenActive(new ToggleAutoAimCommand(true));
+        offAim.whenActive(new ToggleAutoAimCommand(false));
     }
 
 }

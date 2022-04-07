@@ -42,6 +42,8 @@ public class JoystickDriveCommand extends CommandBase {
         // Joystick buttons start off unpressed
         buttonPressedLeft = joystickTriggerLeft.get();
         lastPressedLeft = joystickTriggerLeft.get();
+
+        SmartDashboard.putBoolean("Drive Running", true);
     }
 
     @Override
@@ -94,6 +96,7 @@ public class JoystickDriveCommand extends CommandBase {
         DriveSubsystem.getInstance().setSpeed(0, 0);
         DriveSubsystem.getInstance().setBrakeMode(false);
         invertDrive = false;
+        SmartDashboard.putBoolean("Drive Running", false);
     }
 
     // Returns true when the command should end.
