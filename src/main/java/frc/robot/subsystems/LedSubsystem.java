@@ -71,7 +71,6 @@ public class LedSubsystem extends SubsystemBase {
     }
 
     private void updateLeds() {
-        System.out.println("Update LEDs");
         switch(type) {
             case NONE:
                 candle.setLEDs(0, 0, 0, 0, 0, LIGHT_COUNT + 8);

@@ -242,8 +242,8 @@ public final class Constants {
 
         public static final double DRIVE_GEAR_RATIO = 20.0 / 3;
 
-        public static final double MAX_VELOCITY = 2; 
-        public static final double MAX_ACCELERATION = 0.75;
+        public static final double MAX_VELOCITY = 5; 
+        public static final double MAX_ACCELERATION = 4;
 
         public static final double AUTO_B = 2; 
         public static final double AUTO_ZETA = 1;
@@ -335,7 +335,7 @@ public final class Constants {
     }
 
     public static class FIELD {
-        public static final double ANGLE_OF_RESISTANCE = 0;
+        public static final double ANGLE_OF_RESISTANCE = 180;
 
         public static final double K_CARPET = 0.094564;
     }

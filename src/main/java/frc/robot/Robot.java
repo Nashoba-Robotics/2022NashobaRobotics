@@ -22,6 +22,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.IntakePracticeCommand;
 import frc.robot.commands.JoystickDriveCommand;
 import frc.robot.commands.LedTestCommand;
+import frc.robot.commands.autoroutines.FourBallAuto;
+import frc.robot.commands.autoroutines.GraciousProfessionalismAuto;
+import frc.robot.commands.autoroutines.TaxiAuto;
 import frc.robot.commands.autoroutines.TestPathCommand;
 import frc.robot.commands.autoroutines.ThreeBallAuto;
 import frc.robot.commands.autoroutines.TwoBallAuto;
@@ -30,6 +33,7 @@ import frc.robot.commands.climber.StopClimbCommand;
 import frc.robot.commands.climber.ZeroClimberSensorsCommand;
 import frc.robot.commands.climber.ZeroPusherCommand;
 import frc.robot.commands.intakeshoot.CannonAngleCommand;
+import frc.robot.commands.intakeshoot.ToggleAutoAimCommand;
 import frc.robot.subsystems.CannonSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -76,12 +80,14 @@ public class Robot extends TimedRobot {
         autoChooser = new SendableChooser<>();
         autoChooser.setDefaultOption("Two Ball Auto", new TwoBallAuto());
         autoChooser.addOption("Three Ball Auto", new ThreeBallAuto());
+        autoChooser.addOption("Four Ball Auto", new FourBallAuto());
+        autoChooser.addOption("Taxi Auto", new TaxiAuto());
+        autoChooser.addOption("Graciously Professional", new GraciousProfessionalismAuto());
         autoChooser.addOption("Test Auto", new TestPathCommand());
-        autoChooser.addOption("Two Ball Far", new TwoBallAuto_Far());
-        // TODO autoChooser.addOption("Do nothing", );
         SmartDashboard.putData("Auto", autoChooser); 
 
         CommandScheduler.getInstance().schedule(new StopClimbCommand());
+        CommandScheduler.getInstance().schedule(new ToggleAutoAimCommand(true));
     }
 
     // long lastMillis = System.currentTimeMillis();
@@ -126,6 +132,7 @@ public class Robot extends TimedRobot {
     public void autonomousInit() {
         LedSubsystem.getInstance().setLedStateType(LedStateType.AUTO);
         LimelightSubsystem.getInstance().setShooterLed(3);
+        LimelightSubsystem.getInstance().setShooterLed(3);
         DriveSubsystem.getInstance().resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
         autoChooser.getSelected().schedule();
     }
@@ -141,6 +148,8 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().cancelAll();
 
         LimelightSubsystem.getInstance().setShooterLed(3);
+        LimelightSubsystem.getInstance().setShooterLed(3);
+
 
         DriveSubsystem.getInstance().resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
 

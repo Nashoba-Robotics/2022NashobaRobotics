@@ -4,6 +4,8 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.util.sendable.SendableRegistry;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -16,6 +18,25 @@ public class LimelightSubsystem extends SubsystemBase {
     private NetworkTableEntry shooterPipeline;
     private NetworkTableEntry shooterLedMode;
 
+    private double currTx;
+    private double currTy;
+
+    private Timer timoutTimer;
+
+    @Override
+    public void periodic() {
+        if(shooterValidTarget()){
+            currTx = shooterTx.getDouble(0);
+            currTy = shooterTy.getDouble(0);
+            timoutTimer.reset();
+        } else if(timoutTimer.get() > 0.5){
+            currTx = 0;
+            currTy = 0;
+        }
+
+        SmartDashboard.putNumber("curr tx", currTx);
+    }
+
     private LimelightSubsystem() {
         SendableRegistry.setName(this, "Limelight");
         NetworkTable shooter = NetworkTableInstance.getDefault().getTable("limelight-shooter");
@@ -24,6 +45,9 @@ public class LimelightSubsystem extends SubsystemBase {
         shooterTy = shooter.getEntry("ty");
         shooterPipeline = shooter.getEntry("pipeline");
         shooterLedMode = shooter.getEntry("ledMode");
+
+        timoutTimer = new Timer();
+        timoutTimer.start();
     }
 
     public static LimelightSubsystem getInstance() {
@@ -51,12 +75,12 @@ public class LimelightSubsystem extends SubsystemBase {
 
     //What is the x value of the object from the crosshair that the limelight has locked on to? (-27 to 27 degrees)
     public double getShooterTx() {
-        return shooterTx.getDouble(0);
+        return currTx;
     }
 
     //What is the x value of the object from the crosshair that the limelight has locked on to? (-27 to 27 degrees)
     public double getShooterTy() {
-        return shooterTy.getDouble(0);
+        return currTy;
     }
 
     public void setShooterLed(double led) {

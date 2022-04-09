@@ -13,7 +13,7 @@ public class AimShootCG extends SequentialCommandGroup {
         addCommands(
             new AutoAimMotionMagicCommand(true),
             new ParallelCommandGroup(
-                new NewShootCommand(true), 
+                new ShootCommand(true), 
                 new JoystickDriveCommand()
             )
         );

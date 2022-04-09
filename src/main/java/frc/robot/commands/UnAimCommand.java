@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSubsystem;
 
@@ -15,11 +16,14 @@ public class UnAimCommand extends CommandBase{
     @Override
     public void initialize() {
         timer.start();
+        timer.reset();
+        SmartDashboard.putNumber("Return Angle", DriveSubsystem.getInstance().getReturnAngle());
+        DriveSubsystem.getInstance().unAim();
     }
 
     @Override
     public void execute() {
-        DriveSubsystem.getInstance().unAim();
+        
     }
 
     @Override

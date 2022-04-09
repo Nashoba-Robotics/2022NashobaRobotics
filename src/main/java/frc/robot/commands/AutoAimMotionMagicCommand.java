@@ -25,11 +25,17 @@ public class AutoAimMotionMagicCommand extends CommandBase{
 
     @Override
     public void initialize() {
-        GyroSubsystem.getInstance().zeroHeading();
-        double angle = -LimelightSubsystem.getInstance().getShooterTx();
-        double[] targetPoses = DriveSubsystem.getInstance().turnToAngle(angle + Math.signum(angle) * 3);
-        leftTargetPos = targetPoses[0];
-        rightTargetPos= targetPoses[1];
+        if(aimWhileShooting || !isShooting){
+            GyroSubsystem.getInstance().zeroHeading();
+            double angle = -LimelightSubsystem.getInstance().getShooterTx();
+            double[] targetPoses = DriveSubsystem.getInstance().turnToAngle(angle + Math.signum(angle) * 3);
+            leftTargetPos = targetPoses[0];
+            rightTargetPos= targetPoses[1];
+        }
+        SmartDashboard.putBoolean("Shooting?", isShooting);
+        aimWhileShooting = DriveSubsystem.getInstance().getDoAim();
+        SmartDashboard.putBoolean("Aim?", aimWhileShooting);
+        SmartDashboard.putNumber("Return Angle", DriveSubsystem.getInstance().getReturnAngle());
         timer.reset();
     }
 
@@ -55,8 +61,8 @@ public class AutoAimMotionMagicCommand extends CommandBase{
         
         return (Math.abs(leftDifference) < 1150
             && Math.abs(rightDifference) < 1000)
-            && (!aimWhileShooting || isShooting)
-            || timer.get() >= 1
+            && (aimWhileShooting || !isShooting)
+            || timer.get() >= 2
             ;
     }
 }

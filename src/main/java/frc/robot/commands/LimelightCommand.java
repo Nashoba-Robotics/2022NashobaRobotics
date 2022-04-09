@@ -9,11 +9,13 @@ public class LimelightCommand extends CommandBase {
     public LimelightCommand() {
         addRequirements(LimelightSubsystem.getInstance());
     }
+
     public void execute(){
         SmartDashboard.putNumber("tx shooter", LimelightSubsystem.getInstance().getShooterTx());
         SmartDashboard.putNumber("ty shooter", LimelightSubsystem.getInstance().getShooterTy());
         SmartDashboard.putNumber("d shooter", LimelightSubsystem.getInstance().getDistanceShooter());
     }
+
     @Override
     public boolean isFinished() {
         return false;

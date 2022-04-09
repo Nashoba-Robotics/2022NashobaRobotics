@@ -29,18 +29,18 @@ public final class AutoPaths{
         //Start of 4 ball auto to first ball
         public static final Trajectory TO_FIRST_BALL =
         TrajectoryGenerator.generateTrajectory(
-          new Pose2d(new Translation2d(6.684, 2.292), Rotation2d.fromDegrees(15)), //starting position
+          new Pose2d(new Translation2d(6.324, 2.4), Rotation2d.fromDegrees(28.5)), //starting position
           List.of(), //nodes for robot to travel to
-          new Pose2d(new Translation2d(5.233, 1.91), Rotation2d.fromDegrees(15)), //finishing position
+          new Pose2d(new Translation2d(5.233, 1.95), Rotation2d.fromDegrees(28.5)), //finishing position
           config1);
 
-          DifferentialDriveVoltageConstraint voltageConstraint2 = 
+        private static DifferentialDriveVoltageConstraint voltageConstraint2 = 
         new DifferentialDriveVoltageConstraint(
           new SimpleMotorFeedforward(Constants.DriveTrain.KS, Constants.DriveTrain.KV, Constants.DriveTrain.KA),
           Constants.DriveTrain.KINEMATICS,
           10);
     
-        TrajectoryConfig config2 =
+        private static TrajectoryConfig config2 =
         new TrajectoryConfig(
           Constants.DriveTrain.MAX_VELOCITY,
           Constants.DriveTrain.MAX_ACCELERATION)
@@ -48,20 +48,20 @@ public final class AutoPaths{
           .addConstraint(voltageConstraint2).setReversed(true);
     
         //Start of 4 ball auto to first ball
-        Trajectory TO_HUMAN_LOADER =
+        public static final Trajectory TO_HUMAN_LOADER =
         TrajectoryGenerator.generateTrajectory(
-          new Pose2d(new Translation2d(5.233, 1.91), Rotation2d.fromDegrees(15)), //starting position
+          new Pose2d(new Translation2d(5.233, 1.95), Rotation2d.fromDegrees(28.5)), //starting position
           List.of(), //nodes for robot to travel to
-          new Pose2d(new Translation2d(1.54, 1.222), Rotation2d.fromDegrees(12)), //finishing position
+          new Pose2d(new Translation2d(1.218, 0.8), Rotation2d.fromDegrees(12)), //finishing position
           config2);
 
-          DifferentialDriveVoltageConstraint voltageConstraint3 = 
+        private static DifferentialDriveVoltageConstraint voltageConstraint3 = 
         new DifferentialDriveVoltageConstraint(
           new SimpleMotorFeedforward(Constants.DriveTrain.KS, Constants.DriveTrain.KV, Constants.DriveTrain.KA),
           Constants.DriveTrain.KINEMATICS,
           10);
     
-        TrajectoryConfig config3 =
+        private static TrajectoryConfig config3 =
         new TrajectoryConfig(
           Constants.DriveTrain.MAX_VELOCITY,
           Constants.DriveTrain.MAX_ACCELERATION)
@@ -69,10 +69,52 @@ public final class AutoPaths{
           .addConstraint(voltageConstraint3).setReversed(false);
     
         //Start of 4 ball auto to first ball
-        Trajectory trajectory =
+        public static Trajectory LOADER_TO_SHOOT =
         TrajectoryGenerator.generateTrajectory(
-          new Pose2d(new Translation2d(1.54, 1.222), Rotation2d.fromDegrees(12)), //starting position
+          new Pose2d(new Translation2d(1.218, 0.8), Rotation2d.fromDegrees(12)), //starting position
           List.of(), //nodes for robot to travel to
-          new Pose2d(new Translation2d(3.748, 1.64), Rotation2d.fromDegrees(30)), //finishing position
+          new Pose2d(new Translation2d(4.715, 2), Rotation2d.fromDegrees(20)), //finishing position
           config3);
+
+          private static DifferentialDriveVoltageConstraint voltageConstraint4 = 
+        new DifferentialDriveVoltageConstraint(
+          new SimpleMotorFeedforward(Constants.DriveTrain.KS, Constants.DriveTrain.KV, Constants.DriveTrain.KA),
+          Constants.DriveTrain.KINEMATICS,
+          10);
+    
+        private static TrajectoryConfig config4 =
+        new TrajectoryConfig(
+          Constants.DriveTrain.MAX_VELOCITY,
+          Constants.DriveTrain.MAX_ACCELERATION)
+          .setKinematics(Constants.DriveTrain.KINEMATICS)
+          .addConstraint(voltageConstraint4).setReversed(true);
+    
+        //Start of 4 ball auto to first ball
+        public static Trajectory TWO_BALL_AUTO =
+        TrajectoryGenerator.generateTrajectory(
+          new Pose2d(new Translation2d(2.5, 0), Rotation2d.fromDegrees(0)), //starting position
+          List.of(), //nodes for robot to travel to
+          new Pose2d(new Translation2d(0, 0), Rotation2d.fromDegrees(0)), //finishing position
+          config4);
+
+          private static DifferentialDriveVoltageConstraint voltageConstraint5 = 
+        new DifferentialDriveVoltageConstraint(
+          new SimpleMotorFeedforward(Constants.DriveTrain.KS, Constants.DriveTrain.KV, Constants.DriveTrain.KA),
+          Constants.DriveTrain.KINEMATICS,
+          10);
+
+        private static TrajectoryConfig config5 =
+        new TrajectoryConfig(
+          Constants.DriveTrain.MAX_VELOCITY,
+          Constants.DriveTrain.MAX_ACCELERATION)
+          .setKinematics(Constants.DriveTrain.KINEMATICS)
+          .addConstraint(voltageConstraint5).setReversed(true);
+    
+        //Start of 4 ball auto to first ball
+        public static final Trajectory HUB_TO_FIRST_BALL =
+        TrajectoryGenerator.generateTrajectory(
+          new Pose2d(new Translation2d(7.594, 3.237), Rotation2d.fromDegrees(69)), //starting position
+          List.of(), //nodes for robot to travel to
+          new Pose2d(new Translation2d(5.233, 1.91), Rotation2d.fromDegrees(15)), //finishing position
+          config5);
 }

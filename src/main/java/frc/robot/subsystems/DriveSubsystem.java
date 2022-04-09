@@ -49,8 +49,9 @@ public class DriveSubsystem extends SubsystemBase {
 
     private boolean odometryResetFinished;
 
-    public static double returnLeftAimPos;
-    public static double returnRightAimPos;
+    private double returnLeftAimPos;
+    private double returnRightAimPos;
+    private double returnAngle;
 
     private boolean doAutoAim;
 
@@ -407,6 +408,7 @@ public class DriveSubsystem extends SubsystemBase {
 
         returnLeftAimPos = currentLeftPos;
         returnRightAimPos = currentRightPos;
+        returnAngle = -angle;
 
         double[] targetPoses = new double[2];
         leftMotor.configMotionCruiseVelocity(18_000);
@@ -429,17 +431,36 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public void unAim(){
+        // leftMotor.configMotionCruiseVelocity(18_000);
+        // leftMotor.configMotionAcceleration(Constants.DriveTrain.AUTO_AIM_ACCELARATION);
+        // leftMotor.set(ControlMode.MotionMagic, returnLeftAimPos);
+
+        // rightMotor.configMotionCruiseVelocity(18_000);
+        // rightMotor.configMotionAcceleration(Constants.DriveTrain.AUTO_AIM_ACCELARATION);
+        // rightMotor.set(ControlMode.MotionMagic, returnRightAimPos);
+
+        double currentLeftPos = leftMotor.getSelectedSensorPosition();
+        double currentRightPos = rightMotor.getSelectedSensorPosition();
+
         leftMotor.configMotionCruiseVelocity(18_000);
-        leftMotor.configMotionAcceleration(30_000);
-        leftMotor.set(ControlMode.MotionMagic, returnLeftAimPos);
+        leftMotor.configMotionAcceleration(Constants.DriveTrain.AUTO_AIM_ACCELARATION);
+
+        double targetPos = -332 * returnAngle + currentLeftPos;
+        leftMotor.set(ControlMode.MotionMagic, targetPos);
 
         rightMotor.configMotionCruiseVelocity(18_000);
-        rightMotor.configMotionAcceleration(30_000);
-        rightMotor.set(ControlMode.MotionMagic, returnRightAimPos);
+        rightMotor.configMotionAcceleration(Constants.DriveTrain.AUTO_AIM_ACCELARATION);
+
+        targetPos = 277 * returnAngle + currentRightPos;
+        rightMotor.set(ControlMode.MotionMagic, targetPos);
     }
 
     public double[] getReturnPos(){
         return new double[]{returnLeftAimPos, returnRightAimPos};
+    }
+
+    public double getReturnAngle(){
+        return returnAngle;
     }
 
     public void changeAim(boolean toAimOrNotToAim){

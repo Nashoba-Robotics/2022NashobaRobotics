@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.TestAutoAimCommand;
+import frc.robot.commands.UnAimCommand;
 import frc.robot.commands.JoystickDriveCommand;
 import frc.robot.commands.LedTestCommand;
 import frc.robot.commands.LimelightCommand;
@@ -24,7 +25,7 @@ import frc.robot.commands.intakeshoot.ActuateIntakeCommand;
 import frc.robot.commands.intakeshoot.AimShootCG;
 import frc.robot.commands.intakeshoot.EjectBackCommand;
 import frc.robot.commands.intakeshoot.EjectFrontCommand;
-import frc.robot.commands.intakeshoot.NewShootCommand;
+import frc.robot.commands.intakeshoot.ShootCommand;
 import frc.robot.commands.intakeshoot.PukeCommand;
 import frc.robot.commands.intakeshoot.RunIntakeCommand;
 import frc.robot.commands.intakeshoot.ShootCommand;
@@ -107,6 +108,8 @@ public class RobotContainer {
         SmartDashboard.putData(new AimShootCG());
 
         SmartDashboard.putData(new TestAutoAimCommand());
+        SmartDashboard.putData(new AutoAimMotionMagicCommand(false));
+        SmartDashboard.putData(new UnAimCommand());
     }
 
     private void configureButtonBindings() {
@@ -126,7 +129,7 @@ public class RobotContainer {
         pukeButton.whenActive(new PukeCommand());
 
         //ShootCommand shootCommand = new ShootCommand();
-        runShooterButton.whenActive(new NewShootCommand(false));
+        runShooterButton.whenActive(new ShootCommand(false));
         shootButton.whenActive(new AimShootCG());
         stopShooterButton.whenActive(new StopShooterCommand());
 
