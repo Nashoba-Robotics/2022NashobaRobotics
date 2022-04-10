@@ -1,11 +1,13 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.TestAutoAimCommand;
 import frc.robot.commands.UnAimCommand;
+import frc.robot.commands.YiHasToDoThisCommand;
 import frc.robot.commands.JoystickDriveCommand;
 import frc.robot.commands.LedTestCommand;
 import frc.robot.commands.LimelightCommand;
@@ -94,22 +96,27 @@ public class RobotContainer {
 
     public RobotContainer() {
         configureButtonBindings();
-        SmartDashboard.putData(new ZeroClimberSensorsCommand());
-        SmartDashboard.putData(new ZeroPusherCommand());
-        SmartDashboard.putData(new StopClimbCommand());
-        SmartDashboard.putData(new CannonTestCommand());
-        SmartDashboard.putData(new LimelightCommand());
-        SmartDashboard.putData(new LedTestCommand());
+        // SmartDashboard.putData(new ZeroClimberSensorsCommand());
+        // SmartDashboard.putData(new ZeroPusherCommand());
+        // SmartDashboard.putData(new StopClimbCommand());
+        // SmartDashboard.putData(new CannonTestCommand());
+        // SmartDashboard.putData(new LimelightCommand());
+        // SmartDashboard.putData(new LedTestCommand());
 
-        SmartDashboard.putData(new RetractClimberCommand());
-        SmartDashboard.putData(new DeployPusher());
-        SmartDashboard.putData(new TraversalClimbCommand());
+        // SmartDashboard.putData(new RetractClimberCommand());
+        // SmartDashboard.putData(new DeployPusher());
+        // SmartDashboard.putData(new TraversalClimbCommand());
 
-        SmartDashboard.putData(new AimShootCG());
+        // SmartDashboard.putData(new AimShootCG());
 
-        SmartDashboard.putData(new TestAutoAimCommand());
-        SmartDashboard.putData(new AutoAimMotionMagicCommand(false));
-        SmartDashboard.putData(new UnAimCommand());
+        // SmartDashboard.putData(new TestAutoAimCommand());
+        // SmartDashboard.putData(new AutoAimMotionMagicCommand(false));
+        // SmartDashboard.putData(new UnAimCommand());
+
+        SmartDashboard.putData("YHTDT Forward Red", new YiHasToDoThisCommand(YiHasToDoThisCommand.Direction.FORWARD, Alliance.Red));
+        SmartDashboard.putData("YHTDT Back Red", new YiHasToDoThisCommand(YiHasToDoThisCommand.Direction.BACK, Alliance.Red));
+        SmartDashboard.putData("YHTDT Forward Blue", new YiHasToDoThisCommand(YiHasToDoThisCommand.Direction.FORWARD, Alliance.Blue));
+        SmartDashboard.putData("YHTDT Back Blue", new YiHasToDoThisCommand(YiHasToDoThisCommand.Direction.BACK, Alliance.Blue));
     }
 
     private void configureButtonBindings() {

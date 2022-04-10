@@ -3,18 +3,13 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.led.Animation;
 import com.ctre.phoenix.led.CANdle;
 import com.ctre.phoenix.led.FireAnimation;
-import com.ctre.phoenix.led.LarsonAnimation;
 import com.ctre.phoenix.led.RainbowAnimation;
 import com.ctre.phoenix.led.RgbFadeAnimation;
 import com.ctre.phoenix.led.StrobeAnimation;
 import com.ctre.phoenix.led.TwinkleAnimation;
-import com.ctre.phoenix.led.LarsonAnimation.BounceMode;
 import com.ctre.phoenix.led.TwinkleAnimation.TwinklePercent;
 
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.lib.StateChange;
 
 public class LedSubsystem extends SubsystemBase {
     private static final int LIGHT_COUNT = 38;

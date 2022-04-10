@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.util.List;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.InvertType;
@@ -8,9 +10,16 @@ import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
+
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -203,7 +212,7 @@ public class DriveSubsystem extends SubsystemBase {
         lastRightNU = 0;
         leftMotor.setSelectedSensorPosition(0);
         rightMotor.setSelectedSensorPosition(0);
-        GyroSubsystem.getInstance().setAngle(pose.getRotation().getRadians());
+        GyroSubsystem.getInstance().setAngle(pose.getRotation().getDegrees());
         SmartDashboard.putNumber("Reset Angle", odometry.getPoseMeters().getRotation().getRadians());
         odometryResetFinished = true;
     }

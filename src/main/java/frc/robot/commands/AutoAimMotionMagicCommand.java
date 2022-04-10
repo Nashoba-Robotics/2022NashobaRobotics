@@ -28,7 +28,7 @@ public class AutoAimMotionMagicCommand extends CommandBase{
         if(aimWhileShooting || !isShooting){
             GyroSubsystem.getInstance().zeroHeading();
             double angle = -LimelightSubsystem.getInstance().getShooterTx();
-            double[] targetPoses = DriveSubsystem.getInstance().turnToAngle(angle + Math.signum(angle) * 3);
+            double[] targetPoses = DriveSubsystem.getInstance().turnToAngle(angle + Math.signum(angle) * 3.5);
             leftTargetPos = targetPoses[0];
             rightTargetPos= targetPoses[1];
         }

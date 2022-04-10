@@ -10,8 +10,12 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.AutoPaths;
 import frc.robot.Constants;
+import frc.robot.commands.intakeshoot.ActuateIntakeCommand;
+import frc.robot.commands.intakeshoot.RunIntakeCommand;
 import frc.robot.lib.Units;
 
 public class TestPathCommand extends SequentialCommandGroup{
@@ -25,17 +29,17 @@ public class TestPathCommand extends SequentialCommandGroup{
     
         TrajectoryConfig config =
         new TrajectoryConfig(
-          Constants.DriveTrain.MAX_VELOCITY,
-          Constants.DriveTrain.MAX_ACCELERATION)
+          2,
+          1)
           .setKinematics(Constants.DriveTrain.KINEMATICS)
-          .addConstraint(autoVoltageConstraint).setReversed(false);
+          .addConstraint(autoVoltageConstraint).setReversed(true);
     
         //Start of 4 ball auto to first ball
         Trajectory trajectory =
         TrajectoryGenerator.generateTrajectory(
-          new Pose2d(new Translation2d(1.555, 1.201), Rotation2d.fromDegrees(12)), //starting position
+          new Pose2d(new Translation2d(3.07, 0), Rotation2d.fromDegrees(0)), //starting position
           List.of(), //nodes for robot to travel to
-          new Pose2d(new Translation2d(3.748, 1.64), Rotation2d.fromDegrees(30)), //finishing position
+          new Pose2d(new Translation2d(0, 0), Rotation2d.fromDegrees(0)), //finishing position
           config);
 
         addCommands(

@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -12,6 +13,8 @@ public class GrabberSubsystem extends SubsystemBase  {
     private GrabberSubsystem() {
         motor = new TalonFX(Constants.Intake.PORT_GRABBER);
         motor.setInverted(true);
+        motor.setStatusFramePeriod(StatusFrame.Status_1_General, 50);
+        motor.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 100);
     }
 
     private static GrabberSubsystem instance;

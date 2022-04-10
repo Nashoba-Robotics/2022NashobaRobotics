@@ -28,7 +28,7 @@ public class FourBallAuto extends SequentialCommandGroup{
                 new RunIntakeCommand().until(() -> {
                     return RobotContainer.getSensor1() && RobotContainer.getSensor2();
                 }
-                ).withTimeout(5),
+                ).withTimeout(1.5),
                 // new PathFollowCommand(AutoPaths.HUB_TO_FIRST_BALL, Constants.FIELD.ANGLE_OF_RESISTANCE)
                 new PathFollowCommand(AutoPaths.TO_FIRST_BALL, Constants.FIELD.ANGLE_OF_RESISTANCE)
             ),
@@ -40,7 +40,7 @@ public class FourBallAuto extends SequentialCommandGroup{
                 new RunIntakeCommand().until(() -> {
                     return RobotContainer.getSensor2() && RobotContainer.getSensor1();
                 }
-                ).withTimeout(5),
+                ).withTimeout(3.75),
                 new PathFollowCommand(AutoPaths.TO_HUMAN_LOADER, Constants.FIELD.ANGLE_OF_RESISTANCE)
             ),
             new ParallelCommandGroup(

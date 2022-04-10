@@ -3,6 +3,8 @@ package frc.robot.lib;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.Constants;
 
 public class OdometryCarpetCompensator extends DifferentialDriveOdometry{
@@ -47,9 +49,15 @@ public class OdometryCarpetCompensator extends DifferentialDriveOdometry{
     }
 
     private double compensateRug(double delta){
+        if(DriverStation.getAlliance() == Alliance.Red){
+            return delta > 0 ?
+            delta + (delta*Constants.FIELD.K_CARPET_RED/2)*(1-Math.cos(absAngle)):
+            delta + (delta*Constants.FIELD.K_CARPET_RED/2)*(1+Math.cos(absAngle));
+        }
+
         return delta > 0 ?
-        delta + (delta*Constants.FIELD.K_CARPET/2)*(1-Math.cos(absAngle)):
-        delta + (delta*Constants.FIELD.K_CARPET/2)*(1+Math.cos(absAngle));
+            delta + (delta*Constants.FIELD.K_CARPET_BLUE/2)*(1-Math.cos(absAngle)):
+            delta + (delta*Constants.FIELD.K_CARPET_BLUE/2)*(1+Math.cos(absAngle));
         
     }
 
