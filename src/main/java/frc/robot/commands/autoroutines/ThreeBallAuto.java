@@ -29,7 +29,7 @@ public class ThreeBallAuto extends SequentialCommandGroup{
                     return RobotContainer.getSensor1() && RobotContainer.getSensor2();
                 }
                 ).withTimeout(5),
-                new PathFollowCommand(AutoPaths.TO_FIRST_BALL, Constants.FIELD.ANGLE_OF_RESISTANCE)
+                new PathFollowCommand(AutoPaths.TO_FIRST_BALL)
             ),
             new ToggleAutoAimCommand(true),
             new AutoAimMotionMagicCommand(false),
@@ -40,10 +40,10 @@ public class ThreeBallAuto extends SequentialCommandGroup{
                     return RobotContainer.getSensor2();
                 }
                 ).withTimeout(5),
-                new PathFollowCommand(AutoPaths.TO_HUMAN_LOADER, Constants.FIELD.ANGLE_OF_RESISTANCE)
+                new PathFollowCommand(AutoPaths.TO_HUMAN_LOADER)
             ),
             new ActuateIntakeCommand(false),
-            new PathFollowCommand(AutoPaths.LOADER_TO_SHOOT, Constants.FIELD.ANGLE_OF_RESISTANCE),
+            new PathFollowCommand(AutoPaths.LOADER_TO_SHOOT),
             new AutoAimMotionMagicCommand(false),
             new AutoShootCommand(Angle.SIXTY)
         );

@@ -43,7 +43,7 @@ public class TestPathCommand extends SequentialCommandGroup{
           config);
 
         addCommands(
-            new PathFollowCommand(trajectory, Constants.FIELD.ANGLE_OF_RESISTANCE)
+            new PathFollowCommand(trajectory)
         );
     }
 }

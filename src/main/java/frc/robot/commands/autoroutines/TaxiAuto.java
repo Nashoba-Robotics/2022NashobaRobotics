@@ -12,7 +12,7 @@ public class TaxiAuto extends SequentialCommandGroup{
         addCommands(
             new AutoShootCommand(Angle.EIGHTY),
             new WaitCommand(5),
-            new PathFollowCommand(AutoPaths.TWO_BALL_AUTO, Constants.FIELD.ANGLE_OF_RESISTANCE)
+            new PathFollowCommand(AutoPaths.TWO_BALL_AUTO)
         );
     }
 }

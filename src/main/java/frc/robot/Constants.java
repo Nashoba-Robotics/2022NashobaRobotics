@@ -300,6 +300,8 @@ public final class Constants {
         public static final double INTAKE_HEIGHT = 0;
         public static final double INTAKE_ANGLE = 0;
         public static final double BALL_HEIGHT = 0;
+
+        public static final double AUTO_AIM_OFFSET = 3.5;
     }
 
     //Declares the Button Ports    IMPORTANT: Buttons start at index 1
@@ -335,7 +337,8 @@ public final class Constants {
     }
 
     public static class FIELD {
-        public static final double ANGLE_OF_RESISTANCE = 0;
+        public static final double ANGLE_OF_RESISTANCE_RED = 0;
+        public static final double ANGLE_OF_RESISTANCE_BLUE = 0;
 
         // public static final double K_CARPET_BLUE = 0.094564;
         // public static final double K_CARPET_RED = 0.094564;

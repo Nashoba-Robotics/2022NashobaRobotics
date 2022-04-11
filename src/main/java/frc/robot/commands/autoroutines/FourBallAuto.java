@@ -1,5 +1,7 @@
 package frc.robot.commands.autoroutines;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -20,6 +22,7 @@ import frc.robot.subsystems.CannonSubsystem.Angle;
 
 public class FourBallAuto extends SequentialCommandGroup{
     public FourBallAuto(){
+
         addCommands(
             new ActuateIntakeCommand(true),
             new CannonAngleCommand(Angle.SIXTY),
@@ -30,7 +33,7 @@ public class FourBallAuto extends SequentialCommandGroup{
                 }
                 ).withTimeout(1.5),
                 // new PathFollowCommand(AutoPaths.HUB_TO_FIRST_BALL, Constants.FIELD.ANGLE_OF_RESISTANCE)
-                new PathFollowCommand(AutoPaths.TO_FIRST_BALL, Constants.FIELD.ANGLE_OF_RESISTANCE)
+                new PathFollowCommand(AutoPaths.TO_FIRST_BALL)
             ),
             new ToggleAutoAimCommand(true),
             new AutoAimMotionMagicCommand(false),
@@ -41,12 +44,12 @@ public class FourBallAuto extends SequentialCommandGroup{
                     return RobotContainer.getSensor2() && RobotContainer.getSensor1();
                 }
                 ).withTimeout(3.75),
-                new PathFollowCommand(AutoPaths.TO_HUMAN_LOADER, Constants.FIELD.ANGLE_OF_RESISTANCE)
+                new PathFollowCommand(AutoPaths.TO_HUMAN_LOADER)
             ),
             new ParallelCommandGroup(
                 new RunIntakeCommand().withTimeout(2),
                 new SequentialCommandGroup(
-                    new PathFollowCommand(AutoPaths.LOADER_TO_SHOOT, Constants.FIELD.ANGLE_OF_RESISTANCE),
+                    new PathFollowCommand(AutoPaths.LOADER_TO_SHOOT),
                     new AutoAimMotionMagicCommand(false)
                 )
             ),

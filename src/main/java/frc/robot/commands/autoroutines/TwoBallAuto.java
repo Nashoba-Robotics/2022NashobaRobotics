@@ -28,7 +28,7 @@ public class TwoBallAuto extends SequentialCommandGroup {
             new WaitCommand(0.5),
             new ParallelCommandGroup(
                 new RunIntakeCommand().until(RobotContainer::getSensor2).withTimeout(3),
-                new PathFollowCommand(AutoPaths.TWO_BALL_AUTO, Constants.FIELD.ANGLE_OF_RESISTANCE)
+                new PathFollowCommand(AutoPaths.TWO_BALL_AUTO)
             ),
             new ActuateIntakeCommand(false),
             // new PathFollowCommand("paths/TwoBallFromBallToShoot.wpilib.json"),

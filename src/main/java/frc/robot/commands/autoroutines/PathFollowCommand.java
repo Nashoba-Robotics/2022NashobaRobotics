@@ -14,6 +14,7 @@ import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstrai
 import edu.wpi.first.math.trajectory.constraint.TrajectoryConstraint;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
@@ -50,9 +51,11 @@ public class PathFollowCommand extends SequentialCommandGroup{
        );
     }
 
-    public PathFollowCommand(Trajectory trajectory, double angOfResistance){
+    public PathFollowCommand(Trajectory trajectory){
 
-        
+        double angOfResistance = DriverStation.getAlliance() == Alliance.Blue ?
+        Constants.FIELD.ANGLE_OF_RESISTANCE_BLUE:
+        Constants.FIELD.ANGLE_OF_RESISTANCE_RED;
 
         // TrajectoryConfig config = new TrajectoryConfig(
         //     Constants.DriveTrain.MAX_VELOCITY,
