@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LedSubsystem extends SubsystemBase {
     private static final int LIGHT_COUNT = 38;
-    private static final double BLINK_RATE = 1;
     private static final double RAINBOW_SPEED = 1;
 
     private static LedSubsystem instance;
@@ -66,6 +65,7 @@ public class LedSubsystem extends SubsystemBase {
     }
 
     private void updateLeds() {
+        System.out.println("Update Leds");
         switch(type) {
             case NONE:
                 candle.setLEDs(0, 0, 0, 0, 0, LIGHT_COUNT + 8);
@@ -75,7 +75,7 @@ public class LedSubsystem extends SubsystemBase {
                 candle.animate(a1);
                 break;
             case BALLS:
-                candle.setLEDs(ballColor[0], ballColor[1], ballColor[2], 0, 8, LIGHT_COUNT);
+                candle.setLEDs(ballColor[0], ballColor[1], ballColor[2], 0, 0, LIGHT_COUNT + 8);
                 break;
             case BALLS_BLINK:
                 Animation a2 = new StrobeAnimation(ballColor[0], ballColor[1], ballColor[2], 0, 0.5, LIGHT_COUNT + 8);

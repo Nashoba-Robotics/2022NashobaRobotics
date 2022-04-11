@@ -21,14 +21,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.IntakePracticeCommand;
 import frc.robot.commands.JoystickDriveCommand;
-import frc.robot.commands.LedTestCommand;
 import frc.robot.commands.autoroutines.FourBallAuto;
 import frc.robot.commands.autoroutines.GraciousProfessionalismAuto;
 import frc.robot.commands.autoroutines.TaxiAuto;
 import frc.robot.commands.autoroutines.TestPathCommand;
 import frc.robot.commands.autoroutines.ThreeBallAuto;
 import frc.robot.commands.autoroutines.TwoBallAuto;
-import frc.robot.commands.autoroutines.TwoBallAuto_Far;
 import frc.robot.commands.climber.StopClimbCommand;
 import frc.robot.commands.climber.ZeroClimberSensorsCommand;
 import frc.robot.commands.climber.ZeroPusherCommand;
@@ -119,7 +117,9 @@ public class Robot extends TimedRobot {
         //if(DriverStation.isFMSAttached()) {
             LedSubsystem.getInstance().setLedStateType(LedStateType.FMS_DISABLE);
         //} else {
-        //    LedSubsystem.getInstance().setLedStateType(LedStateType.NONE);
+            //LedSubsystem.getInstance().setLedStateType(LedStateType.NONE);
+        //    LedSubsystem.getInstance().setLedStateType(LedStateType.BALLS);
+        //    LedSubsystem.getInstance().setBallColor(new int[]{255,255,255});
         //}
         //LedSubsystem.getInstance().setLedStateType(LedStateType.GRACIOUS_PROFESSIONALISM);
     }

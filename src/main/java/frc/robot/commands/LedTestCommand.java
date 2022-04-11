@@ -21,11 +21,11 @@ public class LedTestCommand extends CommandBase {
     }
 
     public void execute() {
-        int[] col = new int[]{
-            (int)SmartDashboard.getNumber("R", 0),
-            (int)SmartDashboard.getNumber("G", 0),
-            (int)SmartDashboard.getNumber("B", 0),
-        };
-        //LedSubsystem.getInstance().twinkle(col);
+        // int[] col = new int[]{
+        //     (int)SmartDashboard.getNumber("R", 0),
+        //     (int)SmartDashboard.getNumber("G", 0),
+        //     (int)SmartDashboard.getNumber("B", 0),
+        // };
+        // LedSubsystem.getInstance().twinkle(col);
     }
 }
