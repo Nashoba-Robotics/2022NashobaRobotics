@@ -1,12 +1,10 @@
 package frc.robot.commands.intakeshoot;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.CannonSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -20,20 +18,14 @@ public class ShootCommand extends CommandBase {
 
     private boolean shooting;
     private double lastValidTy;
-    // private Timer timer = null;
-    // private boolean timerRunning;
 
     public ShootCommand(boolean shooting) {
-        this.shooting = shooting;
-        lastValidTy = 0;
-        // if(shooting) {
-        //     timer = new Timer();
-        // }
-
         addRequirements(IntakeSubsystem.getInstance());
         addRequirements(GrabberSubsystem.getInstance());
         addRequirements(LoaderSubsystem.getInstance());
         addRequirements(CannonSubsystem.getInstance());
+        this.shooting = shooting;
+        lastValidTy = 0;
     }
 
     @Override
@@ -41,11 +33,6 @@ public class ShootCommand extends CommandBase {
         IntakeSubsystem.getInstance().set(0);
         GrabberSubsystem.getInstance().set(0);
         LoaderSubsystem.getInstance().set(0);
-        // if(shooting){
-        //     timer.reset();
-        //     timer.stop();
-        //     timerRunning = false;
-        // }
     }
 
     @Override
@@ -73,17 +60,6 @@ public class ShootCommand extends CommandBase {
         } else {
             LoaderSubsystem.getInstance().set(0);
         }
-        // if(shooting && !timerRunning && !RobotContainer.getSensor2() && !RobotContainer.getSensor1()) {
-        //     timer.reset();
-        //     timer.start();
-        //     timerRunning = true;
-        // }
-    }
-
-    @Override
-    public boolean isFinished() {
-        // return shooting && (timer.get() > 1);
-        return false;
     }
 
     @Override
