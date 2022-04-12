@@ -117,11 +117,12 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().cancelAll();
 
         //if(DriverStation.isFMSAttached()) {
-            LedSubsystem.getInstance().setLedStateType(LedStateType.FMS_DISABLE);
+        //LedSubsystem.getInstance().setLedStateType(LedStateType.FMS_DISABLE);
         //} else {
         //    LedSubsystem.getInstance().setLedStateType(LedStateType.NONE);
         //}
         //LedSubsystem.getInstance().setLedStateType(LedStateType.GRACIOUS_PROFESSIONALISM);
+        LedSubsystem.getInstance().setLedStateType(LedStateType.NONE);
     }
 
     @Override
