@@ -147,11 +147,11 @@ public class DriveSubsystem extends SubsystemBase {
         leftMotor.config_kD(Constants.SLOT_IDX, Constants.DriveTrain.D_LEFT, Constants.TIMEOUT);
         
         leftMotor.setInverted(InvertType.InvertMotorOutput);
-        leftMotor2.setInverted(InvertType.FollowMaster);
-        leftMotor3.setInverted(InvertType.FollowMaster);
+        leftMotor2.setInverted(InvertType.InvertMotorOutput);
+        leftMotor3.setInverted(InvertType.InvertMotorOutput);
         rightMotor.setInverted(InvertType.None);
-        rightMotor2.setInverted(InvertType.FollowMaster);
-        rightMotor3.setInverted(InvertType.FollowMaster);
+        rightMotor2.setInverted(InvertType.None);
+        rightMotor3.setInverted(InvertType.None);
 
         doAutoAim = true;
 

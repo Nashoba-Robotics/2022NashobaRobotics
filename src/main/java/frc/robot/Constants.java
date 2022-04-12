@@ -127,8 +127,10 @@ public final class Constants {
         public static final int ROTATING_ANGLE_JOYSTICK_PORT = 4;   //X axis
         public static final double ROTATING_ANGLE_JOYSTICK_DEADZONE = 0.12;
 
-        public static final int DEPLOY_LEFT_POS = 184_500;
-        public static final int DEPLOY_RIGHT_POS = 181_500;
+        // public static final int DEPLOY_LEFT_POS = 184_500;
+        // public static final int DEPLOY_RIGHT_POS = 181_500;
+        public static final int DEPLOY_LEFT_POS = 183_000;
+        public static final int DEPLOY_RIGHT_POS = 183_000;
         public static final int DEPLOY_LEFT_PUSHER_POS = -109_000;
         public static final int DEPLOY_RIGHT_PUSHER_POS = -109_000;
 
@@ -180,8 +182,8 @@ public final class Constants {
 
         // public static final int RELEASE_LEFT_PUSHER_SLOW_POS = -3_000;
         // public static final int RELEASE_RIGHT_PUSHER_SLOW_POS = -3_000;
-        public static final int RELEASE_LEFT_PUSHER_SLOW_POS = 12_000; //-1_750
-        public static final int RELEASE_RIGHT_PUSHER_SLOW_POS = 12_000;
+        public static final int RELEASE_LEFT_PUSHER_SLOW_POS = 10_500; //-1_750
+        public static final int RELEASE_RIGHT_PUSHER_SLOW_POS = 10_500;
 
         public static final int RELEASE_LEFT_PUSHER_CRUISE_VELOCITY_SLOW = 500;
         public static final int RELEASE_RIGHT_PUSHER_CRUISE_VELOCITY_SLOW = 500;

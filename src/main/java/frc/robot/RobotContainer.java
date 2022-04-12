@@ -96,9 +96,9 @@ public class RobotContainer {
 
     public RobotContainer() {
         configureButtonBindings();
-        // SmartDashboard.putData(new ZeroClimberSensorsCommand());
-        // SmartDashboard.putData(new ZeroPusherCommand());
-        // SmartDashboard.putData(new StopClimbCommand());
+        SmartDashboard.putData(new ZeroClimberSensorsCommand());
+        SmartDashboard.putData(new ZeroPusherCommand());
+        SmartDashboard.putData(new StopClimbCommand());
         // SmartDashboard.putData(new CannonTestCommand());
         // SmartDashboard.putData(new LimelightCommand());
         // SmartDashboard.putData(new LedTestCommand());
