@@ -122,7 +122,7 @@ public class Robot extends TimedRobot {
         //    LedSubsystem.getInstance().setLedStateType(LedStateType.NONE);
         //}
         //LedSubsystem.getInstance().setLedStateType(LedStateType.GRACIOUS_PROFESSIONALISM);
-        LedSubsystem.getInstance().setLedStateType(LedStateType.NONE);
+        LedSubsystem.getInstance().setLedStateType(LedStateType.FMS_DISABLE);
     }
 
     @Override

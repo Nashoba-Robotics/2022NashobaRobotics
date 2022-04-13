@@ -72,7 +72,7 @@ public class LedSubsystem extends SubsystemBase {
                 candle.clearAnimation(0);
                 break;
             case AUTO:
-                Animation a0 = new RainbowAnimation(1, 0.5, LIGHT_COUNT + 46);
+                Animation a0 = new RainbowAnimation(1, 0.9, LIGHT_COUNT + 46);
                 candle.animate(a0);
                 break;
             case BALLS:
@@ -83,6 +83,9 @@ public class LedSubsystem extends SubsystemBase {
                 Animation a2 = new StrobeAnimation(ballColor[0], ballColor[1], ballColor[2], 0, 0.2, 46, 0);
                 candle.animate(a2);
                 break;
+            case FMS_DISABLE:
+                Animation a3 = new StrobeAnimation(0, 128, 0, 0, 1, 46, 0);
+                candle.animate(a3);
             default:
                 break;
         }
