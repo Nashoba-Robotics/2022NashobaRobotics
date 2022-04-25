@@ -6,6 +6,8 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
@@ -25,8 +27,10 @@ import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.Leds;
 import frc.robot.lib.OdometryCarpetCompensator;
 import frc.robot.lib.Units;
+import frc.robot.subsystems.LedSubsystem.LedStateType;
 
 // Subsystem for driving the robot
 public class DriveSubsystem extends SubsystemBase {
@@ -69,6 +73,13 @@ public class DriveSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        boolean bad = !leftMotor.getInverted() || !leftMotor2.getInverted() || !leftMotor3.getInverted()
+            || rightMotor.getInverted() || rightMotor2.getInverted() || rightMotor3.getInverted();
+        if(bad) {
+            LedSubsystem.getInstance().setLedStateType(LedStateType.CRITICAL_ERROR);
+            System.err.println("AAAAAAAAAAAA THE MOTORS ARE NOT INVERTED RIGHT POWER CYCLE THE ROBOT NOW!!!!!!!");
+            SmartDashboard.putString("AAA MOTORS BAD", "HELPHELPHELPHELPHELP");
+        }
         if(RobotState.isAutonomous() && RobotState.isEnabled()){
             if(odometryResetFinished && odometry != null){
                 gyroAngle = Rotation2d.fromDegrees(GyroSubsystem.getInstance().getAbsoluteAngle());
@@ -83,17 +94,17 @@ public class DriveSubsystem extends SubsystemBase {
                 lastLeftNU = currLeft;
                 lastRightNU = currRight;
 
-                SmartDashboard.putNumber("angle odometry", odometry.getAngle());
-                SmartDashboard.putNumber("angle gyro", GyroSubsystem.getInstance().getAbsoluteAngle());
-                SmartDashboard.putNumber("l odo", odometry.getLeftNU());
-                SmartDashboard.putNumber("r odo", odometry.getRightNU());
+                // SmartDashboard.putNumber("angle odometry", odometry.getAngle());
+                // SmartDashboard.putNumber("angle gyro", GyroSubsystem.getInstance().getAbsoluteAngle());
+                // SmartDashboard.putNumber("l odo", odometry.getLeftNU());
+                // SmartDashboard.putNumber("r odo", odometry.getRightNU());
 
-                SmartDashboard.putNumber("Odometry X", getPose().getX());
-                SmartDashboard.putNumber("Odometry Y", getPose().getY());
+                // SmartDashboard.putNumber("Odometry X", getPose().getX());
+                // SmartDashboard.putNumber("Odometry Y", getPose().getY());
             }
 
-            SmartDashboard.putNumber("l NU", getPositionLeft());
-            SmartDashboard.putNumber("r NU", getPositionRight());
+            // SmartDashboard.putNumber("l NU", getPositionLeft());
+            // SmartDashboard.putNumber("r NU", getPositionRight());
         } else {
             odometryResetFinished = false;
         }
@@ -101,9 +112,9 @@ public class DriveSubsystem extends SubsystemBase {
         maxLCurrent = Math.max(maxLCurrent, getLeftMotorCurrent());
         maxRCurrent = Math.max(maxRCurrent, getRightMotorCurrent());
 
-        SmartDashboard.putNumber("Left stator", maxLCurrent);
-        SmartDashboard.putNumber("Right stator", maxRCurrent);
-        SmartDashboard.putNumber("angle gyro", GyroSubsystem.getInstance().getAbsoluteAngle());
+        // SmartDashboard.putNumber("Left stator", maxLCurrent);
+        // SmartDashboard.putNumber("Right stator", maxRCurrent);
+        // SmartDashboard.putNumber("angle gyro", GyroSubsystem.getInstance().getAbsoluteAngle());
 
     }
     
@@ -153,6 +164,25 @@ public class DriveSubsystem extends SubsystemBase {
         rightMotor2.setInverted(InvertType.None);
         rightMotor3.setInverted(InvertType.None);
 
+        // TODO put these in constants
+        double supplyThreshold = 40;
+        double supplyLimit = 45;
+        double statorThreshold = 60;
+        double statorLimit = 65;
+        double triggerTime = 0.2;
+        leftMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, supplyThreshold, supplyLimit, triggerTime));
+        leftMotor2.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, supplyThreshold, supplyLimit, triggerTime));
+        leftMotor3.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, supplyThreshold, supplyLimit, triggerTime));
+        rightMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, supplyThreshold, supplyLimit, triggerTime));
+        rightMotor2.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, supplyThreshold, supplyLimit, triggerTime));
+        rightMotor3.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, supplyThreshold, supplyLimit, triggerTime));
+        leftMotor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, statorThreshold, statorLimit, triggerTime));
+        leftMotor2.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, statorThreshold, statorLimit, triggerTime));
+        leftMotor3.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, statorThreshold, statorLimit, triggerTime));
+        rightMotor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, statorThreshold, statorLimit, triggerTime));
+        rightMotor2.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, statorThreshold, statorLimit, triggerTime));
+        rightMotor3.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, statorThreshold, statorLimit, triggerTime));
+
         doAutoAim = true;
 
         // Set the name of the subsystem in smart dashboard
@@ -164,6 +194,58 @@ public class DriveSubsystem extends SubsystemBase {
             instance = new DriveSubsystem();
         }
         return instance;
+    }
+
+    public void emergencyConfig(){
+        configureMotor(leftMotor);
+        configureMotor(leftMotor2);
+        configureMotor(leftMotor3);
+        configureMotor(rightMotor);
+        configureMotor(rightMotor2);
+        configureMotor(rightMotor3);
+
+        leftMotor2.follow(leftMotor);
+        leftMotor3.follow(leftMotor);
+        rightMotor2.follow(rightMotor);
+        rightMotor3.follow(rightMotor);
+
+        leftMotor.setSelectedSensorPosition(0, Constants.PID_IDX, Constants.TIMEOUT);
+        rightMotor.setSelectedSensorPosition(0, Constants.PID_IDX, Constants.TIMEOUT);
+
+        rightMotor.config_kF(Constants.SLOT_IDX, Constants.DriveTrain.KF_RIGHT, Constants.TIMEOUT);
+		rightMotor.config_kP(Constants.SLOT_IDX, Constants.DriveTrain.P_RIGHT, Constants.TIMEOUT);
+		rightMotor.config_kI(Constants.SLOT_IDX, Constants.DriveTrain.I_RIGHT, Constants.TIMEOUT);
+        rightMotor.config_kD(Constants.SLOT_IDX, Constants.DriveTrain.D_RIGHT, Constants.TIMEOUT);
+
+        leftMotor.config_kF(Constants.SLOT_IDX, Constants.DriveTrain.KF_LEFT, Constants.TIMEOUT);
+		leftMotor.config_kP(Constants.SLOT_IDX, Constants.DriveTrain.P_LEFT, Constants.TIMEOUT);
+		leftMotor.config_kI(Constants.SLOT_IDX, Constants.DriveTrain.I_LEFT, Constants.TIMEOUT);
+        leftMotor.config_kD(Constants.SLOT_IDX, Constants.DriveTrain.D_LEFT, Constants.TIMEOUT);
+        
+        leftMotor.setInverted(InvertType.InvertMotorOutput);
+        leftMotor2.setInverted(InvertType.InvertMotorOutput);
+        leftMotor3.setInverted(InvertType.InvertMotorOutput);
+        rightMotor.setInverted(InvertType.None);
+        rightMotor2.setInverted(InvertType.None);
+        rightMotor3.setInverted(InvertType.None);
+
+        double supplyThreshold = 40;
+        double supplyLimit = 45;
+        double statorThreshold = 60;
+        double statorLimit = 65;
+        double triggerTime = 0.2;
+        leftMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, supplyThreshold, supplyLimit, triggerTime));
+        leftMotor2.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, supplyThreshold, supplyLimit, triggerTime));
+        leftMotor3.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, supplyThreshold, supplyLimit, triggerTime));
+        rightMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, supplyThreshold, supplyLimit, triggerTime));
+        rightMotor2.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, supplyThreshold, supplyLimit, triggerTime));
+        rightMotor3.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, supplyThreshold, supplyLimit, triggerTime));
+        leftMotor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, statorThreshold, statorLimit, triggerTime));
+        leftMotor2.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, statorThreshold, statorLimit, triggerTime));
+        leftMotor3.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, statorThreshold, statorLimit, triggerTime));
+        rightMotor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, statorThreshold, statorLimit, triggerTime));
+        rightMotor2.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, statorThreshold, statorLimit, triggerTime));
+        rightMotor3.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, statorThreshold, statorLimit, triggerTime));
     }
 
     public void createOdometry(double angOfResistance, double startAngle){
@@ -195,7 +277,7 @@ public class DriveSubsystem extends SubsystemBase {
         leftMotor.setSelectedSensorPosition(0, Constants.PID_IDX, Constants.TIMEOUT);
         rightMotor.setSelectedSensorPosition(0, Constants.PID_IDX, Constants.TIMEOUT);
         GyroSubsystem.getInstance().setAngle(pose.getRotation().getDegrees());
-        SmartDashboard.putNumber("Reset Angle", odometry.getPoseMeters().getRotation().getRadians());
+        // SmartDashboard.putNumber("Reset Angle", odometry.getPoseMeters().getRotation().getRadians());
         odometryResetFinished = true;
     }
 
@@ -213,7 +295,7 @@ public class DriveSubsystem extends SubsystemBase {
         leftMotor.setSelectedSensorPosition(0);
         rightMotor.setSelectedSensorPosition(0);
         GyroSubsystem.getInstance().setAngle(pose.getRotation().getDegrees());
-        SmartDashboard.putNumber("Reset Angle", odometry.getPoseMeters().getRotation().getRadians());
+        // SmartDashboard.putNumber("Reset Angle", odometry.getPoseMeters().getRotation().getRadians());
         odometryResetFinished = true;
     }
 

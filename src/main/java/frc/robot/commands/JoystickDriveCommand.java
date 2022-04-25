@@ -43,7 +43,7 @@ public class JoystickDriveCommand extends CommandBase {
         buttonPressedLeft = joystickTriggerLeft.get();
         lastPressedLeft = joystickTriggerLeft.get();
 
-        SmartDashboard.putBoolean("Drive Running", true);
+        //SmartDashboard.putBoolean("Drive Running", true);
     }
 
     @Override
@@ -80,8 +80,8 @@ public class JoystickDriveCommand extends CommandBase {
             motorValues = JoystickProcessing.radiusDrive(joystickValues);
         }
 
-        SmartDashboard.putBoolean("ArcadeDrive on?", arcadeDrive);
-        SmartDashboard.putBoolean("InvertedDrive?", invertDrive);
+        // SmartDashboard.putBoolean("ArcadeDrive on?", arcadeDrive);
+        // SmartDashboard.putBoolean("InvertedDrive?", invertDrive);
                 
         //Sets the speed
         if(!invertDrive) DriveSubsystem.getInstance().setSpeed(motorValues.left, motorValues.right);
@@ -96,7 +96,7 @@ public class JoystickDriveCommand extends CommandBase {
         DriveSubsystem.getInstance().setSpeed(0, 0);
         DriveSubsystem.getInstance().setBrakeMode(false);
         invertDrive = false;
-        SmartDashboard.putBoolean("Drive Running", false);
+        // SmartDashboard.putBoolean("Drive Running", false);
     }
 
     // Returns true when the command should end.

@@ -11,11 +11,13 @@ import frc.robot.commands.JoystickDriveCommand;
 public class AimShootCG extends SequentialCommandGroup {
     public AimShootCG(){
         addCommands(
+            //new LogShootCommand(true),
             new AutoAimMotionMagicCommand(true),
             new ParallelCommandGroup(
                 new ShootCommand(true), 
                 new JoystickDriveCommand()
             )
+            //new LogShootCommand(false)
         );
     }
     

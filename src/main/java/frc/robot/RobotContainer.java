@@ -34,10 +34,12 @@ import frc.robot.commands.intakeshoot.ShootCommand;
 import frc.robot.commands.intakeshoot.StopIntakeCommand;
 import frc.robot.commands.intakeshoot.StopShooterCommand;
 import frc.robot.commands.intakeshoot.ToggleAutoAimCommand;
+import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.JoystickSubsystem;
 import frc.robot.subsystems.CannonSubsystem.Angle;
 import frc.robot.commands.AutoAimMotionMagicCommand;
 import frc.robot.commands.CannonTestCommand;
+import frc.robot.commands.ConfigDriveCommand;
 
 public class RobotContainer {
 
@@ -83,6 +85,7 @@ public class RobotContainer {
     Trigger autoAimButton = new JoystickButton(JoystickSubsystem.getInstance().getRightJoystick(), Constants.Buttons.AUTO_AIM);
     Trigger onAim = new JoystickButton(JoystickSubsystem.getInstance().getLeftJoystick(), 13);
     Trigger offAim = new JoystickButton(JoystickSubsystem.getInstance().getLeftJoystick(), 14);
+    Trigger emergencyConfigButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftJoystick(), 11);
 
     static DigitalInput ballSensor1 = new DigitalInput(Constants.Intake.DIO_SENSOR_1);
     static DigitalInput ballSensor2 = new DigitalInput(Constants.Intake.DIO_SENSOR_2);
@@ -96,8 +99,8 @@ public class RobotContainer {
 
     public RobotContainer() {
         configureButtonBindings();
-        SmartDashboard.putData(new ZeroClimberSensorsCommand());
-        SmartDashboard.putData(new ZeroPusherCommand());
+        // SmartDashboard.putData(new ZeroClimberSensorsCommand());
+        // SmartDashboard.putData(new ZeroPusherCommand());
         SmartDashboard.putData(new StopClimbCommand());
         // SmartDashboard.putData(new CannonTestCommand());
         // SmartDashboard.putData(new LimelightCommand());
@@ -113,15 +116,18 @@ public class RobotContainer {
         // SmartDashboard.putData(new AutoAimMotionMagicCommand(false));
         // SmartDashboard.putData(new UnAimCommand());
 
-        SmartDashboard.putData("YHTDT Forward Red", new YiHasToDoThisCommand(YiHasToDoThisCommand.Direction.FORWARD, Alliance.Red));
-        SmartDashboard.putData("YHTDT Back Red", new YiHasToDoThisCommand(YiHasToDoThisCommand.Direction.BACK, Alliance.Red));
-        SmartDashboard.putData("YHTDT Forward Blue", new YiHasToDoThisCommand(YiHasToDoThisCommand.Direction.FORWARD, Alliance.Blue));
-        SmartDashboard.putData("YHTDT Back Blue", new YiHasToDoThisCommand(YiHasToDoThisCommand.Direction.BACK, Alliance.Blue));
+        // SmartDashboard.putData("YHTDT Forward Red", new YiHasToDoThisCommand(YiHasToDoThisCommand.Direction.FORWARD, Alliance.Red));
+        // SmartDashboard.putData("YHTDT Back Red", new YiHasToDoThisCommand(YiHasToDoThisCommand.Direction.BACK, Alliance.Red));
+        // SmartDashboard.putData("YHTDT Forward Blue", new YiHasToDoThisCommand(YiHasToDoThisCommand.Direction.FORWARD, Alliance.Blue));
+        // SmartDashboard.putData("YHTDT Back Blue", new YiHasToDoThisCommand(YiHasToDoThisCommand.Direction.BACK, Alliance.Blue));
     }
 
     private void configureButtonBindings() {
         deployIntakeSwitch.whenInactive(new ActuateIntakeCommand(true));
         deployIntakeSwitch.whenActive(new ActuateIntakeCommand(false));
+
+        // emergencyConfigButton.whenActive(() -> {DriveSubsystem.getInstance().emergencyConfig();});
+        emergencyConfigButton.whenActive(new ConfigDriveCommand());
 
         // incrementShooterSpeed.whenActive(() -> {CannonSubsystem.getInstance().changeSpeedChange(0.005);});
         // decrementShooterSpeed.whenActive(() -> {CannonSubsystem.getInstance().changeSpeedChange(-0.005);});

@@ -25,6 +25,7 @@ import frc.robot.commands.LedTestCommand;
 import frc.robot.commands.autoroutines.FourBallAuto;
 import frc.robot.commands.autoroutines.GraciousProfessionalismAuto;
 import frc.robot.commands.autoroutines.TaxiAuto;
+import frc.robot.commands.autoroutines.TaxiFarAuto;
 import frc.robot.commands.autoroutines.TestPathCommand;
 import frc.robot.commands.autoroutines.ThreeBallAuto;
 import frc.robot.commands.autoroutines.TwoBallAuto;
@@ -73,7 +74,8 @@ public class Robot extends TimedRobot {
 
         LimelightSubsystem.getInstance().setShooterLed(1);
 
-        //ph.enableCompressorAnalog(100, 120);
+        ph.enableCompressorAnalog(100, 117);
+        
         //ph.disableCompressor();
         CommandScheduler.getInstance().setDefaultCommand(DriveSubsystem.getInstance(), new JoystickDriveCommand());
 
@@ -82,6 +84,7 @@ public class Robot extends TimedRobot {
         autoChooser.addOption("Three Ball Auto", new ThreeBallAuto());
         autoChooser.addOption("Four Ball Auto", new FourBallAuto());
         autoChooser.addOption("Taxi Auto", new TaxiAuto());
+        autoChooser.addOption("Taxi Far Auto", new TaxiFarAuto());
         autoChooser.addOption("Graciously Professional", new GraciousProfessionalismAuto());
         autoChooser.addOption("Test Auto", new TestPathCommand());
         SmartDashboard.putData("Auto", autoChooser); 
@@ -100,6 +103,9 @@ public class Robot extends TimedRobot {
         //     SmartDashboard.putNumber("loop time", millis - lastMillis);
         // }
         // lastMillis = millis;
+
+            // SmartDashboard.putNumber("Pneumatic Pressure", ph.getPressure(0));
+            // SmartDashboard.putBoolean("Pressure Switch", ph.getPressureSwitch());
     }
 
     @Override
@@ -107,7 +113,7 @@ public class Robot extends TimedRobot {
         DriveSubsystem.getInstance().setDriveMode(DriveMode.VELOCITY);
         DriveSubsystem.getInstance().setSpeed(0, 0);
         IntakeSubsystem.getInstance().stop();
-        IntakeSolenoidSubsystem.getInstance().retract();    //Undeploys the intake when the robot is disabled
+        // IntakeSolenoidSubsystem.getInstance().retract();    //Undeploys the intake when the robot is disabled
         CannonSubsystem.getInstance().setAngle(Angle.EIGHTY);
         DriveSubsystem.getInstance().changeNeutralMode(NeutralMode.Coast);    //Sets the robot into "coast" mode after robot is diabled -> Easier to move
         LimelightSubsystem.getInstance().setShooterLed(1);
@@ -159,9 +165,6 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().schedule(new ZeroPusherCommand());
 
         CommandScheduler.getInstance().schedule(new CannonAngleCommand(Angle.EIGHTY));
-
-        //Zeroes the climbers when teleop starts
-        //CommandScheduler.getInstance().schedule(new ZeroClimberCommand());
 
         SmartDashboard.putNumber("auto angle", 0);
     }

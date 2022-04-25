@@ -37,11 +37,11 @@ public class ShootCommand extends CommandBase {
 
     @Override
     public void execute() {
-        if(Math.abs(LimelightSubsystem.getInstance().getShooterTx()) <= Constants.AUTO_AIM_DEADZONE) {
-            SmartDashboard.putBoolean("I've Got'chu in my Sights", true);
-        } else {
-            SmartDashboard.putBoolean("I've Got'chu in my Sights", false);
-        }
+        // if(Math.abs(LimelightSubsystem.getInstance().getShooterTx()) <= Constants.AUTO_AIM_DEADZONE) {
+        //     SmartDashboard.putBoolean("I've Got'chu in my Sights", true);
+        // } else {
+        //     SmartDashboard.putBoolean("I've Got'chu in my Sights", false);
+        // }
 
         Angle angle = ANGLE.get() ? Angle.EIGHTY : Angle.SIXTY;
         double cannonSpeed;

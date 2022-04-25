@@ -24,7 +24,7 @@ public class LedSubsystem extends SubsystemBase {
     }
 
     public enum LedStateType {
-        NONE, AUTO, BALLS, BALLS_BLINK, CLIMB, FMS_DISABLE, GRACIOUS_PROFESSIONALISM
+        NONE, AUTO, BALLS, BALLS_BLINK, CLIMB, FMS_DISABLE, GRACIOUS_PROFESSIONALISM, CRITICAL_ERROR
     }
 
     private CANdle candle;
@@ -38,7 +38,7 @@ public class LedSubsystem extends SubsystemBase {
         candle.configFactoryDefault();
         candle.configLOSBehavior(true);
         candle.configStatusLedState(true);
-        candle.configBrightnessScalar(0.7);
+        candle.configBrightnessScalar(0.35);
     }
 
     public void setLedStateType(LedStateType newType) {
@@ -66,7 +66,7 @@ public class LedSubsystem extends SubsystemBase {
 
     private void updateLeds() {
         candle.setLEDs(ballColor[0], ballColor[1], ballColor[2]);
-        System.out.println(ballColor[0] + " " + ballColor[1] + " " + ballColor[2]);
+        //System.out.println(ballColor[0] + " " + ballColor[1] + " " + ballColor[2]);
         switch(type) {
             case NONE:
                 candle.clearAnimation(0);
@@ -86,6 +86,11 @@ public class LedSubsystem extends SubsystemBase {
             case FMS_DISABLE:
                 Animation a3 = new StrobeAnimation(0, 128, 0, 0, 1, 46, 0);
                 candle.animate(a3);
+                break;
+            case CRITICAL_ERROR:
+                Animation a4 = new StrobeAnimation(255, 255, 0, 0, 0.2, 46, 0);
+                candle.animate(a4);
+                break;
             default:
                 break;
         }

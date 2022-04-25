@@ -110,7 +110,9 @@ public final class Constants {
         public static final double farShotSpeed(double ty) {
             // return 0.53 - 0.00825 * ty;
             // return 0.543677 - 0.00620598 * ty;
-            return 0.53491 - 0.00686079 * ty + 0.0000779582 * ty*ty;
+
+            //return 0.53491 - 0.00686079 * ty + 0.0000779582 * ty*ty;
+            return 0.54491 - 0.00716079 * ty + 0.0000779582 * ty*ty;
         }
     }
     public static class Climber {
@@ -240,7 +242,8 @@ public final class Constants {
 
         public static final double WHEEL_GAP = 0.85162; // distance between wheels in meters
         // public static final double WHEEL_RADIUS = Units.inches2Meters(1.97775696); // wheel radius in meters
-        public static final double WHEEL_RADIUS = Units.inches2Meters(1.893888); // wheel radius in meters
+        // public static final double WHEEL_RADIUS = Units.inches2Meters(1.893888); // wheel radius in meters
+        public static final double WHEEL_RADIUS = 0.04697; // wheel radius in meters
 
         public static final double DRIVE_GEAR_RATIO = 20.0 / 3;
 
@@ -303,7 +306,7 @@ public final class Constants {
         public static final double INTAKE_ANGLE = 0;
         public static final double BALL_HEIGHT = 0;
 
-        public static final double AUTO_AIM_OFFSET = 3.5;
+        public static final double AUTO_AIM_OFFSET = 4; // before: 3.5
     }
 
     //Declares the Button Ports    IMPORTANT: Buttons start at index 1
@@ -340,11 +343,13 @@ public final class Constants {
 
     public static class FIELD {
         public static final double ANGLE_OF_RESISTANCE_RED = 0;
-        public static final double ANGLE_OF_RESISTANCE_BLUE = 0;
+        public static final double ANGLE_OF_RESISTANCE_BLUE = 180;
 
         // public static final double K_CARPET_BLUE = 0.094564;
         // public static final double K_CARPET_RED = 0.094564;
-        public static final double K_CARPET_BLUE = 0.1049;
-        public static final double K_CARPET_RED = 0.1049;
+        // public static final double K_CARPET_BLUE = 0.1049;
+        // public static final double K_CARPET_RED = 0.1049;
+        public static final double K_CARPET_RED = 0.09936;
+        public static final double K_CARPET_BLUE = 0.09936;
     }
 }
