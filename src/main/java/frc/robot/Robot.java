@@ -47,6 +47,9 @@ import frc.robot.subsystems.DriveSubsystem.DriveMode;
 import frc.robot.subsystems.LedSubsystem.LedStateType;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.CvSink;
+import edu.wpi.first.cscore.CvSource;
 
 
 /**
@@ -91,6 +94,16 @@ public class Robot extends TimedRobot {
 
         CommandScheduler.getInstance().schedule(new StopClimbCommand());
         CommandScheduler.getInstance().schedule(new ToggleAutoAimCommand(true));
+
+                // Creates UsbCamera and MjpegServer [1] and connects them
+        CameraServer.startAutomaticCapture();
+
+        // // Creates the CvSink and connects it to the UsbCamera
+        CvSink cvSink = CameraServer.getVideo();
+
+        // // Creates the CvSource and MjpegServer [2] and connects them
+        // CvSource outputStream = CameraServer.putVideo("Blur", 640, 480);
+        
     }
 
     // long lastMillis = System.currentTimeMillis();

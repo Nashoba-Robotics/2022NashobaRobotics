@@ -26,6 +26,6 @@ public class LedTestCommand extends CommandBase {
             (int)SmartDashboard.getNumber("G", 0),
             (int)SmartDashboard.getNumber("B", 0),
         };
-        //LedSubsystem.getInstance().twinkle(col);
+        LedSubsystem.getInstance().setBallColor(col);
     }
 }

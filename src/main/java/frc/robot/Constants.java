@@ -99,14 +99,16 @@ public final class Constants {
         public static final int PORT_TOP = 9;
         public static final int PORT_BOTTOM = 10;
 
-        public static final double KP = 0.048;
-        public static final double KI = 0.0;
-        public static final double KD = 0.005;
+        public static final double KP = 0.011;
+        public static final double KI = 0; //0.0003;
+        public static final double KD = 0.5;
         public static final double KF = 0.0475;
 
         public static final int SOLENOID_PORT = 7;
 
-        public static final double CLOSE_SHOT_SPEED = 0.45;
+        public static final double VOLTAGE_COMPENSATION = 10;
+
+        public static final double CLOSE_SHOT_SPEED = 0.47;
         public static final double farShotSpeed(double ty) {
             // return 0.53 - 0.00825 * ty;
             // return 0.543677 - 0.00620598 * ty;
@@ -279,6 +281,11 @@ public final class Constants {
         public static final double GRABBER_SPEED = 0.6;
         public static final double LOADER_SPEED = 0.15;
 
+        // public static final double LOADER_KF = 0.0475;
+        // public static final double LOADER_KP = 0.03;
+        // public static final double LOADER_KI = 0;
+        // public static final double LOADER_KD = 0.2;
+
         public static final int COLOR_REJECTION_SWITCH_PORT = 12;
 
         public static final int COLOR_REJECTION_PUKE_TIME = 3000; // in millis
@@ -327,7 +334,7 @@ public final class Constants {
         public static final int SHOOT = 9;
         public static final int RUN_SHOOTER = 8;
         public static final int STOP_SHOOTER = 5;
-        public static final int SHOOTER_ANGLE = 7;
+        public static final int SHOOTER_ANGLE = 12;
 
         //Ports for static climber
         public static final int FIXED_CLIMB_DEPLOY = 3;
