@@ -39,7 +39,7 @@ public class YiHasToDoThisCommand extends CommandBase {
         double r = endR - startR;
         String name = "FIELD TEST " + direction.toString() + " " + alliance.toString() + " ";
         if(direction == Direction.FORWARD){
-            double radius = (((l + r) / 2) / 3.225) * Constants.DriveTrain.WHEEL_RADIUS;
+            double radius = (((l + r) / 2) / 3.2475) * Constants.DriveTrain.WHEEL_RADIUS;
             forwardMeters = (l + r) / 2;
             SmartDashboard.putNumber(name + "new radius", radius);
             System.out.println(name + "new radius: " + radius);

@@ -114,7 +114,7 @@ public final class Constants {
             // return 0.543677 - 0.00620598 * ty;
 
             //return 0.53491 - 0.00686079 * ty + 0.0000779582 * ty*ty;
-            return 0.54491 - 0.00716079 * ty + 0.0000779582 * ty*ty;
+            return 0.56391 - 0.00796079 * ty + 0.0000879582 * ty*ty;
         }
     }
     public static class Climber {
@@ -163,8 +163,8 @@ public final class Constants {
         // public static final int RETRACT_RIGHT_POS = 13_750;
      //   public static final int RETRACT_LEFT_POS = 10_000;
     //    public static final int RETRACT_RIGHT_POS = 10_000;
-        public static final int RETRACT_LEFT_POS = 8_000;
-        public static final int RETRACT_RIGHT_POS = 8_000;
+        public static final int RETRACT_LEFT_POS = 7_500;
+        public static final int RETRACT_RIGHT_POS = 7_500;
 
         // public static final int RELEASE_LEFT_POS = 70_000;
         // public static final int RELEASE_RIGHT_POS = 70_000;
@@ -350,7 +350,7 @@ public final class Constants {
 
     public static class FIELD {
         public static final double ANGLE_OF_RESISTANCE_RED = 0;
-        public static final double ANGLE_OF_RESISTANCE_BLUE = 180;
+        public static final double ANGLE_OF_RESISTANCE_BLUE = 0;
 
         // public static final double K_CARPET_BLUE = 0.094564;
         // public static final double K_CARPET_RED = 0.094564;
@@ -359,4 +359,10 @@ public final class Constants {
         public static final double K_CARPET_RED = 0.09936;
         public static final double K_CARPET_BLUE = 0.09936;
     }
+
+    public static class Billerica {
+
+        public static final double FIRST_AUTO_SHOT_SPEED = 0.60;
+
+    } 
 }

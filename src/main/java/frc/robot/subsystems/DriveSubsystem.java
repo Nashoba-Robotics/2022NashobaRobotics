@@ -188,6 +188,7 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public void emergencyConfig(){
+
         configureMotor(leftMotor);
         configureMotor(leftMotor2);
         configureMotor(leftMotor3);
@@ -441,6 +442,14 @@ public class DriveSubsystem extends SubsystemBase {
 
     public double getRightMotorVelocity(){
         return rightMotor.getSelectedSensorVelocity(Constants.PID_IDX);
+    }
+
+    public double getRightSupply(){
+        return rightMotor.getSupplyCurrent();
+    }
+
+    public double getLeftSupply(){
+        return leftMotor.getSupplyCurrent();
     }
     
     public double getLeftMotorCurrent(){

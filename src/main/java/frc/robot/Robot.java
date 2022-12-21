@@ -19,10 +19,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.AutoShootCommand;
 import frc.robot.commands.IntakePracticeCommand;
 import frc.robot.commands.JoystickDriveCommand;
 import frc.robot.commands.LedTestCommand;
 import frc.robot.commands.autoroutines.FourBallAuto;
+import frc.robot.commands.autoroutines.FourBallBillerica;
 import frc.robot.commands.autoroutines.GraciousProfessionalismAuto;
 import frc.robot.commands.autoroutines.TaxiAuto;
 import frc.robot.commands.autoroutines.TaxiFarAuto;
@@ -38,6 +40,7 @@ import frc.robot.commands.intakeshoot.ToggleAutoAimCommand;
 import frc.robot.subsystems.CannonSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.GyroSubsystem;
 import frc.robot.subsystems.IntakeSolenoidSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LedSubsystem;
@@ -80,12 +83,13 @@ public class Robot extends TimedRobot {
         ph.enableCompressorAnalog(100, 117);
         
         //ph.disableCompressor();
-        CommandScheduler.getInstance().setDefaultCommand(DriveSubsystem.getInstance(), new JoystickDriveCommand());
+        //CommandScheduler.getInstance().setDefaultCommand(DriveSubsystem.getInstance(), new JoystickDriveCommand());
 
         autoChooser = new SendableChooser<>();
         autoChooser.setDefaultOption("Two Ball Auto", new TwoBallAuto());
         autoChooser.addOption("Three Ball Auto", new ThreeBallAuto());
         autoChooser.addOption("Four Ball Auto", new FourBallAuto());
+        autoChooser.addOption("HAIL MARY", new FourBallBillerica());
         autoChooser.addOption("Taxi Auto", new TaxiAuto());
         autoChooser.addOption("Taxi Far Auto", new TaxiFarAuto());
         autoChooser.addOption("Graciously Professional", new GraciousProfessionalismAuto());
@@ -154,6 +158,7 @@ public class Robot extends TimedRobot {
         LimelightSubsystem.getInstance().setShooterLed(3);
         LimelightSubsystem.getInstance().setShooterLed(3);
         DriveSubsystem.getInstance().resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
+        DriveSubsystem.getInstance().emergencyConfig();
         autoChooser.getSelected().schedule();
     }
 
@@ -174,12 +179,14 @@ public class Robot extends TimedRobot {
         DriveSubsystem.getInstance().resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
 
         CommandScheduler.getInstance().schedule(new StopClimbCommand());
-        CommandScheduler.getInstance().schedule(new ZeroClimberSensorsCommand());
-        CommandScheduler.getInstance().schedule(new ZeroPusherCommand());
+        // CommandScheduler.getInstance().schedule(new ZeroClimberSensorsCommand());
+        // CommandScheduler.getInstance().schedule(new ZeroPusherCommand());
 
-        CommandScheduler.getInstance().schedule(new CannonAngleCommand(Angle.EIGHTY));
+        CommandScheduler.getInstance().schedule(new CannonAngleCommand(Angle.SIXTY));
 
         SmartDashboard.putNumber("auto angle", 0);
+
+        GyroSubsystem.getInstance();
     }
 
     @Override

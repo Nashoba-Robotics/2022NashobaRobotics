@@ -363,4 +363,33 @@ public class ClimberSubsystem extends SubsystemBase {
     public void setAcceleration(ClimberMotor motor, double acceleration){
         getMotor(motor).configMotionAcceleration(acceleration);
     }
+
+    public void setPosition(int leftPos, int rightPos){
+        leftClimber.configMotionCruiseVelocity(Constants.Climber.DEPLOY_LEFT_CRUISE_VELOCITY);
+        leftClimber.configMotionAcceleration(Constants.Climber.DEPLOY_LEFT_ACCELERATION);
+
+        rightClimber.configMotionCruiseVelocity(Constants.Climber.DEPLOY_RIGHT_CRUISE_VELOCITY);
+        rightClimber.configMotionAcceleration(Constants.Climber.DEPLOY_RIGHT_ACCELERATION);
+
+        leftClimber.set(ControlMode.MotionMagic, leftPos);
+        rightClimber.set(ControlMode.MotionMagic, rightPos);
+    }
+
+    public void setPosition(int pos){
+        setPosition(pos, pos);
+    }
+
+    public void leftSetPos(int pos){
+        leftClimber.configMotionCruiseVelocity(Constants.Climber.DEPLOY_LEFT_CRUISE_VELOCITY);
+        leftClimber.configMotionAcceleration(Constants.Climber.DEPLOY_LEFT_ACCELERATION);
+
+        leftClimber.set(ControlMode.MotionMagic, pos);
+    }
+
+    public void rightSetPos(int pos){
+        rightClimber.configMotionCruiseVelocity(Constants.Climber.DEPLOY_RIGHT_CRUISE_VELOCITY);
+        rightClimber.configMotionAcceleration(Constants.Climber.DEPLOY_RIGHT_ACCELERATION);
+
+        rightClimber.set(ControlMode.MotionMagic, pos);
+    }
 }
