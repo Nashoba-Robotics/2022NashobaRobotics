@@ -31,7 +31,7 @@ public final class AutoPaths{
         TrajectoryGenerator.generateTrajectory(
           new Pose2d(new Translation2d(6.324, 2.4), Rotation2d.fromDegrees(28.5)), //starting position
           List.of(), //nodes for robot to travel to
-          new Pose2d(new Translation2d(5.233, 1.8), Rotation2d.fromDegrees(28.5)), //finishing position
+          new Pose2d(new Translation2d(5.233, 1.8), Rotation2d.fromDegrees(34.5)), //finishing position
           config1);
           // 1.95
 
@@ -51,9 +51,9 @@ public final class AutoPaths{
         //Start of 4 ball auto to first ball
         public static final Trajectory TO_HUMAN_LOADER =
         TrajectoryGenerator.generateTrajectory(
-          new Pose2d(new Translation2d(5.233, 1.8), Rotation2d.fromDegrees(28.5)), //starting position
+          new Pose2d(new Translation2d(5.233, 1.8), Rotation2d.fromDegrees(34.5)), //starting position
           List.of(), //nodes for robot to travel to
-          new Pose2d(new Translation2d(1.08, 0.78), Rotation2d.fromDegrees(45)), //finishing position
+          new Pose2d(new Translation2d(1.15, 0.85), Rotation2d.fromDegrees(45)), //finishing position
           config2);
           //Loader: (1.05, 0.85)
           //(0.98, 0.68)
@@ -74,7 +74,7 @@ public final class AutoPaths{
         //Start of 4 ball auto to first ball
         public static Trajectory LOADER_TO_SHOOT =
         TrajectoryGenerator.generateTrajectory(
-          new Pose2d(new Translation2d(1.08, 0.78), Rotation2d.fromDegrees(45)), //starting position
+          new Pose2d(new Translation2d(1.15, 0.85), Rotation2d.fromDegrees(45)), //starting position
           List.of(), //nodes for robot to travel to
           new Pose2d(new Translation2d(4.715, 2), Rotation2d.fromDegrees(20)), //finishing position
           config3);

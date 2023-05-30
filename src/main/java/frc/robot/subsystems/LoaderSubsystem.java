@@ -16,6 +16,11 @@ public class LoaderSubsystem extends SubsystemBase {
         motor.setNeutralMode(NeutralMode.Brake);
         motor.setStatusFramePeriod(StatusFrame.Status_1_General, 50);
         motor.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 100);
+
+        // motor.config_kF(0, Constants.Intake.LOADER_KF);
+        // motor.config_kP(0, Constants.Intake.LOADER_KP);
+        // motor.config_kI(0, Constants.Intake.LOADER_KI);
+        // motor.config_kD(0, Constants.Intake.LOADER_KD);
     }
 
     private static LoaderSubsystem instance;
@@ -25,6 +30,7 @@ public class LoaderSubsystem extends SubsystemBase {
     }
 
     public void set(double speed){
+        // speed *= 22000;
         motor.set(ControlMode.PercentOutput, speed);
     }
 

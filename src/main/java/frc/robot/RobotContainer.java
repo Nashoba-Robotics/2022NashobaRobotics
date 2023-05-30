@@ -11,6 +11,7 @@ import frc.robot.commands.YiHasToDoThisCommand;
 import frc.robot.commands.JoystickDriveCommand;
 import frc.robot.commands.LedTestCommand;
 import frc.robot.commands.LimelightCommand;
+import frc.robot.commands.LogCommand;
 import frc.robot.commands.climber.ManualClimberCommand;
 import frc.robot.commands.climber.DeployClimberCommadGroup;
 import frc.robot.commands.climber.DeployPusher;
@@ -24,6 +25,7 @@ import frc.robot.commands.climber.ZeroClimberSensorsCommand;
 import frc.robot.commands.climber.ZeroPusherCommand;
 import frc.robot.commands.intakeshoot.CannonAngleCommand;
 import frc.robot.commands.intakeshoot.ActuateIntakeCommand;
+import frc.robot.commands.intakeshoot.ActuateRunIntakeCommand;
 import frc.robot.commands.intakeshoot.AimShootCG;
 import frc.robot.commands.intakeshoot.EjectBackCommand;
 import frc.robot.commands.intakeshoot.EjectFrontCommand;
@@ -34,6 +36,8 @@ import frc.robot.commands.intakeshoot.ShootCommand;
 import frc.robot.commands.intakeshoot.StopIntakeCommand;
 import frc.robot.commands.intakeshoot.StopShooterCommand;
 import frc.robot.commands.intakeshoot.ToggleAutoAimCommand;
+import frc.robot.commands.lipdub.ClimberDanceCommand;
+import frc.robot.commands.lipdub.ClimberDanceGroup;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.JoystickSubsystem;
 import frc.robot.subsystems.CannonSubsystem.Angle;
@@ -60,7 +64,7 @@ public class RobotContainer {
     Trigger shootButton = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), Constants.Buttons.SHOOT).debounce(Constants.Buttons.DEBOUNCE_VALUE);
     Trigger runShooterButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), Constants.Buttons.RUN_SHOOTER).debounce(Constants.Buttons.DEBOUNCE_VALUE);
     Trigger stopShooterButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), Constants.Buttons.STOP_SHOOTER);
-    public static Trigger shooterAngleSwitch = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), Constants.Buttons.SHOOTER_ANGLE).debounce(Constants.Buttons.DEBOUNCE_VALUE);
+    public static Trigger shooterAngleSwitch = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), Constants.Buttons.SHOOTER_ANGLE).debounce(Constants.Buttons.DEBOUNCE_VALUE);
 
     Trigger fixedClimbDeployButton = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), Constants.Buttons.FIXED_CLIMB_DEPLOY).debounce(Constants.Buttons.DEBOUNCE_VALUE);
     Trigger fixedClimbButton = new JoystickButton(JoystickSubsystem.getInstance().getRightOperatorJoystick(), Constants.Buttons.FIXED_CLIMB).debounce(Constants.Buttons.DEBOUNCE_VALUE);
@@ -85,7 +89,7 @@ public class RobotContainer {
     Trigger autoAimButton = new JoystickButton(JoystickSubsystem.getInstance().getRightJoystick(), Constants.Buttons.AUTO_AIM);
     Trigger onAim = new JoystickButton(JoystickSubsystem.getInstance().getLeftJoystick(), 13);
     Trigger offAim = new JoystickButton(JoystickSubsystem.getInstance().getLeftJoystick(), 14);
-    Trigger emergencyConfigButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftJoystick(), 11);
+    Trigger emergencyConfigButton = new JoystickButton(JoystickSubsystem.getInstance().getLeftOperatorJoystick(), 11);
 
     static DigitalInput ballSensor1 = new DigitalInput(Constants.Intake.DIO_SENSOR_1);
     static DigitalInput ballSensor2 = new DigitalInput(Constants.Intake.DIO_SENSOR_2);
@@ -102,10 +106,11 @@ public class RobotContainer {
         // SmartDashboard.putData(new ZeroClimberSensorsCommand());
         // SmartDashboard.putData(new ZeroPusherCommand());
         SmartDashboard.putData(new StopClimbCommand());
-        // SmartDashboard.putData(new CannonTestCommand());
+        SmartDashboard.putData(new CannonTestCommand());
         // SmartDashboard.putData(new LimelightCommand());
-        // SmartDashboard.putData(new LedTestCommand());
+        SmartDashboard.putData(new LedTestCommand());
 
+        SmartDashboard.putData(new ConfigDriveCommand());
         // SmartDashboard.putData(new RetractClimberCommand());
         // SmartDashboard.putData(new DeployPusher());
         // SmartDashboard.putData(new TraversalClimbCommand());
@@ -120,10 +125,12 @@ public class RobotContainer {
         // SmartDashboard.putData("YHTDT Back Red", new YiHasToDoThisCommand(YiHasToDoThisCommand.Direction.BACK, Alliance.Red));
         // SmartDashboard.putData("YHTDT Forward Blue", new YiHasToDoThisCommand(YiHasToDoThisCommand.Direction.FORWARD, Alliance.Blue));
         // SmartDashboard.putData("YHTDT Back Blue", new YiHasToDoThisCommand(YiHasToDoThisCommand.Direction.BACK, Alliance.Blue));
+        SmartDashboard.putData(new LogCommand());
+        SmartDashboard.putData(new ClimberDanceCommand());
     }
 
     private void configureButtonBindings() {
-        deployIntakeSwitch.whenInactive(new ActuateIntakeCommand(true));
+        deployIntakeSwitch.whenInactive(new ActuateRunIntakeCommand());
         deployIntakeSwitch.whenActive(new ActuateIntakeCommand(false));
 
         // emergencyConfigButton.whenActive(() -> {DriveSubsystem.getInstance().emergencyConfig();});

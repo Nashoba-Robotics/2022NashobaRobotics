@@ -65,6 +65,8 @@ public class CannonSubsystem extends SubsystemBase{
 
         motor.selectProfileSlot(Constants.SLOT_IDX, 0);
         motor.setNeutralMode(NeutralMode.Coast);
+        motor.configVoltageCompSaturation(Constants.Cannon.VOLTAGE_COMPENSATION);
+        motor.enableVoltageCompensation(true);
     }
 
     public double getCurrentTop(){

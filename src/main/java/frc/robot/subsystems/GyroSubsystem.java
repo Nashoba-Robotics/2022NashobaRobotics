@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.sensors.PigeonIMU;
+import com.ctre.phoenix.sensors.PigeonIMU.GeneralStatus;
+import com.ctre.phoenix.sensors.PigeonIMU.PigeonState;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -10,8 +12,17 @@ public class GyroSubsystem extends SubsystemBase{
     private double[] speedxyz;
     private short[] acceleration;
 
+    public boolean autoReady;
+
     public GyroSubsystem(){
         pigeon = new PigeonIMU(0);
+        GeneralStatus status = new GeneralStatus();
+        autoReady = true;
+        pigeon.getGeneralStatus(status);
+        if(status.state == PigeonState.NoComm) {
+            System.err.println("Error finding pigeon");
+            autoReady = false;
+        }
         xyz = new double[3];
         speedxyz = new double[3];
         acceleration = new short[3];

@@ -99,20 +99,22 @@ public final class Constants {
         public static final int PORT_TOP = 9;
         public static final int PORT_BOTTOM = 10;
 
-        public static final double KP = 0.048;
-        public static final double KI = 0.0;
-        public static final double KD = 0.005;
+        public static final double KP = 0.011;
+        public static final double KI = 0; //0.0003;
+        public static final double KD = 0.5;
         public static final double KF = 0.0475;
 
         public static final int SOLENOID_PORT = 7;
 
-        public static final double CLOSE_SHOT_SPEED = 0.45;
+        public static final double VOLTAGE_COMPENSATION = 10;
+
+        public static final double CLOSE_SHOT_SPEED = 0.47;
         public static final double farShotSpeed(double ty) {
             // return 0.53 - 0.00825 * ty;
             // return 0.543677 - 0.00620598 * ty;
 
             //return 0.53491 - 0.00686079 * ty + 0.0000779582 * ty*ty;
-            return 0.54491 - 0.00716079 * ty + 0.0000779582 * ty*ty;
+            return 0.56391 - 0.00796079 * ty + 0.0000879582 * ty*ty;
         }
     }
     public static class Climber {
@@ -161,8 +163,8 @@ public final class Constants {
         // public static final int RETRACT_RIGHT_POS = 13_750;
      //   public static final int RETRACT_LEFT_POS = 10_000;
     //    public static final int RETRACT_RIGHT_POS = 10_000;
-        public static final int RETRACT_LEFT_POS = 8_000;
-        public static final int RETRACT_RIGHT_POS = 8_000;
+        public static final int RETRACT_LEFT_POS = 7_500;
+        public static final int RETRACT_RIGHT_POS = 7_500;
 
         // public static final int RELEASE_LEFT_POS = 70_000;
         // public static final int RELEASE_RIGHT_POS = 70_000;
@@ -279,6 +281,11 @@ public final class Constants {
         public static final double GRABBER_SPEED = 0.6;
         public static final double LOADER_SPEED = 0.15;
 
+        // public static final double LOADER_KF = 0.0475;
+        // public static final double LOADER_KP = 0.03;
+        // public static final double LOADER_KI = 0;
+        // public static final double LOADER_KD = 0.2;
+
         public static final int COLOR_REJECTION_SWITCH_PORT = 12;
 
         public static final int COLOR_REJECTION_PUKE_TIME = 3000; // in millis
@@ -327,7 +334,7 @@ public final class Constants {
         public static final int SHOOT = 9;
         public static final int RUN_SHOOTER = 8;
         public static final int STOP_SHOOTER = 5;
-        public static final int SHOOTER_ANGLE = 7;
+        public static final int SHOOTER_ANGLE = 12;
 
         //Ports for static climber
         public static final int FIXED_CLIMB_DEPLOY = 3;
@@ -343,7 +350,7 @@ public final class Constants {
 
     public static class FIELD {
         public static final double ANGLE_OF_RESISTANCE_RED = 0;
-        public static final double ANGLE_OF_RESISTANCE_BLUE = 180;
+        public static final double ANGLE_OF_RESISTANCE_BLUE = 0;
 
         // public static final double K_CARPET_BLUE = 0.094564;
         // public static final double K_CARPET_RED = 0.094564;
@@ -352,4 +359,10 @@ public final class Constants {
         public static final double K_CARPET_RED = 0.09936;
         public static final double K_CARPET_BLUE = 0.09936;
     }
+
+    public static class Billerica {
+
+        public static final double FIRST_AUTO_SHOT_SPEED = 0.60;
+
+    } 
 }

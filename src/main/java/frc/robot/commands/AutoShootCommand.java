@@ -12,6 +12,8 @@ import frc.robot.subsystems.CannonSubsystem.Angle;
 public class AutoShootCommand extends CommandBase{
     long startMillis;
     Angle angle;
+    double speed;
+    boolean manualSpeed;
     double cannonSpeed;
     double lastValidTy;
 
@@ -22,6 +24,18 @@ public class AutoShootCommand extends CommandBase{
         addRequirements(LoaderSubsystem.getInstance());
         
         this.angle = angle;
+        manualSpeed = false;
+    }
+
+    public AutoShootCommand(Angle angle, double speed) {
+        addRequirements(CannonSubsystem.getInstance());
+        addRequirements(IntakeSubsystem.getInstance());
+        addRequirements(GrabberSubsystem.getInstance());
+        addRequirements(LoaderSubsystem.getInstance());
+        
+        this.angle = angle;
+        this.speed = speed;
+        manualSpeed = true;
     }
 
     @Override
@@ -45,6 +59,8 @@ public class AutoShootCommand extends CommandBase{
         } else {
             cannonSpeed = Constants.Cannon.CLOSE_SHOT_SPEED;
         }
+
+        if(manualSpeed) cannonSpeed = speed;
 
         CannonSubsystem.getInstance().set(cannonSpeed);
 
