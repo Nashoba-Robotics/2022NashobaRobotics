@@ -84,8 +84,8 @@ public class JoystickDriveCommand extends CommandBase {
         // SmartDashboard.putBoolean("InvertedDrive?", invertDrive);
                 
         //Sets the speed
-        if(!invertDrive) DriveSubsystem.getInstance().setSpeed(motorValues.left, motorValues.right);
-        else DriveSubsystem.getInstance().setSpeed(-motorValues.left, -motorValues.right);
+        if(!invertDrive) DriveSubsystem.getInstance().setSpeed(motorValues.left * 0.2, motorValues.right * 0.2);
+        else DriveSubsystem.getInstance().setSpeed(-motorValues.left * 0.2, -motorValues.right * 0.2);
     }
 
     // Called once the command ends or is interrupted.
