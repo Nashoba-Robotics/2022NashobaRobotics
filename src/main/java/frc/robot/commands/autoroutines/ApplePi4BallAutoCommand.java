@@ -2,11 +2,11 @@ package frc.robot.commands.autoroutines;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.TestAutoAimCommand;
+import frc.robot.commands.ActuateIntakeCommand;
 import frc.robot.commands.AutoAimMotionMagicCommand;
 import frc.robot.commands.AutoShootCommand;
 import frc.robot.commands.AutoStopIntakeCommand;
 import frc.robot.commands.UnAimCommand;
-import frc.robot.commands.intakeshoot.ActuateIntakeCommand;
 import frc.robot.commands.intakeshoot.RunIntakeCommand;
 import frc.robot.subsystems.CannonSubsystem.Angle;
 

@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.AutoPaths;
 import frc.robot.Constants;
-import frc.robot.commands.intakeshoot.ActuateIntakeCommand;
+import frc.robot.commands.ActuateIntakeCommand;
 import frc.robot.commands.intakeshoot.RunIntakeCommand;
 import frc.robot.lib.Units;
 

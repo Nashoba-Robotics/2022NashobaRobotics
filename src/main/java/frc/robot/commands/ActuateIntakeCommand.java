@@ -1,4 +1,4 @@
-package frc.robot.commands.intakeshoot;
+package frc.robot.commands;
 
 import java.lang.Thread.State;
 

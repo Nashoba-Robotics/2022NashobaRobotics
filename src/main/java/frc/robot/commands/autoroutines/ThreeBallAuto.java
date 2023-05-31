@@ -1,6 +1,7 @@
 package frc.robot.commands.autoroutines;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.ActuateIntakeCommand;
 import frc.robot.commands.AutoAimMotionMagicCommand;
 import frc.robot.commands.AutoShootCommand;
 import frc.robot.commands.UnAimCommand;
@@ -13,7 +14,6 @@ import frc.robot.RobotContainer;
 import frc.robot.Constants.Intake;
 import frc.robot.commands.AutoShootCommand;
 import frc.robot.commands.intakeshoot.CannonAngleCommand;
-import frc.robot.commands.intakeshoot.ActuateIntakeCommand;
 import frc.robot.commands.intakeshoot.RunIntakeCommand;
 import frc.robot.commands.intakeshoot.ToggleAutoAimCommand;
 import frc.robot.subsystems.DriveSubsystem;

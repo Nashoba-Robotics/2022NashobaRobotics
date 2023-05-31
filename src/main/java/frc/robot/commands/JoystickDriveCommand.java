@@ -26,15 +26,20 @@ public class JoystickDriveCommand extends CommandBase {
     // The left and right joystick triggers
     private JoystickButton joystickTriggerLeft;
 
+    private double multiplier;
 
     public JoystickDriveCommand() {
         addRequirements(DriveSubsystem.getInstance());
         addRequirements(JoystickSubsystem.getInstance());
         joystickTriggerLeft = new JoystickButton(JoystickSubsystem.getInstance().getLeftJoystick(), 1);
+
+        multiplier = 0.2;
     }
 
     @Override
     public void initialize() {
+        SmartDashboard.putNumber("Kiddy Multiplier", 0.2);
+
         DriveSubsystem.getInstance().setSpeed(0, 0);
         // Default to enabling arcade drive
         arcadeDrive = true;
@@ -48,6 +53,8 @@ public class JoystickDriveCommand extends CommandBase {
 
     @Override
     public void execute() {
+        multiplier = SmartDashboard.getNumber("Kiddy Multiplier", 0.2);
+
         // Joystick drive uses velocity mode
         DriveSubsystem.getInstance().setDriveMode(DriveMode.VELOCITY);
         
@@ -84,8 +91,8 @@ public class JoystickDriveCommand extends CommandBase {
         // SmartDashboard.putBoolean("InvertedDrive?", invertDrive);
                 
         //Sets the speed
-        if(!invertDrive) DriveSubsystem.getInstance().setSpeed(motorValues.left * 0.2, motorValues.right * 0.2);
-        else DriveSubsystem.getInstance().setSpeed(-motorValues.left * 0.2, -motorValues.right * 0.2);
+        if(!invertDrive) DriveSubsystem.getInstance().setSpeed(motorValues.left * multiplier, motorValues.right * multiplier);
+        else DriveSubsystem.getInstance().setSpeed(-motorValues.left * multiplier, -motorValues.right * multiplier);
     }
 
     // Called once the command ends or is interrupted.

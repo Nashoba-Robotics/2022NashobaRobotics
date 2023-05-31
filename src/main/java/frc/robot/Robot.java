@@ -24,7 +24,6 @@ import frc.robot.commands.IntakePracticeCommand;
 import frc.robot.commands.JoystickDriveCommand;
 import frc.robot.commands.LedTestCommand;
 import frc.robot.commands.autoroutines.FourBallAuto;
-import frc.robot.commands.autoroutines.FourBallBillerica;
 import frc.robot.commands.autoroutines.GraciousProfessionalismAuto;
 import frc.robot.commands.autoroutines.TaxiAuto;
 import frc.robot.commands.autoroutines.TaxiFarAuto;
@@ -83,13 +82,13 @@ public class Robot extends TimedRobot {
         ph.enableCompressorAnalog(100, 117);
         
         //ph.disableCompressor();
-        //CommandScheduler.getInstance().setDefaultCommand(DriveSubsystem.getInstance(), new JoystickDriveCommand());
+        CommandScheduler.getInstance().setDefaultCommand(DriveSubsystem.getInstance(), new JoystickDriveCommand());
 
         autoChooser = new SendableChooser<>();
         autoChooser.setDefaultOption("Two Ball Auto", new TwoBallAuto());
         autoChooser.addOption("Three Ball Auto", new ThreeBallAuto());
         autoChooser.addOption("Four Ball Auto", new FourBallAuto());
-        autoChooser.addOption("HAIL MARY", new FourBallBillerica());
+        // autoChooser.addOption("HAIL MARY", new FourBallBillerica());
         autoChooser.addOption("Taxi Auto", new TaxiAuto());
         autoChooser.addOption("Taxi Far Auto", new TaxiFarAuto());
         autoChooser.addOption("Graciously Professional", new GraciousProfessionalismAuto());

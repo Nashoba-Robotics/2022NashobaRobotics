@@ -13,7 +13,7 @@ import frc.robot.RobotContainer;
 import frc.robot.commands.AutoAimMotionMagicCommand;
 import frc.robot.commands.AutoShootCommand;
 import frc.robot.commands.UnAimCommand;
-import frc.robot.commands.intakeshoot.ActuateIntakeCommand;
+//import frc.robot.commands.intakeshoot.ActuateIntakeCommand;
 import frc.robot.commands.intakeshoot.CannonAngleCommand;
 import frc.robot.commands.intakeshoot.RunIntakeCommand;
 import frc.robot.commands.intakeshoot.ShootCommand;
@@ -26,7 +26,7 @@ public class FourBallBillerica extends SequentialCommandGroup{
 
         addCommands(
             new AutoShootCommand(Angle.EIGHTY, Constants.Billerica.FIRST_AUTO_SHOT_SPEED),
-            new ActuateIntakeCommand(true),
+            // new ActuateIntakeCommand(true),
             new CannonAngleCommand(Angle.SIXTY),
             new WaitCommand(0.25),
             new ParallelCommandGroup(
